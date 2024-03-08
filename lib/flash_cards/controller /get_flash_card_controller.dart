@@ -7,12 +7,13 @@ class GetFlashCardDataController extends GetxController with StateMixin<FlashCar
   RxList likedCardList = [].obs;
   RxList flashCards = [].obs;
 
-  void getFlashCardData() async {
+  void getFlashCardData(String categoryName) async {
     change(null, status: RxStatus.loading());
 
     try {
-      final response = await getRequest(
-        apiEndPoint: "https://run.mocky.io/v3/481dc78a-b0b8-425f-8fa8-512d9c578962",
+      final response = await postRequest(
+        postData: {"category_name": categoryName},
+        apiEndPoint: "http://10.0.20.125/learnAPi/Api/flashCardData",
       );
 
       if (response.statusCode != 200) {
@@ -20,6 +21,32 @@ class GetFlashCardDataController extends GetxController with StateMixin<FlashCar
       }
 
       final modal = FlashCardDataModel.fromJson(response.data);
+      change(modal, status: RxStatus.success());
+    } catch (error) {
+      debugPrint("Error in fetching quiz questions: $error");
+      change(null, status: RxStatus.error(error.toString()));
+    }
+  }
+}
+
+//------------------------------ GetFlashCardListDataController ----------------------------------
+class GetFlashCardListDataController extends GetxController with StateMixin<GetFlashCardListData> {
+  RxList likedCardList = [].obs;
+  RxList flashCards = [].obs;
+
+  void getFlashCardListData() async {
+    change(null, status: RxStatus.loading());
+
+    try {
+      final response = await getRequest(
+        apiEndPoint: "http://10.0.20.125/learnAPi/Api/getCategoryNameList",
+      );
+
+      if (response.statusCode != 200) {
+        throw 'API ERROR ${response.statusCode} Message ${response.statusMessage}';
+      }
+
+      final modal = GetFlashCardListData.fromJson(response.data);
       change(modal, status: RxStatus.success());
     } catch (error) {
       debugPrint("Error in fetching quiz questions: $error");

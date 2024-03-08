@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:vocablury/components/web_view.dart';
-import 'package:vocablury/dashboard_module/learn_from_videos/view/video_links_page.dart';
+import 'package:vocablury/dashboard_module/learn_from_videos/video_links_page.dart';
 import 'package:vocablury/dashboard_module/quiz/view/choose_flash_cards.dart';
 import 'package:vocablury/dashboard_module/quiz/view/choose_mock_test.dart';
 import 'package:vocablury/dashboard_module/quiz/view/daily_quiz_screen.dart';
-import 'package:vocablury/dashboard_module/quiz/view/flash_card_screen.dart';
 import 'package:vocablury/dashboard_module/quiz/view/listening_practice.dart';
 import 'package:vocablury/dashboard_module/quiz/view/quiz_screen.dart';
 import 'package:vocablury/dashboard_module/quiz/view/reading_screen.dart';
@@ -93,7 +92,11 @@ final GoRouter goRouterConfig = GoRouter(
       parentNavigatorKey: rootNavigatorKey,
       path: GoPaths.customFlashCards,
       builder: (context, state) {
-        return const CustomFlashCards();
+        final extraParams = state.extra as Map<String, dynamic>; // Explicit casting
+        final categoryName = extraParams['categoryName'];
+        return CustomFlashCards(
+          categoryName: categoryName,
+        );
       },
     ),
 
@@ -109,13 +112,6 @@ final GoRouter goRouterConfig = GoRouter(
       path: GoPaths.chooseFlashCardScreen,
       builder: (context, state) {
         return const ChooseFlashCardScreen();
-      },
-    ),
-    GoRoute(
-      parentNavigatorKey: rootNavigatorKey,
-      path: GoPaths.flashCardScreen,
-      builder: (context, state) {
-        return const FlashCardScreen();
       },
     ),
 

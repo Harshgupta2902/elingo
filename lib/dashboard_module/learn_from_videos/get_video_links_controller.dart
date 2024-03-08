@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:vocablury/dashboard_module/learn_from_videos/model/video_links_model.dart';
+import 'package:vocablury/dashboard_module/learn_from_videos/video_links_model.dart';
 import 'package:vocablury/utilities/dio/api_request.dart';
 
 class GetYouTubeVideoLinksController extends GetxController with StateMixin<VideoLinksModel> {

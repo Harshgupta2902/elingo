@@ -27,6 +27,8 @@
 <!--            android:resource="@mipmap/ic_notification" />-->
 
 
+
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -51,6 +53,11 @@
 <!--                android:value="pushnotification"-->
 
 <!--                />-->
+            <!-- Add <queries> tag here -->
+
+            <intent-filter>
+                    <action android:name="android.intent.action.TTS_SERVICE" />
+            </intent-filter>
 
 
 

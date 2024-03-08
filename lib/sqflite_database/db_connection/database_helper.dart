@@ -68,8 +68,17 @@ class DatabaseHelper {
   }
 
 
-  void getReturnData (){
-    final db = DatabaseHelper();
-    final dynamic data = DatabaseHelper.getAllData();
+
+  static Future<bool> isItemExists(LikedFlashCardsModel item) async {
+    final db = await _getDB();
+
+    final List<Map<String, dynamic>> maps = await db.query(
+      "LikedFlashCards",
+      where: 'title = ?',
+      whereArgs: [item.title], // Assuming 'title' is the field used for comparison
+    );
+
+    return maps.isNotEmpty;
   }
+
 }

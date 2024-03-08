@@ -1,17 +1,16 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get/get.dart';
-import 'package:go_router/go_router.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:vocablury/components/app_bar/custom_app_bar.dart';
 import 'package:vocablury/flash_cards/controller%20/get_flash_card_controller.dart';
-import 'package:vocablury/flash_cards/model/flash_card_data_model.dart';
 import 'package:vocablury/flash_cards/view/category_view.dart';
 import 'package:vocablury/sqflite_database/db_connection/database_helper.dart';
 import 'package:vocablury/sqflite_database/model/liked_flash_cards_model.dart';
 import 'package:vocablury/utilities/constants/assets_path.dart';
 import 'package:vocablury/utilities/constants/blur_screen.dart';
-import 'package:vocablury/utilities/navigation/go_paths.dart';
 import 'package:vocablury/utilities/theme/app_colors.dart';
 import 'package:vocablury/utilities/theme/box_decoration.dart';
 import 'package:vocablury/utilities/theme/button_decoration.dart';
@@ -21,7 +20,12 @@ final _getFlashCardDataController = Get.put(GetFlashCardDataController());
 final dbReturnData = DatabaseHelper.getAllData();
 
 class CustomFlashCards extends StatefulWidget {
-  const CustomFlashCards({Key? key}) : super(key: key);
+  final String categoryName;
+
+  const CustomFlashCards({
+    Key? key,
+    required this.categoryName,
+  }) : super(key: key);
 
   @override
   State<CustomFlashCards> createState() => _CustomFlashCardsState();
@@ -31,17 +35,42 @@ class _CustomFlashCardsState extends State<CustomFlashCards> {
   late PageController _pageController;
   int currentPage = 0;
   bool isBlurred = false;
+  final player = AudioPlayer();
+  final flutterTts = FlutterTts();
 
+  List? likedData;
 
+  Future<void> _playAudio(String audioUrl) async {
+    player.play(UrlSource(audioUrl));
+    debugPrint('Playing audio from $audioUrl');
+  }
 
   @override
-  void initState()    {
+  void initState() {
     super.initState();
     _pageController = PageController();
-    _getFlashCardDataController.getFlashCardData();
+    _getFlashCardDataController.getFlashCardData(
+      widget.categoryName,
+    );
     isBlurred = true;
     debugPrint("initState ${_getFlashCardDataController.likedCardList.length}");
+    fetchData();
+  }
 
+  Future _speak(String word) async {
+    var result = await flutterTts.speak(word);
+    // if (result == 1) setState(() => ttsState = TtsState.playing);
+  }
+
+  Future<void> fetchData() async {
+    List? fetchedData = await DatabaseHelper.getAllData();
+    setState(() {
+      likedData = fetchedData?.map((e) => e.toJson()).toList();
+    });
+  }
+
+  bool isItemExists(LikedFlashCardsModel? item) {
+    return likedData?.any((element) => element["title"] == item?.title) ?? false;
   }
 
   void updateLikedCardList(Map data) {
@@ -73,22 +102,14 @@ class _CustomFlashCardsState extends State<CustomFlashCards> {
                 itemBuilder: (context, index) {
                   final item = state?.words?[index];
 
-
-
                   return Container(
-                    margin: const EdgeInsets.symmetric(
-                      vertical: 6,
-                      horizontal: 16,
-                    ),
+                    margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 16),
                     decoration: AppBoxDecoration.getBoxDecoration(
                       showShadow: false,
                       borderRadius: 8,
                       color: AppColors.zircon,
                     ),
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 20,
-                      horizontal: 20,
-                    ),
+                    padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
                     child: Center(
                       child: Column(
                         children: [
@@ -105,7 +126,7 @@ class _CustomFlashCardsState extends State<CustomFlashCards> {
                                 ),
                                 const SizedBox(height: 60),
                                 Text(
-                                  item?.example ?? '',
+                                  item?.exampleSentence ?? '',
                                   textAlign: TextAlign.center,
                                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                                         color: AppColors.black,
@@ -162,35 +183,59 @@ class _CustomFlashCardsState extends State<CustomFlashCards> {
                                 },
                                 child: SvgPicture.asset(AssetPath.share),
                               ),
-                              SvgPicture.asset(AssetPath.speaker),
+                              GestureDetector(
+                                onTap: () {
+                                  _speak(item?.word ?? "");
+                                },
+                                child: SvgPicture.asset(AssetPath.speaker),
+                              ),
                               GestureDetector(
                                 onTap: () async {
-                                  final db = await DatabaseHelper.getAllData();
-
                                   final LikedFlashCardsModel data = LikedFlashCardsModel(
                                     id: item?.id?.toInt() ?? 0,
                                     title: item?.word ?? "",
-                                    description: item?.example ?? "",
+                                    description: item?.exampleSentence ?? "",
                                     antonyms: item?.antonyms.toString() ?? "",
-                                    synonyms: item?.synonyms.toString() ?? "[]",
+                                    synonyms: item?.synonyms.toString() ?? "",
                                   );
 
-                                  if ((db?.where((element) => element.title == (item?.word ?? "")).isNotEmpty) ??
-                                      false) {
-                                    debugPrint("Here already exists.");
+                                  if (isItemExists(
+                                    LikedFlashCardsModel(
+                                      id: item?.id?.toInt() ?? 0,
+                                      title: item?.word ?? "",
+                                      description: item?.exampleSentence ?? "",
+                                      antonyms: item?.antonyms.toString() ?? "",
+                                      synonyms: item?.synonyms.toString() ?? "",
+                                    ),
+                                  )) {
+                                    await DatabaseHelper.deleteNote(data).then((value) {
+                                      fetchData();
+                                    });
+                                    debugPrint("here is the Data ");
                                     return;
                                   }
 
                                   await DatabaseHelper.addNote(data).then((value) {
-                                    setState(() {});
-                                    context.push(GoPaths.likedFlashCardsView);
+                                    fetchData();
                                   });
-
-                                  debugPrint(" like button tapped");
                                 },
-                                child: SvgPicture.asset(AssetPath.heart),
+                                child: SvgPicture.asset(
+                                  isItemExists(
+                                    LikedFlashCardsModel(
+                                      id: item?.id?.toInt() ?? 0,
+                                      title: item?.word ?? "",
+                                      description: item?.exampleSentence ?? "",
+                                      antonyms: item?.antonyms.toString() ?? "",
+                                      synonyms: item?.synonyms.toString() ?? "",
+                                    ),
+                                  )
+                                      ? AssetPath.heartFilled
+                                      : AssetPath.heart,
+                                ),
                               ),
-                              SvgPicture.asset(AssetPath.save),
+                              SvgPicture.asset(
+                                AssetPath.save,
+                              ),
                             ],
                           ),
                           const SizedBox(height: 40),
@@ -202,7 +247,7 @@ class _CustomFlashCardsState extends State<CustomFlashCards> {
               );
             },
           ),
-          bottomNavigationBar: Padding(
+          bottomNavigationBar: Padding  (
             padding: const EdgeInsets.symmetric(
               horizontal: 20,
               vertical: 10,

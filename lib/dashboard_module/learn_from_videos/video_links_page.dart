@@ -4,13 +4,13 @@ import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
 import 'package:vocablury/components/app_bar/custom_app_bar.dart';
 import 'package:vocablury/components/cached_image_container.dart';
-import 'package:vocablury/dashboard_module/learn_from_videos/controller/get_video_links_controller.dart';
+import 'package:vocablury/dashboard_module/learn_from_videos/get_video_links_controller.dart';
 import 'package:vocablury/utilities/theme/app_colors.dart';
 import 'package:vocablury/utilities/theme/box_decoration.dart';
 
-import '../../../utilities/constants/assets_path.dart';
-import '../../../utilities/navigation/go_paths.dart';
-import '../model/video_links_model.dart';
+import '../../utilities/constants/assets_path.dart';
+import '../../utilities/navigation/go_paths.dart';
+import 'video_links_model.dart';
 
 final _controller = Get.put(GetYouTubeVideoLinksController());
 

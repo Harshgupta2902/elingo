@@ -18,8 +18,8 @@ class AssetPath {
   // flash Cards Icons
   static const String heart = "assets/flash_cards_icons/heart.svg";
   static const String heartFilled = "assets/flash_cards_icons/heart_filled.svg";
-  static const String save = "assets/flash_cards_icons/archive-minus.svg";
-  static const String saveFilled = "assets/flash_cards_icons/archive-minus.svg";
+  static const String save = "assets/flash_cards_icons/save.svg";
+  static const String saved = "assets/flash_cards_icons/saved.svg";
   static const String share = "assets/flash_cards_icons/share.svg";
   static const String speaker = "assets/flash_cards_icons/volume-high.svg";
   static const String category = "assets/flash_cards_icons/category.svg";

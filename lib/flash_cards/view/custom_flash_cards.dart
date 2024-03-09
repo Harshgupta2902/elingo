@@ -40,11 +40,6 @@ class _CustomFlashCardsState extends State<CustomFlashCards> {
 
   List? likedData;
 
-  Future<void> _playAudio(String audioUrl) async {
-    player.play(UrlSource(audioUrl));
-    debugPrint('Playing audio from $audioUrl');
-  }
-
   @override
   void initState() {
     super.initState();
@@ -57,10 +52,7 @@ class _CustomFlashCardsState extends State<CustomFlashCards> {
     fetchData();
   }
 
-  Future _speak(String word) async {
-    var result = await flutterTts.speak(word);
-    // if (result == 1) setState(() => ttsState = TtsState.playing);
-  }
+  Future _speak(String word) async {}
 
   Future<void> fetchData() async {
     List? fetchedData = await DatabaseHelper.getAllData();
@@ -181,13 +173,21 @@ class _CustomFlashCardsState extends State<CustomFlashCards> {
                                     subject: "  ${item?.word ?? ""}",
                                   );
                                 },
-                                child: SvgPicture.asset(AssetPath.share),
+                                child: SvgPicture.asset(
+                                  AssetPath.share,
+                                  height: 30,
+                                  width: 30,
+                                ),
                               ),
                               GestureDetector(
                                 onTap: () {
                                   _speak(item?.word ?? "");
                                 },
-                                child: SvgPicture.asset(AssetPath.speaker),
+                                child: SvgPicture.asset(
+                                  AssetPath.speaker,
+                                  height: 30,
+                                  width: 30,
+                                ),
                               ),
                               GestureDetector(
                                 onTap: () async {
@@ -231,10 +231,23 @@ class _CustomFlashCardsState extends State<CustomFlashCards> {
                                   )
                                       ? AssetPath.heartFilled
                                       : AssetPath.heart,
+                                  height: 30,
+                                  width: 30,
                                 ),
                               ),
                               SvgPicture.asset(
-                                AssetPath.save,
+                                isItemExists(
+                                  LikedFlashCardsModel(
+                                    id: item?.id?.toInt() ?? 0,
+                                    title: item?.word ?? "",
+                                    description: item?.exampleSentence ?? "",
+                                    antonyms: item?.antonyms.toString() ?? "",
+                                    synonyms: item?.synonyms.toString() ?? "",
+                                  ),
+                                ) ?
+                                AssetPath.saved : AssetPath.save,
+                                height: 30,
+                                width: 30,
                               ),
                             ],
                           ),
@@ -247,7 +260,7 @@ class _CustomFlashCardsState extends State<CustomFlashCards> {
               );
             },
           ),
-          bottomNavigationBar: Padding  (
+          bottomNavigationBar: Padding(
             padding: const EdgeInsets.symmetric(
               horizontal: 20,
               vertical: 10,

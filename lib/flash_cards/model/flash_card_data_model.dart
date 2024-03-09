@@ -123,8 +123,6 @@ class Postdata {
   }
 
 }
-
-
 class GetFlashCardListData {
   GetFlashCardListData({
     num? status,

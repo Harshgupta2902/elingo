@@ -6,29 +6,36 @@ import 'package:vocablury/sqflite_database/model/liked_flash_cards_model.dart';
 import 'package:vocablury/utilities/dio/api_request.dart';
 
 class GetFlashCardDataController extends GetxController with StateMixin<FlashCardDataModel> {
-  RxList likedCardList = [].obs;
-  RxList flashCards = [].obs;
-  List? likedData = [].obs;
+  RxList savedFlashCards = [].obs;
+  RxList likedData = [].obs;
 
   deleteLikedFlashCardFromController(LikedFlashCardsModel item) async {
     await DatabaseHelper.deleteNote("LikedFlashCards", item);
+    fetchData("LikedFlashCards");
   }
+
+  addLikedFlashCardFromController(LikedFlashCardsModel item) async {
+    await DatabaseHelper.addNote('LikedFlashCards', item);
+    fetchData("LikedFlashCards");
+  }
+
+
 
   bool isItemExists(LikedFlashCardsModel? item) {
-    return likedData?.any((element) => element["title"] == item?.title) ?? false;
+    return likedData.any((element) => element["title"] == item?.title) ?? false;
   }
 
-  Future<void> fetchData() async {
-    List? fetchedData = await DatabaseHelper.getLikedFlashCardsData();
-    likedData = fetchedData?.map((e) => e.toJson()).toList();
-  }
 
+
+  void fetchData( String dbName ) async {
+    List? fetchedData = await DatabaseHelper.getLikedFlashCardsData(dbName);
+    likedData.value = fetchedData?.map((e) => e.toJson()).toList() ?? [];
+  }
 
 
 
 
   void getFlashCardData(String categoryName) async {
-
     change(null, status: RxStatus.loading());
 
     try {

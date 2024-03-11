@@ -7,7 +7,6 @@ import 'package:share_plus/share_plus.dart';
 import 'package:vocablury/components/app_bar/custom_app_bar.dart';
 import 'package:vocablury/flash_cards/controller%20/get_flash_card_controller.dart';
 import 'package:vocablury/flash_cards/view/category_view.dart';
-import 'package:vocablury/sqflite_database/db_connection/database_helper.dart';
 import 'package:vocablury/sqflite_database/model/liked_flash_cards_model.dart';
 import 'package:vocablury/utilities/constants/assets_path.dart';
 import 'package:vocablury/utilities/constants/blur_screen.dart';
@@ -21,7 +20,6 @@ class CustomFlashCards extends StatefulWidget {
   final String categoryName;
 
   const CustomFlashCards({
-
     Key? key,
     required this.categoryName,
   }) : super(key: key);
@@ -43,8 +41,6 @@ class _CustomFlashCardsState extends State<CustomFlashCards> {
     _pageController = PageController();
     _getFlashCardDataController.getFlashCardData(widget.categoryName);
     isBlurred = true;
-    debugPrint("initState ${_getFlashCardDataController.likedCardList.length}");
-    _getFlashCardDataController.fetchData();
   }
 
   Future _speak(String word) async {
@@ -75,6 +71,15 @@ class _CustomFlashCardsState extends State<CustomFlashCards> {
                 },
                 itemBuilder: (context, index) {
                   final item = state?.words?[index];
+                  final LikedFlashCardsModel data = LikedFlashCardsModel(
+                    id: item?.id?.toInt() ?? 0,
+                    title: item?.word ?? "",
+                    description: item?.exampleSentence ?? "",
+                    antonyms: item?.antonyms.toString() ?? "",
+                    synonyms: item?.synonyms.toString() ?? "",
+                  );
+
+                  final isLikedOrExists = _getFlashCardDataController.isItemExists(data);
 
                   return Container(
                     margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 16),
@@ -82,7 +87,6 @@ class _CustomFlashCardsState extends State<CustomFlashCards> {
                       showShadow: false,
                       borderRadius: 8,
                       color: AppColors.zircon,
-                      
                     ),
                     padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
                     child: Center(
@@ -163,65 +167,30 @@ class _CustomFlashCardsState extends State<CustomFlashCards> {
                               ),
                               GestureDetector(
                                 onTap: () async {
-                                  final LikedFlashCardsModel data = LikedFlashCardsModel(
-                                    id: item?.id?.toInt() ?? 0,
-                                    title: item?.word ?? "",
-                                    description: item?.exampleSentence ?? "",
-                                    antonyms: item?.antonyms.toString() ?? "",
-                                    synonyms: item?.synonyms.toString() ?? "",
-                                  );
+                                  if (isLikedOrExists) {
+                                    await _getFlashCardDataController.deleteLikedFlashCardFromController(data);
+                                    setState(() {});
 
-                                  if (_getFlashCardDataController.isItemExists(
-                                    LikedFlashCardsModel(
-                                      id: item?.id?.toInt() ?? 0,
-                                      title: item?.word ?? "",
-                                      description: item?.exampleSentence ?? "",
-                                      antonyms: item?.antonyms.toString() ?? "",
-                                      synonyms: item?.synonyms.toString() ?? "",
-                                    ),
-                                  )) {
-                                    _getFlashCardDataController.deleteLikedFlashCardFromController(data);
-                                    // await DatabaseHelper.deleteNote("LikedFlashCards", data).then((value) {
-                                    _getFlashCardDataController.fetchData();
-                                    // });
-                                    debugPrint("here is the Data deleted  ");
-
+                                    debugPrint(" here is the Data deleted ");
                                     return;
                                   }
 
-                                  await DatabaseHelper.addNote('LikedFlashCards', data).then((value) {
-                                    _getFlashCardDataController.fetchData();
-                                    debugPrint("here is the Data inserted  ");
-                                  });
+                                  if (!isLikedOrExists) {
+                                    await _getFlashCardDataController.addLikedFlashCardFromController(data);
+
+                                    setState(() {});
+                                    debugPrint("here is the Data inserted ");
+                                    return;
+                                  }
                                 },
                                 child: SvgPicture.asset(
-                                  _getFlashCardDataController.isItemExists(
-                                    LikedFlashCardsModel(
-                                      id: item?.id?.toInt() ?? 0,
-                                      title: item?.word ?? "",
-                                      description: item?.exampleSentence ?? "",
-                                      antonyms: item?.antonyms.toString() ?? "",
-                                      synonyms: item?.synonyms.toString() ?? "",
-                                    ),
-                                  )
-                                      ? AssetPath.heartFilled
-                                      : AssetPath.heart,
+                                  isLikedOrExists ? AssetPath.heartFilled : AssetPath.heart,
                                   height: 30,
                                   width: 30,
                                 ),
                               ),
                               SvgPicture.asset(
-                                _getFlashCardDataController.isItemExists(
-                                  LikedFlashCardsModel(
-                                    id: item?.id?.toInt() ?? 0,
-                                    title: item?.word ?? "",
-                                    description: item?.exampleSentence ?? "",
-                                    antonyms: item?.antonyms.toString() ?? "",
-                                    synonyms: item?.synonyms.toString() ?? "",
-                                  ),
-                                )
-                                    ? AssetPath.saved
-                                    : AssetPath.save,
+                                AssetPath.save,
                                 height: 30,
                                 width: 30,
                               ),

@@ -132,11 +132,11 @@ class DatabaseHelper {
 
 
   //  --------------------- get data for LikedFlashCards -------------------------------
-  static Future<List<LikedFlashCardsModel>?> getLikedFlashCardsData() async {
-    final db = await _getDB("LikedFlashCards");
+  static Future<List<LikedFlashCardsModel>?> getLikedFlashCardsData( String dbName) async {
+    final db = await _getDB(dbName);
 
     final List<Map<String, dynamic>> maps = await db.query(
-      "LikedFlashCards",
+      dbName,
     );
 
     if (maps.isEmpty) {
@@ -148,6 +148,7 @@ class DatabaseHelper {
           (index) => LikedFlashCardsModel.fromJson(maps[index]),
     );
   }
+
 
 
 

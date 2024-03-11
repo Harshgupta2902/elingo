@@ -85,7 +85,9 @@ final GoRouter goRouterConfig = GoRouter(
       parentNavigatorKey: rootNavigatorKey,
       path: GoPaths.likedFlashCardsView,
       builder: (context, state) {
-        return const LikedFlashCardsView();
+        final extraParams = state.extra as Map<String, dynamic>; // Explicit casting
+        final dbName = extraParams['dbName'];
+        return LikedFlashCardsView(dbName: dbName);
       },
     ),
     GoRoute(

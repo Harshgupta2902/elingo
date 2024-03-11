@@ -1,13 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:vocablury/flash_cards/model/flash_card_data_model.dart';
+import 'package:vocablury/sqflite_database/db_connection/database_helper.dart';
+import 'package:vocablury/sqflite_database/model/liked_flash_cards_model.dart';
 import 'package:vocablury/utilities/dio/api_request.dart';
 
 class GetFlashCardDataController extends GetxController with StateMixin<FlashCardDataModel> {
   RxList likedCardList = [].obs;
   RxList flashCards = [].obs;
+  List? likedData = [].obs;
+
+  deleteLikedFlashCardFromController(LikedFlashCardsModel item) async {
+    await DatabaseHelper.deleteNote("LikedFlashCards", item);
+  }
+
+  bool isItemExists(LikedFlashCardsModel? item) {
+    return likedData?.any((element) => element["title"] == item?.title) ?? false;
+  }
+
+  Future<void> fetchData() async {
+    List? fetchedData = await DatabaseHelper.getLikedFlashCardsData();
+    likedData = fetchedData?.map((e) => e.toJson()).toList();
+  }
+
+
+
+
 
   void getFlashCardData(String categoryName) async {
+
     change(null, status: RxStatus.loading());
 
     try {

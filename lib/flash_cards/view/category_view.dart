@@ -27,7 +27,6 @@ class FlashCardCategoryView extends StatelessWidget {
     AppColors.lightBluishGreen,
     AppColors.babyPurple,
     AppColors.sand,
-
     AppColors.lightBluishGreen,
   ];
 
@@ -48,6 +47,14 @@ class FlashCardCategoryView extends StatelessWidget {
         ),
         buildGridTestContainers(
           context: context,
+          routesData: [
+            "likedFlashCardsView",
+            "liked",
+            "noun",
+            "adjective",
+            "verb",
+            "adverb",
+          ],
           value: [
             KeyValuePair(
               key: "Liked ",

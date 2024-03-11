@@ -17,12 +17,11 @@ import 'package:vocablury/utilities/theme/button_decoration.dart';
 
 final _getFlashCardDataController = Get.put(GetFlashCardDataController());
 
-final dbReturnData = DatabaseHelper.getAllData();
-
 class CustomFlashCards extends StatefulWidget {
   final String categoryName;
 
   const CustomFlashCards({
+
     Key? key,
     required this.categoryName,
   }) : super(key: key);
@@ -38,35 +37,18 @@ class _CustomFlashCardsState extends State<CustomFlashCards> {
   final player = AudioPlayer();
   final flutterTts = FlutterTts();
 
-  List? likedData;
-
   @override
   void initState() {
     super.initState();
     _pageController = PageController();
-    _getFlashCardDataController.getFlashCardData(
-      widget.categoryName,
-    );
+    _getFlashCardDataController.getFlashCardData(widget.categoryName);
     isBlurred = true;
     debugPrint("initState ${_getFlashCardDataController.likedCardList.length}");
-    fetchData();
+    _getFlashCardDataController.fetchData();
   }
 
-  Future _speak(String word) async {}
-
-  Future<void> fetchData() async {
-    List? fetchedData = await DatabaseHelper.getAllData();
-    setState(() {
-      likedData = fetchedData?.map((e) => e.toJson()).toList();
-    });
-  }
-
-  bool isItemExists(LikedFlashCardsModel? item) {
-    return likedData?.any((element) => element["title"] == item?.title) ?? false;
-  }
-
-  void updateLikedCardList(Map data) {
-    _getFlashCardDataController.likedCardList.add(data);
+  Future _speak(String word) async {
+    await flutterTts.speak(word);
   }
 
   @override
@@ -100,6 +82,7 @@ class _CustomFlashCardsState extends State<CustomFlashCards> {
                       showShadow: false,
                       borderRadius: 8,
                       color: AppColors.zircon,
+                      
                     ),
                     padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
                     child: Center(
@@ -168,26 +151,15 @@ class _CustomFlashCardsState extends State<CustomFlashCards> {
                             children: [
                               GestureDetector(
                                 onTap: () {
-                                  Share.share(
-                                    item?.word ?? "",
-                                    subject: "  ${item?.word ?? ""}",
-                                  );
+                                  Share.share(item?.word ?? "", subject: item?.word ?? "");
                                 },
-                                child: SvgPicture.asset(
-                                  AssetPath.share,
-                                  height: 30,
-                                  width: 30,
-                                ),
+                                child: SvgPicture.asset(AssetPath.share, height: 30, width: 30),
                               ),
                               GestureDetector(
                                 onTap: () {
                                   _speak(item?.word ?? "");
                                 },
-                                child: SvgPicture.asset(
-                                  AssetPath.speaker,
-                                  height: 30,
-                                  width: 30,
-                                ),
+                                child: SvgPicture.asset(AssetPath.speaker, height: 30, width: 30),
                               ),
                               GestureDetector(
                                 onTap: () async {
@@ -199,7 +171,7 @@ class _CustomFlashCardsState extends State<CustomFlashCards> {
                                     synonyms: item?.synonyms.toString() ?? "",
                                   );
 
-                                  if (isItemExists(
+                                  if (_getFlashCardDataController.isItemExists(
                                     LikedFlashCardsModel(
                                       id: item?.id?.toInt() ?? 0,
                                       title: item?.word ?? "",
@@ -208,19 +180,22 @@ class _CustomFlashCardsState extends State<CustomFlashCards> {
                                       synonyms: item?.synonyms.toString() ?? "",
                                     ),
                                   )) {
-                                    await DatabaseHelper.deleteNote(data).then((value) {
-                                      fetchData();
-                                    });
-                                    debugPrint("here is the Data ");
+                                    _getFlashCardDataController.deleteLikedFlashCardFromController(data);
+                                    // await DatabaseHelper.deleteNote("LikedFlashCards", data).then((value) {
+                                    _getFlashCardDataController.fetchData();
+                                    // });
+                                    debugPrint("here is the Data deleted  ");
+
                                     return;
                                   }
 
-                                  await DatabaseHelper.addNote(data).then((value) {
-                                    fetchData();
+                                  await DatabaseHelper.addNote('LikedFlashCards', data).then((value) {
+                                    _getFlashCardDataController.fetchData();
+                                    debugPrint("here is the Data inserted  ");
                                   });
                                 },
                                 child: SvgPicture.asset(
-                                  isItemExists(
+                                  _getFlashCardDataController.isItemExists(
                                     LikedFlashCardsModel(
                                       id: item?.id?.toInt() ?? 0,
                                       title: item?.word ?? "",
@@ -236,7 +211,7 @@ class _CustomFlashCardsState extends State<CustomFlashCards> {
                                 ),
                               ),
                               SvgPicture.asset(
-                                isItemExists(
+                                _getFlashCardDataController.isItemExists(
                                   LikedFlashCardsModel(
                                     id: item?.id?.toInt() ?? 0,
                                     title: item?.word ?? "",
@@ -244,8 +219,9 @@ class _CustomFlashCardsState extends State<CustomFlashCards> {
                                     antonyms: item?.antonyms.toString() ?? "",
                                     synonyms: item?.synonyms.toString() ?? "",
                                   ),
-                                ) ?
-                                AssetPath.saved : AssetPath.save,
+                                )
+                                    ? AssetPath.saved
+                                    : AssetPath.save,
                                 height: 30,
                                 width: 30,
                               ),

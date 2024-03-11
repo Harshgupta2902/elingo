@@ -132,6 +132,7 @@ Widget buildGridContainers({
 Widget buildGridTestContainers({
   required BuildContext context,
   required List value,
+  required List routesData,
   List<Color>? bgColors,
   List<Color>? borderColorsList,
 }) {
@@ -146,52 +147,55 @@ Widget buildGridTestContainers({
     itemCount: value.length ?? 0,
     itemBuilder: (context, index) {
       final data = value[index];
+      final route = routesData[index];
 
       final backColors = bgColors?[index];
       final borderColors = borderColorsList?[index];
 
-      return Container(
-        margin: const EdgeInsets.symmetric(
-          horizontal: 10,
-          vertical: 12,
-        ),
-        width: 160,
-        decoration: AppBoxDecoration.getBorderBoxDecoration(
-          color: backColors ?? AppColors.tequila,
-          borderRadius: 18,
-          showShadow: false,
-          borderColor: borderColors ?? AppColors.sand,
-        ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 12,
-            vertical: 12,
+      return GestureDetector(
+        onTap: () {
+          context.push("/$route");
+        },
+        child: Container(
+          margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+          width: 160,
+          decoration: AppBoxDecoration.getBorderBoxDecoration(
+            color: backColors ?? AppColors.tequila,
+            borderRadius: 18,
+            showShadow: false,
+            borderColor: borderColors ?? AppColors.sand,
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const SizedBox(height: 10),
-              Text(
-                data.key ?? '',
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.brightGrey,
-                    ),
-              ),
-              const SizedBox(height: 10),
-              Text(
-                data.value ?? "",
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: AppColors.brightGrey,
-                    ),
-              ),
-              Lottie.asset(
-                data.path.toString() ?? "",
-                fit: BoxFit.fitHeight,
-                height: 100,
-              ),
-            ],
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 12,
+              vertical: 12,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const SizedBox(height: 10),
+                Text(
+                  data.key ?? '',
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.brightGrey,
+                      ),
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  data.value ?? "",
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: AppColors.brightGrey,
+                      ),
+                ),
+                Lottie.asset(
+                  data.path.toString() ?? "",
+                  fit: BoxFit.fitHeight,
+                  height: 100,
+                ),
+              ],
+            ),
           ),
         ),
       );

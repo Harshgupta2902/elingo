@@ -21,7 +21,6 @@ class ChooseFlashCardScreen extends StatefulWidget {
 class _ChooseFlashCardScreenState extends State<ChooseFlashCardScreen> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _getFlashCardController.getFlashCardListData();
   }
@@ -46,7 +45,7 @@ class _ChooseFlashCardScreenState extends State<ChooseFlashCardScreen> {
                 final item = state?.categoryNameList?[index];
                 return KeyValuePair(
                   key: item?.title ?? "",
-                  value: item?.subTitle ?? "",
+                  value: item?.categoryName ?? "",
                   path: AssetPath.image,
                 );
               },
@@ -58,6 +57,7 @@ class _ChooseFlashCardScreenState extends State<ChooseFlashCardScreen> {
                 GoPaths.customFlashCards,
                 extra: {
                   "categoryName": categoryNameList?.categoryName ?? "",
+                  "dbName": categoryNameList?.title ?? "",
                 },
               );
             },

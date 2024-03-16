@@ -54,6 +54,10 @@ dependencies:
   sqflite: ^2.0.2
   flutter_pdfview: ^1.3.2
   flutter_tts: ^3.8.5
+  path_provider: ^2.1.2
+  fluttertoast: ^8.2.4
+  firebase_core: ^2.24.2
+
 
 
 
@@ -101,35 +105,35 @@ flutter:
   # example:
 
 
-  fonts:
-    - family: Urbanist
-      fonts:
-        - asset: assets/font/Urbanist/Urbanist-Regular.ttf
-          weight: 400
-
-        - asset: assets/font/Urbanist/Urbanist-Bold.ttf
-          weight: 700
-
-        - asset: assets/font/Urbanist/Urbanist-Medium.ttf
-          weight: 500
-
-        - asset: assets/font/Urbanist/Urbanist-Light.ttf
-          weight: 300
-
 #  fonts:
 #    - family: Urbanist
 #      fonts:
-#        - asset: assets/font/DiariaPro-Medium.ttf
+#        - asset: assets/font/Urbanist/Urbanist-Regular.ttf
 #          weight: 400
 #
-#        - asset: assets/font/DiariaPro-Medium.ttf
+#        - asset: assets/font/Urbanist/Urbanist-Bold.ttf
 #          weight: 700
 #
-#        - asset: assets/font/DiariaPro-Medium.ttf
+#        - asset: assets/font/Urbanist/Urbanist-Medium.ttf
 #          weight: 500
 #
-#        - asset: assets/font/DiariaPro-Medium.ttf
+#        - asset: assets/font/Urbanist/Urbanist-Light.ttf
 #          weight: 300
+
+  fonts:
+    - family: Quicksand
+      fonts:
+        - asset: assets/quick_sand_font/Quicksand-Regular.ttf
+          weight: 400
+
+        - asset: assets/quick_sand_font/Quicksand-Bold.ttf
+          weight: 700
+
+        - asset: assets/quick_sand_font/Quicksand-Medium.ttf
+          weight: 500
+
+        - asset: assets/quick_sand_font/Quicksand-Light.ttf
+          weight: 300
 
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

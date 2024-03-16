@@ -52,7 +52,7 @@ class DashboardViewState extends State<DashboardView> {
     "videoLinksView",
     "readingScreen",
     "readingScreen",
-    "dictionary",
+    "onboardingQuestions",
     // "likedFlashCardsView",
 
     "irregularVerbsScreen",

@@ -12,7 +12,18 @@ class GoPaths {
 
   static const String test = '/test';
   static const String view = '/view';
+
+
+
+
+
+  static const String loginView = '/loginView';
+
+
+
+  static const String onboardingQuestions = '/onboardingQuestions';
   static const String likedFlashCardsView = '/likedFlashCardsView';
+  static const String savedFlashCardsView = '/savedFlashCardsView';
   static const String customFlashCards = '/customFlashCards';
   static const String chooseFlashCardScreen = '/chooseFlashCardScreen';
   static const String chooseMockTestScreen = '/chooseMockTestScreen';

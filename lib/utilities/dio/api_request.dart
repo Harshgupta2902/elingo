@@ -34,7 +34,13 @@ Future<Response> postRequest({
 
   debugPrint("~~~~~~~~~~~~~~~~~~~~ $apiEndPoint postRequest postData $postData ~~~~~~~~~~~~~~~~~~~~ ");
 
-  final response = await client.post(apiEndPoint, data: postData);
+  final response = await client.post(
+    apiEndPoint,
+    data: postData,
+    options: Options(
+      contentType: Headers.jsonContentType,
+    ),
+  );
 
   debugPrint("~~~~~~~~~~~~~~~~~~~~ $apiEndPoint postRequest End ~~~~~~~~~~~~~~~~~~~~ ");
 

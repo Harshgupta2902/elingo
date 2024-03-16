@@ -1,20 +1,26 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:hive_flutter/adapters.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:vocablury/utilities/theme/app_colors.dart';
 
 import 'utilities/navigation/route_generator.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Hive.initFlutter();
-  await Hive.openBox("isSubmittedListBox");
+
+  // await Firebase.initializeApp();
+  var directory = await getApplicationDocumentsDirectory();
+  Hive.init(directory.path);
+
   // await Firebase.initializeApp();
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
+
   // CheckBiometrics();
 
   FlutterError.onError = (FlutterErrorDetails details) {
@@ -38,10 +44,18 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         useMaterial3: false,
         primaryColor: AppColors.scienceBlue,
-        fontFamily: 'Urbanist',
+        fontFamily: 'Quicksand',
         outlinedButtonTheme: OutlinedButtonThemeData(
           style: OutlinedButton.styleFrom(
             foregroundColor: AppColors.scienceBlue,
+          ),
+        ),
+        bottomSheetTheme: const BottomSheetThemeData(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20),
+              topRight: Radius.circular(20),
+            ),
           ),
         ),
         inputDecorationTheme: InputDecorationTheme(

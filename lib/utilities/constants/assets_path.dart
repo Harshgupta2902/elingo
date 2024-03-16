@@ -7,13 +7,18 @@ class AssetPath {
 
 
   // png images
-  static const String   wrong = "assets/png_images/cross.png";
+  static const String wrong = "assets/png_images/cross.png";
   static const String check = "assets/png_images/check.png";
   static const String user = "assets/svg_images/user.svg";
   static const String image = "assets/png_images/image.png";
   static const String music = "assets/png_images/music.png";
   static const String flash = "assets/png_images/flash.png";
   static const String reading = "assets/png_images/reading.png";
+
+
+  // svg images
+  static const String show = "assets/dashboard/show.svg";
+  static const String hide = "assets/dashboard/hide.svg";
 
   // flash Cards Icons
   static const String heart = "assets/flash_cards_icons/heart.svg";

@@ -1,23 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:vocablury/components/app_bar/custom_app_bar.dart';
+import 'package:vocablury/dashboard_module/quiz/model/daily_quiz_model.dart';
 import 'package:vocablury/utilities/constants/assets_path.dart';
 import 'package:vocablury/utilities/theme/app_colors.dart';
 import 'package:vocablury/utilities/theme/box_decoration.dart';
-
-import '../model/daily_quiz_model.dart';
 
 class TestResultPage extends StatelessWidget {
   final List<Questions> questions;
   final List<int> selectedAnswers;
   final int correctCount;
-  final int totalTimeInSeconds;
 
   const TestResultPage({
     Key? key,
     required this.questions,
     required this.selectedAnswers,
     required this.correctCount,
-    required this.totalTimeInSeconds,
   }) : super(key: key);
 
   @override
@@ -33,7 +30,8 @@ class TestResultPage extends StatelessWidget {
           return;
         },
       ),
-      body: ListView.builder(
+      body:
+      ListView.builder(
         physics: const BouncingScrollPhysics(),
         itemCount: questions.length,
         itemBuilder: (BuildContext context, int index) {
@@ -50,7 +48,6 @@ class TestResultPage extends StatelessWidget {
 
           return Container(
             margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
-
             decoration: AppBoxDecoration.getBorderBoxDecoration(
               showShadow: true,
               shadowColor: AppColors.zircon,

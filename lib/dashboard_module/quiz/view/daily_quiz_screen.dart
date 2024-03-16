@@ -6,21 +6,24 @@ import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:vocablury/components/app_bar/custom_app_bar.dart';
 import 'package:vocablury/dashboard_module/quiz/controller/daily_quiz_controller.dart';
-import 'package:vocablury/utilities/constants/assets_path.dart';
 import 'package:vocablury/utilities/navigation/go_paths.dart';
 import 'package:vocablury/utilities/theme/app_colors.dart';
 import 'package:vocablury/utilities/theme/box_decoration.dart';
 
 final _quizController = Get.put(GetDailyQuizController());
 
+typedef OnTestCompleted = Function(int);
+
 class DailyQuizScreen extends StatefulWidget {
   final String apiUrl;
   final int? completedIndex;
+  final OnTestCompleted onTestCompleted;
 
   const DailyQuizScreen({
     Key? key,
     required this.apiUrl,
     this.completedIndex,
+    required this.onTestCompleted,
   }) : super(key: key);
 
   @override
@@ -33,9 +36,9 @@ class DailyQuizScreenState extends State<DailyQuizScreen> with TickerProviderSta
   final selectedOption = "".obs;
   final currentQuestionIndex = 0.obs;
   final answered = false.obs;
-  final secondsLeft = 30.obs;
+  final secondsLeft = 5.obs;
   Timer? timer;
-  Map<int, Map<String, String>> answerStatus = {};
+  Map<String, String> answerStatus = {};
 
   @override
   void initState() {
@@ -56,71 +59,116 @@ class DailyQuizScreenState extends State<DailyQuizScreen> with TickerProviderSta
   }
 
   startTimer() async {
-    timer = Timer.periodic(
-      const Duration(seconds: 1),
-      (timer) {
-        if (secondsLeft.value < 0) {
-          timer.cancel();
-          debugPrint("timer End here");
+    while (true) {
+      await Future.delayed(const Duration(seconds: 1));
 
-          _updateAnswerStatus(currentQuestionIndex.value, "Not Attempted", false);
-          debugPrint("here is the restart  updated index ${currentQuestionIndex.value}");
+      if (secondsLeft.value > 0) {
+        secondsLeft.value--;
+      }
 
-          currentQuestionIndex.value++;
-          selectedOption.value = '';
-          answered.value = false;
-          debugPrint("here is the restart after   updated index ${currentQuestionIndex.value}");
+      if (secondsLeft.value <= 0) {
+        debugPrint("timer End here");
 
-          _restartTimer();
-          debugPrint("answer status: $answerStatus");
-          return;
-        }
+        _updateAnswerStatus(
+            _quizController.state?.questions?[currentQuestionIndex.value].question ?? "", "Not Attempted");
+        debugPrint("here is the restart  updated index ${currentQuestionIndex.value}");
 
-        if (secondsLeft.value == 0 &&
-            currentQuestionIndex.value + 1 == _quizController.state?.questions?.length &&
-            answered.value == false) {
-          _updateAnswerStatus(currentQuestionIndex.value, "Not Attempted", false);
-          debugPrint("function called  End here");
-          List<int> selectedAnswers = answerStatus.entries.map((entry) {
-            String? option = entry.value['option'];
-            int index = _quizController.state?.questions?[entry.key].options?.indexOf(option!) ?? -1;
-            return index;
-          }).toList();
+        currentQuestionIndex.value++;
+        selectedOption.value = '';
+        answered.value = false;
+        debugPrint("here is the restart after   updated index ${currentQuestionIndex.value}");
 
-          timer.cancel();
-          _quizController.testSubmitted.value = true;
-          context.push(
-            GoPaths.testResultPage,
-            extra: {
-              "questions": _quizController.state?.questions ?? [],
-              "selectedAnswers": selectedAnswers,
-              "correctCount": answerStatus.values.where((value) => value['result'] == 'Correct!').length,
-              "totalTimeInSeconds": (_quizController.state?.questions?.length ?? 0) * 10,
-            },
-          );
-          return;
-        }
-        if (secondsLeft > 0) {
-          secondsLeft.value--;
-        }
-      },
-    );
+        _restartTimer();
+        debugPrint("answer status: $answerStatus");
+      }
+
+      if (currentQuestionIndex.value + 2 == (_quizController.state?.questions?.length ?? 0) + 1 &&
+          answered.value == false &&
+          secondsLeft.value <= 1) {
+        debugPrint(
+            "${currentQuestionIndex.value + 2 == (_quizController.state?.questions?.length ?? 0) + 1 && answered.value == false}");
+        _updateAnswerStatus(
+            _quizController.state?.questions?[currentQuestionIndex.value].question ?? "", "Not Attempted");
+        debugPrint("function called  secondsLeft :  ${secondsLeft.value}");
+        debugPrint("function called  End here");
+
+        _quizController.testSubmitted.value = true;
+
+        await context.push(GoPaths.test, extra: {
+          "userAnswers": answerStatus,
+          "questions": _quizController.state?.questions,
+        });
+
+        widget.onTestCompleted((widget.completedIndex)! + 1 ?? 0);
+        return; // Return from the function after submitting the test
+      }
+    }
   }
+
+  // startTimer() async {
+  //   timer = Timer.periodic(
+  //     const Duration(seconds: 1),
+  //     (timer) {
+  //       if (secondsLeft > 0) {
+  //         secondsLeft.value--;
+  //       }
+  //
+  //       if (secondsLeft.value <= 0) {
+  //         debugPrint("timer End here");
+  //
+  //         _updateAnswerStatus(currentQuestionIndex.value, "Not Attempted", false);
+  //         debugPrint("here is the restart  updated index ${currentQuestionIndex.value}");
+  //
+  //         currentQuestionIndex.value++;
+  //         selectedOption.value = '';
+  //         answered.value = false;
+  //         debugPrint("here is the restart after   updated index ${currentQuestionIndex.value}");
+  //
+  //         _restartTimer();
+  //         debugPrint("answer status: $answerStatus");
+  //
+  //         return;
+  //       }
+  //
+  //       if (currentQuestionIndex.value + 2 == (_quizController.state?.questions?.length ?? 0) + 1 &&
+  //           answered.value == false) {
+  //         _updateAnswerStatus(currentQuestionIndex.value, "Not Attempted", false);
+  //         debugPrint("function called  secondsLeft :  ${secondsLeft.value}");
+  //         debugPrint("function called  End here");
+  //         List<int> selectedAnswers = answerStatus.entries.map((entry) {
+  //           String? option = entry.value['option'];
+  //           int index = _quizController.state?.questions?[entry.key].options?.indexOf(option!) ?? 0;
+  //           return index;
+  //         }).toList();
+  //
+  //         timer.cancel();
+  //
+  //         _quizController.testSubmitted.value = true;
+  //         context.push(
+  //           GoPaths.testResultPage,
+  //           extra: {
+  //             "questions": _quizController.state?.questions ?? [],
+  //             "selectedAnswers": selectedAnswers,
+  //             "correctCount": answerStatus.values.where((value) => value['result'] == 'Correct!').length,
+  //             "totalTimeInSeconds": (_quizController.state?.questions?.length ?? 0) * 10,
+  //           },
+  //         );
+  //         return;
+  //       }
+  //     },
+  //   );
+  // }
 
   _restartTimer() {
     _controller.reset();
+    secondsLeft.value = 5;
     _controller.forward();
-
-    secondsLeft.value = 30;
     debugPrint("timer restarted here ");
   }
 
-  void _updateAnswerStatus(int questionIndex, String option, bool isCorrect) {
+  void _updateAnswerStatus(String questionKey, String option) {
     setState(() {
-      answerStatus[questionIndex] = {
-        'option': option,
-        'result': isCorrect ? 'Correct!' : 'Wrong!',
-      };
+      answerStatus[questionKey] = option;
     });
   }
 
@@ -153,45 +201,33 @@ class DailyQuizScreenState extends State<DailyQuizScreen> with TickerProviderSta
     String option,
   ) async {
     if (selectedOption.value.isEmpty) {
-      debugPrint("Select an option before proceeding");
       return;
     }
 
     selectedOption.value = option;
     answered.value = true;
-    debugPrint("button tapped here ");
-    bool isCorrect = option == _quizController.state?.questions?[currentQuestionIndex.value].correctAnswer;
 
     final lastIndex = _quizController.state?.questions?.length ?? 0;
 
     if (index >= lastIndex - 1) {
-      _updateAnswerStatus(currentQuestionIndex.value, option, isCorrect);
-      List<int> selectedAnswers = answerStatus.entries.map((entry) {
-        String? option = entry.value['option'];
-        int index = _quizController.state?.questions?[entry.key].options?.indexOf(option!) ?? -1;
-        return index;
-      }).toList();
+      _updateAnswerStatus(_quizController.state?.questions?[currentQuestionIndex.value].question ?? "", option);
 
       timer?.cancel();
       _quizController.testSubmitted.value = true;
-      await context.push(
-        GoPaths.testResultPage,
-        extra: {
-          "questions": _quizController.state?.questions ?? [],
-          "selectedAnswers": selectedAnswers,
-          "correctCount": answerStatus.values.where((value) => value['result'] == 'Correct!').length,
-          "totalTimeInSeconds": (_quizController.state?.questions?.length ?? 0) * 10,
-        },
-      );
+
+      await context.push(GoPaths.test, extra: {
+        "userAnswers": answerStatus,
+        "questions": _quizController.state?.questions,
+      });
 
       debugPrint("end Quiz ");
       return;
     }
 
     if (index < lastIndex - 1) {
-      _updateAnswerStatus(currentQuestionIndex.value, option, isCorrect);
-      currentQuestionIndex.value++; // Update currentQuestionIndex
-      selectedOption.value = ''; // Reset selectedOption
+      _updateAnswerStatus(_quizController.state?.questions?[currentQuestionIndex.value].question ?? "", option);
+      currentQuestionIndex.value++;
+      selectedOption.value = '';
       answered.value = false;
 
       _restartTimer();
@@ -202,7 +238,7 @@ class DailyQuizScreenState extends State<DailyQuizScreen> with TickerProviderSta
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.whiteSmoke,
+      backgroundColor: AppColors.zircon,
       appBar: CustomAppBar(
         title: "",
         isProfileView: false,
@@ -333,44 +369,25 @@ class DailyQuizScreenState extends State<DailyQuizScreen> with TickerProviderSta
                   final option = questionsData?.options?[index];
                   return GestureDetector(
                     onTap: () async {
-                      if (!answered.value) {
-                        await checkAnswer(option ?? "");
-                      }
+                      selectedOption.value = option ?? "";
+                      answered.value = true;
                     },
                     child: Container(
                       padding: const EdgeInsets.all(10),
                       margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                       decoration: AppBoxDecoration.getBorderBoxDecoration(
-                        color: AppColors.zircon,
-                        showShadow: true,
-                        borderColor:
-                            answered.value && option == state?.questions?[currentQuestionIndex.value].correctAnswer
-                                ? Colors.green
-                                : answered.value &&
-                                        option != state?.questions?[currentQuestionIndex.value].correctAnswer &&
-                                        selectedOption.value == option
-                                    ? Colors.red
-                                    : AppColors.lemonGrass.withOpacity(0.5),
-                        borderWidth: 2.0,
-                        shadowColor: AppColors.lemonGrass.withOpacity(0.3),
+                        borderRadius: 10,
+                        color: AppColors.white,
+                        borderColor: selectedOption.value == (option ?? "") ? AppColors.scienceBlue : AppColors.white,
                       ),
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
                             option ?? "",
                             style: Theme.of(context).textTheme.titleMedium?.copyWith(
                                   color: AppColors.black,
                                 ),
-                          ),
-                          assetIcon(
-                            answered.value && option == state?.questions?[currentQuestionIndex.value].correctAnswer
-                                ? AssetPath.check
-                                : answered.value &&
-                                        option != state?.questions?[currentQuestionIndex.value].correctAnswer &&
-                                        selectedOption.value == option
-                                    ? AssetPath.wrong
-                                    : "",
                           ),
                         ],
                       ),
@@ -379,7 +396,7 @@ class DailyQuizScreenState extends State<DailyQuizScreen> with TickerProviderSta
                 },
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 40),
+                padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 40),
                 child: ElevatedButton(
                   onPressed: () {
                     nextQuestion(currentQuestionIndex.value, selectedOption.value);
@@ -387,7 +404,7 @@ class DailyQuizScreenState extends State<DailyQuizScreen> with TickerProviderSta
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.scienceBlue,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(14),
                     ),
                   ),
                   child: SizedBox(
@@ -395,9 +412,11 @@ class DailyQuizScreenState extends State<DailyQuizScreen> with TickerProviderSta
                     height: MediaQuery.of(context).size.height * 0.06,
                     child: Center(
                       child: Text(
-                        currentQuestionIndex.value - 2 == state?.questions?.length ? "Submit" : "Next",
+                        currentQuestionIndex.value + 1 == _quizController.state?.questions?.length
+                            ? "Submit"
+                            : " Save & Next",
                         textAlign: TextAlign.center,
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                               color: AppColors.white,
                             ),
                       ),

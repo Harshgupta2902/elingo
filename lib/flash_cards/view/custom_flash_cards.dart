@@ -3,44 +3,115 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get/get.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:vocablury/components/app_bar/custom_app_bar.dart';
 import 'package:vocablury/flash_cards/controller%20/get_flash_card_controller.dart';
 import 'package:vocablury/flash_cards/view/category_view.dart';
-import 'package:vocablury/sqflite_database/model/liked_flash_cards_model.dart';
 import 'package:vocablury/utilities/constants/assets_path.dart';
 import 'package:vocablury/utilities/constants/blur_screen.dart';
 import 'package:vocablury/utilities/theme/app_colors.dart';
 import 'package:vocablury/utilities/theme/box_decoration.dart';
 import 'package:vocablury/utilities/theme/button_decoration.dart';
 
+import '../../utilities/constants/key_value_pair.dart';
+
 final _getFlashCardDataController = Get.put(GetFlashCardDataController());
 
 class CustomFlashCards extends StatefulWidget {
   final String categoryName;
+  final String dbName;
 
   const CustomFlashCards({
     Key? key,
     required this.categoryName,
+    required this.dbName,
   }) : super(key: key);
 
   @override
   State<CustomFlashCards> createState() => _CustomFlashCardsState();
 }
 
-class _CustomFlashCardsState extends State<CustomFlashCards> {
+class _CustomFlashCardsState extends State<CustomFlashCards> with TickerProviderStateMixin {
   late PageController _pageController;
   int currentPage = 0;
   bool isBlurred = false;
-  final player = AudioPlayer();
+
   final flutterTts = FlutterTts();
+  late AnimationController _controller;
+  late Animation<double> _animation;
 
   @override
   void initState() {
     super.initState();
     _pageController = PageController();
-    _getFlashCardDataController.getFlashCardData(widget.categoryName);
+    _getFlashCardDataController.getFlashCardData(categoryName: widget.categoryName);
     isBlurred = true;
+    openDataBase();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 500), // Adjust the duration as needed
+    );
+    _animation = Tween(begin: 1.0, end: 1.5).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: Curves.easeInOutBack, // Use different curves for different effects
+      ),
+    );
+    _controller.addListener(() {
+      setState(() {});
+    });
+    _controller.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        _controller.reverse();
+      }
+    });
+  }
+
+  openDataBase() async {
+    var liked = await Hive.openBox("LikedFlashCards");
+    var saved = await Hive.openBox("SavedFlashCards");
+
+    List<dynamic> likedItemList = liked.get("LikedFlashCards", defaultValue: []);
+    _getFlashCardDataController.testLikedData.value = likedItemList;
+
+    List<dynamic> savedItemList = saved.get("SavedFlashCards", defaultValue: []);
+    _getFlashCardDataController.testSavedData.value = savedItemList;
+  }
+
+  Future<void> addAndDeleteDataTOHiveBox(Map<String, dynamic> boxData, {required String tableName}) async {
+    var box = await Hive.openBox(tableName);
+
+    var itemList = box.get(tableName, defaultValue: []);
+
+    bool allReadyExist = itemList.any((element) => element["title"] == boxData["title"]);
+    debugPrint("allReadyExist ----------- $allReadyExist");
+
+    if (allReadyExist) {
+      itemList.removeWhere((element) => element["title"] == boxData["title"]);
+
+      await box.put(tableName, itemList);
+
+      setState(() {});
+      return;
+    }
+
+    if (!allReadyExist) {
+      itemList.add(boxData);
+
+      await box.put(tableName, itemList);
+
+      setState(() {});
+      return;
+    }
+  }
+
+  bool isLikedItemExists(dynamic item) {
+    return _getFlashCardDataController.testLikedData.any((element) => element["title"] == item["title"]);
+  }
+
+  bool isSavedItemExists(dynamic item) {
+    return _getFlashCardDataController.testSavedData.any((element) => element["title"] == item["title"]);
   }
 
   Future _speak(String word) async {
@@ -53,8 +124,8 @@ class _CustomFlashCardsState extends State<CustomFlashCards> {
       children: [
         Scaffold(
           backgroundColor: AppColors.zircon,
-          appBar: const CustomAppBar(
-            title: "Flash Cards",
+          appBar: CustomAppBar(
+            title: widget.dbName,
             isProfileView: false,
           ),
           body: _getFlashCardDataController.obx(
@@ -71,15 +142,17 @@ class _CustomFlashCardsState extends State<CustomFlashCards> {
                 },
                 itemBuilder: (context, index) {
                   final item = state?.words?[index];
-                  final LikedFlashCardsModel data = LikedFlashCardsModel(
-                    id: item?.id?.toInt() ?? 0,
-                    title: item?.word ?? "",
-                    description: item?.exampleSentence ?? "",
-                    antonyms: item?.antonyms.toString() ?? "",
-                    synonyms: item?.synonyms.toString() ?? "",
-                  );
 
-                  final isLikedOrExists = _getFlashCardDataController.isItemExists(data);
+                  final boxData = {
+                    "id": item?.id ?? '',
+                    "title": item?.title ?? "",
+                    "description": item?.exampleSentence ?? "",
+                    "antonyms": item?.antonyms.toString() ?? "",
+                    "synonyms": item?.synonyms.toString() ?? "",
+                  };
+
+                  final isLikedOrExists = isLikedItemExists(boxData);
+                  final isSavedOrExists = isSavedItemExists(boxData);
 
                   return Container(
                     margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 16),
@@ -98,7 +171,7 @@ class _CustomFlashCardsState extends State<CustomFlashCards> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  item?.word ?? '',
+                                  item?.title ?? '',
                                   style: Theme.of(context).textTheme.displaySmall?.copyWith(
                                         color: AppColors.black,
                                       ),
@@ -155,44 +228,63 @@ class _CustomFlashCardsState extends State<CustomFlashCards> {
                             children: [
                               GestureDetector(
                                 onTap: () {
-                                  Share.share(item?.word ?? "", subject: item?.word ?? "");
+                                  Share.share(item?.title ?? "", subject: item?.title ?? "");
                                 },
                                 child: SvgPicture.asset(AssetPath.share, height: 30, width: 30),
                               ),
                               GestureDetector(
                                 onTap: () {
-                                  _speak(item?.word ?? "");
+                                  _speak(item?.title ?? "");
                                 },
                                 child: SvgPicture.asset(AssetPath.speaker, height: 30, width: 30),
                               ),
+                              // GestureDetector(
+                              //   onTap: () async {
+                              //     await addAndDeleteDataTOHiveBox(boxData, tableName: "LikedFlashCards");
+                              //     openDataBase();
+                              //     setState(() {});
+                              //     return;
+                              //   },
+                              //   child: SvgPicture.asset(
+                              //     isLikedOrExists ? AssetPath.heartFilled : AssetPath.heart,
+                              //     height: 30,
+                              //     width: 30,
+                              //   ),
+                              // ),
                               GestureDetector(
                                 onTap: () async {
-                                  if (isLikedOrExists) {
-                                    await _getFlashCardDataController.deleteLikedFlashCardFromController(data);
-                                    setState(() {});
-
-                                    debugPrint(" here is the Data deleted ");
-                                    return;
-                                  }
-
-                                  if (!isLikedOrExists) {
-                                    await _getFlashCardDataController.addLikedFlashCardFromController(data);
-
-                                    setState(() {});
-                                    debugPrint("here is the Data inserted ");
-                                    return;
-                                  }
+                                  await addAndDeleteDataTOHiveBox(boxData, tableName: "LikedFlashCards");
+                                  openDataBase();
+                                  setState(() {});
+                                  _controller.forward(from: 0.0); // Start the animation from the beginning
+                                  return;
+                                },
+                                child: AnimatedBuilder(
+                                  animation: _animation,
+                                  builder: (context, child) {
+                                    return Transform.scale(
+                                      scale: _animation.value,
+                                      child: SvgPicture.asset(
+                                        isLikedOrExists ? AssetPath.heartFilled : AssetPath.heart,
+                                        height: 30,
+                                        width: 30,
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: () async {
+                                  await addAndDeleteDataTOHiveBox(boxData, tableName: "SavedFlashCards");
+                                  openDataBase();
+                                  setState(() {});
+                                  return;
                                 },
                                 child: SvgPicture.asset(
-                                  isLikedOrExists ? AssetPath.heartFilled : AssetPath.heart,
+                                  isSavedOrExists ? AssetPath.saved : AssetPath.save,
                                   height: 30,
                                   width: 30,
                                 ),
-                              ),
-                              SvgPicture.asset(
-                                AssetPath.save,
-                                height: 30,
-                                width: 30,
                               ),
                             ],
                           ),
@@ -225,7 +317,33 @@ class _CustomFlashCardsState extends State<CustomFlashCards> {
                   ),
                   onPressed: () {
                     debugPrint("category button pressed");
-                    showCustomBottomSheet(context);
+                    showModalBottomSheet(
+                      context: context,
+                      isDismissible: true,
+                      enableDrag: true,
+                      isScrollControlled: true,
+                      showDragHandle: true,
+                      constraints: BoxConstraints(
+                        maxHeight: MediaQuery.of(context).size.height * 0.7,
+                        minHeight: MediaQuery.of(context).size.height * 0.5,
+                      ),
+                      builder: (context) {
+                        return FlashCardCategoryView(
+                          routesData: [
+                            KeyValuePair(
+                              key: "Liked Flash Cards",
+                              value: "LikedFlashCards",
+                              path: "likedFlashCardsView",
+                            ),
+                            KeyValuePair(
+                              key: "Saved Flash Cards",
+                              value: "SavedFlashCards",
+                              path: "likedFlashCardsView",
+                            )
+                          ],
+                        );
+                      },
+                    );
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -245,7 +363,6 @@ class _CustomFlashCardsState extends State<CustomFlashCards> {
                     ],
                   ),
                 ),
-                const Text("data"),
               ],
             ),
           ),
@@ -268,29 +385,4 @@ class _CustomFlashCardsState extends State<CustomFlashCards> {
       ],
     );
   }
-}
-
-void showCustomBottomSheet(
-  BuildContext context,
-) {
-  showModalBottomSheet(
-    context: context,
-    isDismissible: true,
-    enableDrag: true,
-    isScrollControlled: true,
-    showDragHandle: true,
-    constraints: BoxConstraints(
-      maxHeight: MediaQuery.of(context).size.height * 0.9,
-      minHeight: MediaQuery.of(context).size.height * 0.5,
-    ),
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.only(
-        topLeft: Radius.circular(20),
-        topRight: Radius.circular(20),
-      ),
-    ),
-    builder: (BuildContext context) {
-      return FlashCardCategoryView();
-    },
-  );
 }

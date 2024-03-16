@@ -1,5 +1,6 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 import 'package:vocablury/components/app_bar/custom_app_bar.dart';
 import 'package:vocablury/dashboard_module/quiz/model/get_audios_model.dart';
 import 'package:vocablury/utilities/theme/app_colors.dart';
@@ -15,12 +16,17 @@ class IrregularVerbsScreen extends StatefulWidget {
 
 class IrregularVerbsScreenState extends State<IrregularVerbsScreen> {
   final player = AudioPlayer();
+  final flutterTts = FlutterTts();
 
   final modelData = GetAudiosModel.fromJson(jsonData);
 
   @override
   void initState() {
     super.initState();
+  }
+
+  Future _speak(String word) async {
+    await flutterTts.speak(word);
   }
 
   @override
@@ -52,7 +58,6 @@ class IrregularVerbsScreenState extends State<IrregularVerbsScreen> {
                   ),
             ),
           ),
-
           Flexible(
             child: ListView.builder(
               shrinkWrap: true,
@@ -65,14 +70,14 @@ class IrregularVerbsScreenState extends State<IrregularVerbsScreen> {
                   baseForm: verb?.baseForm ?? "",
                   pastParticiple: verb?.pastParticiple ?? "",
                   pastSimple: verb?.pastSimple ?? "",
+                  verbTap: () {
+                    _speak(verb?.baseForm ?? "");
+                  },
                   pastParticipleTap: () {
-                    _playAudio(verb?.audioUrls?.pastParticiple ?? "");
+                    _speak(verb?.pastParticiple ?? "");
                   },
                   pastSimpleTap: () {
-                    _playAudio(verb?.audioUrls?.pastSimple ?? "");
-                  },
-                  verbTap: () {
-                    _playAudio(verb?.audioUrls?.baseForm ?? "");
+                    _speak(verb?.pastSimple ?? "");
                   },
                 );
               },

@@ -50,4 +50,5 @@ class AppColors {
   static const Color iron = Color(0xFFD0D5DD);
   static const Color mediumTealBlue = Color(0xFF055AAB);
   static const Color ultramarineBlue  = Color(0xFF5570F1);
+  static const Color blueHaze = Color(0xFFB6C2E2);
 }

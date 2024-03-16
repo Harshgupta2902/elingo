@@ -1,22 +1,34 @@
 import 'package:flutter/material.dart';
-import 'package:vocablury/dashboard_module/componants/dashboard_custom_components.dart';
+import 'package:go_router/go_router.dart';
+import 'package:lottie/lottie.dart';
 import 'package:vocablury/utilities/constants/assets_path.dart';
 import 'package:vocablury/utilities/constants/key_value_pair.dart';
 import 'package:vocablury/utilities/theme/app_colors.dart';
+import 'package:vocablury/utilities/theme/box_decoration.dart';
 
 class FlashCardCategoryView extends StatelessWidget {
-  final List? categoryName;
+  final List? routesData;
 
   FlashCardCategoryView({
     super.key,
-    this.categoryName,
+    this.routesData,
   });
+
+  final keyValue = [
+    KeyValuePair(
+      key: "Liked ",
+      value: "Practice Makes a Man Perfect!",
+      path: AssetPath.saveJson,
+    ),
+    KeyValuePair(
+      key: "Saved",
+      value: "Practice Makes a Man Perfect!",
+      path: AssetPath.saveJson,
+    ),
+  ];
 
   final bgColors = [
     AppColors.lavenderMist,
-    AppColors.tequila,
-    AppColors.aeroBlue,
-    AppColors.moonRaker,
     AppColors.tequila,
     AppColors.aeroBlue,
   ];
@@ -24,10 +36,6 @@ class FlashCardCategoryView extends StatelessWidget {
   final borderColorsList = [
     AppColors.pastelBlue,
     AppColors.sand,
-    AppColors.lightBluishGreen,
-    AppColors.babyPurple,
-    AppColors.sand,
-    AppColors.lightBluishGreen,
   ];
 
   @override
@@ -36,7 +44,7 @@ class FlashCardCategoryView extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Text(
             'Category Name',
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
@@ -45,50 +53,75 @@ class FlashCardCategoryView extends StatelessWidget {
                 ),
           ),
         ),
-        buildGridTestContainers(
-          context: context,
-          routesData: [
-            "likedFlashCardsView",
-            "liked",
-            "noun",
-            "adjective",
-            "verb",
-            "adverb",
-          ],
-          value: [
-            KeyValuePair(
-              key: "Liked ",
-              value: "Practice Makes a Man Perfect!",
-              path: AssetPath.saveJson,
-            ),
-            KeyValuePair(
-              key: "Saved",
-              value: "Practice Makes a Man Perfect!",
-              path: AssetPath.saveJson,
-            ),
-            KeyValuePair(
-              key: "Noun",
-              value: "Practice Makes a Man Perfect!",
-              path: AssetPath.saveJson,
-            ),
-            KeyValuePair(
-              key: "Adjective",
-              value: "Practice Makes a Man Perfect!",
-              path: AssetPath.likedJson,
-            ),
-            KeyValuePair(
-              key: "Verb",
-              value: "Practice Makes a Man Perfect!",
-              path: AssetPath.likedJson,
-            ),
-            KeyValuePair(
-              key: "Adverb",
-              value: "Practice Makes a Man Perfect!",
-              path: AssetPath.saveJson,
-            ),
-          ],
-          bgColors: bgColors,
-          borderColorsList: borderColorsList,
+        GridView.builder(
+          shrinkWrap: true,
+          physics: const BouncingScrollPhysics(),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            crossAxisSpacing: 12,
+            mainAxisExtent: MediaQuery.of(context).size.height * 0.25,
+          ),
+          itemCount: keyValue.length,
+          itemBuilder: (context, index) {
+            final item = keyValue[index];
+            final route = routesData?[index];
+
+            final backColors = bgColors[index];
+            final borderColors = borderColorsList[index];
+
+            return GestureDetector(
+              onTap: () {
+                context.push(
+                  "/${route.path}",
+                  extra: {
+                    "dbName": route.value,
+                    "title": route.key,
+                  },
+                );
+              },
+              child: Container(
+                margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+                width: 160,
+                decoration: AppBoxDecoration.getBorderBoxDecoration(
+                  color: backColors ,
+                  borderRadius: 18,
+                  showShadow: false,
+                  borderColor: borderColors ,
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 12,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const SizedBox(height: 10),
+                      Text(
+                        item.key ,
+                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                              fontWeight: FontWeight.w600,
+                              color: AppColors.brightGrey,
+                            ),
+                      ),
+                      const SizedBox(height: 10),
+                      Text(
+                        item.value ,
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              color: AppColors.brightGrey,
+                            ),
+                      ),
+                      Lottie.asset(
+                        item.path.toString(),
+                        fit: BoxFit.fitHeight,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          },
         ),
       ],
     );

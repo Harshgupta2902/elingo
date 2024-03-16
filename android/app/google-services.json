@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "640449208605",
+    "project_id": "gradding-cd56c",
+    "storage_bucket": "gradding-cd56c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:640449208605:android:248135696af421e91881f4",
+        "android_client_info": {
+          "package_name": "com.vocablury"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCXxqe16almaex9lzEW8cs1VvN4uxtMcTU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -43,15 +43,13 @@ ButtonStyle getElevatedButtonStyle({
   bool showShadow = true,
 }) {
   return ElevatedButton.styleFrom(
-    shape: RoundedRectangleBorder(
+    foregroundColor: foregroundColor, backgroundColor: backgroundColor, shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.all(
         Radius.circular(
           borderRadius ?? 8.0,
         ),
       ),
     ),
-    primary: backgroundColor,
-    onPrimary: foregroundColor,
     elevation: elevation,
     minimumSize: Size(
       width,

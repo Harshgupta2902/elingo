@@ -1,12 +1,11 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:go_router/go_router.dart';
 import 'package:vocablury/components/app_bar/custom_app_bar.dart';
 import 'package:vocablury/dashboard_module/quiz/controller/daily_quiz_controller.dart';
 import 'package:vocablury/utilities/navigation/go_paths.dart';
+import 'package:vocablury/utilities/navigation/my_navigator.dart';
 import 'package:vocablury/utilities/theme/app_colors.dart';
 import 'package:vocablury/utilities/theme/box_decoration.dart';
 
@@ -60,7 +59,11 @@ class DailyQuizScreenState extends State<DailyQuizScreen> with TickerProviderSta
 
   startTimer() async {
     while (true) {
-      await Future.delayed(const Duration(seconds: 1));
+      await Future.delayed(
+        const Duration(
+          seconds: 1,
+        ),
+      );
 
       if (secondsLeft.value > 0) {
         secondsLeft.value--;
@@ -70,8 +73,9 @@ class DailyQuizScreenState extends State<DailyQuizScreen> with TickerProviderSta
         debugPrint("timer End here");
 
         _updateAnswerStatus(
-            _quizController.state?.questions?[currentQuestionIndex.value].question ?? "", "Not Attempted");
-        debugPrint("here is the restart  updated index ${currentQuestionIndex.value}");
+          _quizController.state?.questions?[currentQuestionIndex.value].question ?? "",
+          "Not Attempted",
+        );
 
         currentQuestionIndex.value++;
         selectedOption.value = '';
@@ -85,79 +89,29 @@ class DailyQuizScreenState extends State<DailyQuizScreen> with TickerProviderSta
       if (currentQuestionIndex.value + 2 == (_quizController.state?.questions?.length ?? 0) + 1 &&
           answered.value == false &&
           secondsLeft.value <= 1) {
-        debugPrint(
-            "${currentQuestionIndex.value + 2 == (_quizController.state?.questions?.length ?? 0) + 1 && answered.value == false}");
         _updateAnswerStatus(
-            _quizController.state?.questions?[currentQuestionIndex.value].question ?? "", "Not Attempted");
+          _quizController.state?.questions?[currentQuestionIndex.value].question ?? "",
+          "Not Attempted",
+        );
         debugPrint("function called  secondsLeft :  ${secondsLeft.value}");
         debugPrint("function called  End here");
 
         _quizController.testSubmitted.value = true;
 
-        await context.push(GoPaths.test, extra: {
-          "userAnswers": answerStatus,
-          "questions": _quizController.state?.questions,
-        });
+          MyNavigator.pushNamed(
+            GoPaths.quizResultView,
+            extra: {
+              "userAnswers": answerStatus,
+              "questions": _quizController.state?.questions,
+            },
+          );
+
 
         widget.onTestCompleted((widget.completedIndex)! + 1 ?? 0);
         return; // Return from the function after submitting the test
       }
     }
   }
-
-  // startTimer() async {
-  //   timer = Timer.periodic(
-  //     const Duration(seconds: 1),
-  //     (timer) {
-  //       if (secondsLeft > 0) {
-  //         secondsLeft.value--;
-  //       }
-  //
-  //       if (secondsLeft.value <= 0) {
-  //         debugPrint("timer End here");
-  //
-  //         _updateAnswerStatus(currentQuestionIndex.value, "Not Attempted", false);
-  //         debugPrint("here is the restart  updated index ${currentQuestionIndex.value}");
-  //
-  //         currentQuestionIndex.value++;
-  //         selectedOption.value = '';
-  //         answered.value = false;
-  //         debugPrint("here is the restart after   updated index ${currentQuestionIndex.value}");
-  //
-  //         _restartTimer();
-  //         debugPrint("answer status: $answerStatus");
-  //
-  //         return;
-  //       }
-  //
-  //       if (currentQuestionIndex.value + 2 == (_quizController.state?.questions?.length ?? 0) + 1 &&
-  //           answered.value == false) {
-  //         _updateAnswerStatus(currentQuestionIndex.value, "Not Attempted", false);
-  //         debugPrint("function called  secondsLeft :  ${secondsLeft.value}");
-  //         debugPrint("function called  End here");
-  //         List<int> selectedAnswers = answerStatus.entries.map((entry) {
-  //           String? option = entry.value['option'];
-  //           int index = _quizController.state?.questions?[entry.key].options?.indexOf(option!) ?? 0;
-  //           return index;
-  //         }).toList();
-  //
-  //         timer.cancel();
-  //
-  //         _quizController.testSubmitted.value = true;
-  //         context.push(
-  //           GoPaths.testResultPage,
-  //           extra: {
-  //             "questions": _quizController.state?.questions ?? [],
-  //             "selectedAnswers": selectedAnswers,
-  //             "correctCount": answerStatus.values.where((value) => value['result'] == 'Correct!').length,
-  //             "totalTimeInSeconds": (_quizController.state?.questions?.length ?? 0) * 10,
-  //           },
-  //         );
-  //         return;
-  //       }
-  //     },
-  //   );
-  // }
 
   _restartTimer() {
     _controller.reset();
@@ -215,7 +169,7 @@ class DailyQuizScreenState extends State<DailyQuizScreen> with TickerProviderSta
       timer?.cancel();
       _quizController.testSubmitted.value = true;
 
-      await context.push(GoPaths.test, extra: {
+      MyNavigator.pushNamed(GoPaths.quizResultView, extra: {
         "userAnswers": answerStatus,
         "questions": _quizController.state?.questions,
       });
@@ -239,14 +193,11 @@ class DailyQuizScreenState extends State<DailyQuizScreen> with TickerProviderSta
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.zircon,
-      appBar: CustomAppBar(
+      appBar: const CustomAppBar(
         title: "",
         isProfileView: false,
         leadingIconColor: AppColors.white,
         bgColor: AppColors.scienceBlue,
-        actionOnTap: () {
-          SystemNavigator.pop();
-        },
       ),
       body: _quizController.obx(
         (state) {

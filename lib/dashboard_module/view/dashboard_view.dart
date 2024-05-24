@@ -1,14 +1,17 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
 import 'package:vocablury/components/app_bar/custom_app_bar.dart';
+import 'package:vocablury/dashboard_module/componants/container_for_test.dart';
 import 'package:vocablury/dashboard_module/componants/dashboard_custom_components.dart';
-import 'package:vocablury/dashboard_module/componants/take_test.dart';
 import 'package:vocablury/utilities/constants/assets_path.dart';
 import 'package:vocablury/utilities/constants/key_value_pair.dart';
+import 'package:vocablury/utilities/fcm_services/dynamic_link_service.dart';
+import 'package:vocablury/utilities/fcm_services/firebase_notification_service.dart';
 import 'package:vocablury/utilities/navigation/go_paths.dart';
 import 'package:vocablury/utilities/theme/app_colors.dart';
 import 'package:vocablury/utilities/theme/box_decoration.dart';
@@ -25,6 +28,14 @@ class DashboardViewState extends State<DashboardView> {
   @override
   void initState() {
     super.initState();
+
+    FCMNotificationService().updateFCMToken();
+
+    FirebaseMessaging.instance.getInitialMessage().then((RemoteMessage? value) {
+      if (value != null) {
+        FCMNotificationService().onNotificationClicked(payload: value.data, path: "home view");
+      }
+    });
   }
 
   final controller = CarouselController();
@@ -123,16 +134,28 @@ class DashboardViewState extends State<DashboardView> {
                             fontWeight: FontWeight.bold,
                             fontSize: 24,
                           ),
-                      children: const <InlineSpan>[
+                      children: <InlineSpan>[
                         TextSpan(
-                          text: 'Take IELTS Pre-Test and\n',
-                        ),
+                            text: 'How to Teach ESL Vocabulary: ',
+                            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                                  color: AppColors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 24,
+                                )),
                         TextSpan(
-                          text: 'Access Your English ',
-                        ),
+                            text: 'Top Methods for Introducing ',
+                            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                                  color: AppColors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 24,
+                                )),
                         TextSpan(
-                          text: ' Proficiency Level',
-                        ),
+                            text: ' New Words',
+                            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                                  color: AppColors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 24,
+                                )),
                       ],
                     ),
                   ),
@@ -183,8 +206,7 @@ class DashboardViewState extends State<DashboardView> {
                     ),
                     Lottie.asset(
                       AssetPath.busLottie,
-                      height: 180,
-                      width: 200,
+                      height: MediaQuery.of(context).size.height * 0.2,
                     ),
                   ],
                 ),
@@ -220,13 +242,13 @@ class DashboardViewState extends State<DashboardView> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 6),
+                        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 6),
                         child: Text(
-                          "Dashboard",
-                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          "Categories",
+                          style: Theme.of(context).textTheme.labelLarge?.copyWith(
                                 color: AppColors.scienceBlue,
                                 fontWeight: FontWeight.w600,
-                                fontSize: 18,
+                                fontSize: 16,
                               ),
                         ),
                       ),

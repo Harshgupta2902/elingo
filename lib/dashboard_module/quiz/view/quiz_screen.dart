@@ -7,6 +7,7 @@ import 'package:vocablury/components/app_bar/custom_app_bar.dart';
 import 'package:vocablury/dashboard_module/quiz/controller/get_quiz_controller.dart';
 import 'package:vocablury/dashboard_module/quiz/model/get_quiz_questions_model.dart';
 import 'package:vocablury/utilities/navigation/go_paths.dart';
+import 'package:vocablury/utilities/navigation/my_navigator.dart';
 import 'package:vocablury/utilities/theme/app_colors.dart';
 import 'package:vocablury/utilities/theme/box_decoration.dart';
 
@@ -248,7 +249,7 @@ class _QuizScreenState extends State<QuizScreen> {
     }
 
     if (allQuestionsAnswered && isTimeOut == false) {
-      context.push(GoPaths.resultPage, extra: {
+      MyNavigator.pushNamed(GoPaths.resultPage, extra: {
         "questions": questionsData,
         "selectedAnswers": selectedAnswers,
         "correctCount": correctCount,
@@ -257,7 +258,7 @@ class _QuizScreenState extends State<QuizScreen> {
       _timer?.cancel();
     } else {
       if (isTimeOut == true) {
-        context.go(GoPaths.resultPage, extra: {
+        MyNavigator.pushNamed(GoPaths.resultPage, extra: {
           "questions": questionsData,
           "selectedAnswers": selectedAnswers,
           "correctCount": correctCount,

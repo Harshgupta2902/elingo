@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:go_router/go_router.dart';
 import 'package:vocablury/components/app_bar/custom_app_bar.dart';
 import 'package:vocablury/components/custom_container.dart';
 import 'package:vocablury/flash_cards/controller%20/get_flash_card_controller.dart';
 import 'package:vocablury/utilities/constants/assets_path.dart';
 import 'package:vocablury/utilities/constants/key_value_pair.dart';
 import 'package:vocablury/utilities/navigation/go_paths.dart';
+import 'package:vocablury/utilities/navigation/my_navigator.dart';
 import 'package:vocablury/utilities/theme/app_colors.dart';
 
 final _getFlashCardController = Get.put(GetFlashCardListDataController());
@@ -53,7 +53,7 @@ class _ChooseFlashCardScreenState extends State<ChooseFlashCardScreen> {
             onTap: (index) {
               final categoryNameList = state?.categoryNameList?[index];
 
-              context.push(
+              MyNavigator.pushNamed(
                 GoPaths.customFlashCards,
                 extra: {
                   "categoryName": categoryNameList?.categoryName ?? "",

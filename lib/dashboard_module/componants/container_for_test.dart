@@ -30,7 +30,7 @@ class TakeTest extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(vertical: 8),
                   child: Text(
                     'Master Your Grammar: Test Your English Proficiency! ',
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                           color: AppColors.balticSea,
                         ),
                   ),
@@ -47,29 +47,34 @@ class TakeTest extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8),
             child: OutlinedButton(
-                style: getOutlinedButtonStyle(
-                  borderRadius: 10,
-                  showShadow: false,
-                  width: 101,
-                  height: 40,
-                  backgroundColor: AppColors.white,
-                  borderColor: AppColors.white,
-                ),
-                onPressed: () {
-                  context.push(
-                    GoPaths.chooseMockTestScreen,
-                  );
-                },
-                child: const Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text("Take Test"),
-                    Icon(
-                      Icons.arrow_forward,
-                      color: AppColors.balticSea,
-                    ),
-                  ],
-                )),
+              style: getOutlinedButtonStyle(
+                borderRadius: 10,
+                showShadow: false,
+                width: MediaQuery.of(context).size.width * 0.1,
+                height: 40,
+                backgroundColor: AppColors.white,
+                borderColor: AppColors.white,
+              ),
+              onPressed: () {
+                context.push(
+                  GoPaths.chooseMockTestScreen,
+                );
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Take Test",
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
+                  const SizedBox(width: 8),
+                  const Icon(
+                    Icons.arrow_forward,
+                    color: AppColors.balticSea,
+                  ),
+                ],
+              ),
+            ),
           )
         ],
       ),

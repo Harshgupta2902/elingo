@@ -1,4 +1,3 @@
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_tts/flutter_tts.dart';
@@ -10,11 +9,10 @@ import 'package:vocablury/flash_cards/controller%20/get_flash_card_controller.da
 import 'package:vocablury/flash_cards/view/category_view.dart';
 import 'package:vocablury/utilities/constants/assets_path.dart';
 import 'package:vocablury/utilities/constants/blur_screen.dart';
+import 'package:vocablury/utilities/constants/key_value_pair.dart';
 import 'package:vocablury/utilities/theme/app_colors.dart';
 import 'package:vocablury/utilities/theme/box_decoration.dart';
 import 'package:vocablury/utilities/theme/button_decoration.dart';
-
-import '../../utilities/constants/key_value_pair.dart';
 
 final _getFlashCardDataController = Get.put(GetFlashCardDataController());
 

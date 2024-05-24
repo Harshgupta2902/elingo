@@ -18,6 +18,9 @@ class GoPaths {
 
 
   static const String loginView = '/loginView';
+  static const String notificationWebView = '/notificationWebView';
+  static const String quizResultView = '/quizResultView';
+
 
 
 
@@ -33,7 +36,6 @@ class GoPaths {
   static const String dailyQuizScreen = '/dailyQuizScreen';
   static const String radioQuestionsPage = '/radioQuestionsPage';
   static const String resultPage = '/resultPage';
-  static const String testResultPage = '/testResultPage';
   static const String notificationScreen = '/notificationScreen';
   static const String dailyQuiz = '/dailyQuiz';
 

@@ -18,32 +18,36 @@ class ButtonLoader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Obx(
-          () {
+      () {
         return isLoading.value
             ? Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-              child: SizedBox(
-                height: 20,
-                width: 20,
-                child: CircularProgressIndicator(),
-              ),
-            ),
-            Text(
-              loaderString,
-              style: textStyle ??
-                  Theme.of(context).textTheme.labelLarge?.copyWith(color: Colors.white),
-            )
-          ],
-        )
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                    child: SizedBox(
+                      height: 20,
+                      width: 20,
+                      child: CircularProgressIndicator(),
+                    ),
+                  ),
+                  Text(
+                    loaderString,
+                    style: textStyle ??
+                        Theme.of(context).textTheme.labelLarge?.copyWith(
+                              color: Colors.white,
+                            ),
+                  )
+                ],
+              )
             : Text(
-          buttonString,
-          style: textStyle ??
-              Theme.of(context).textTheme.labelLarge?.copyWith(color: Colors.white),
-        );
+                buttonString,
+                style: textStyle ??
+                    Theme.of(context).textTheme.labelLarge?.copyWith(
+                          color: Colors.white,
+                        ),
+              );
       },
     );
   }

@@ -136,7 +136,7 @@ class QuizQuestionTileState extends State<QuizQuestionTile> {
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(widget.sentence ?? ""),
+          Text(widget.sentence),
           const SizedBox(height: 8),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,

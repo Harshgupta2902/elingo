@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:vocablury/dashboard_module/quiz/model/daily_quiz_model.dart';
+import 'package:vocablury/dashboard_module/quiz/model/quiz_model.dart';
 import 'package:vocablury/utilities/dio/api_request.dart';
 
 class GetDailyQuizController extends GetxController with StateMixin<DailyQuizModel> {

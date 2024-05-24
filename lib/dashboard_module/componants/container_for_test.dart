@@ -18,6 +18,7 @@ class TakeTest extends StatelessWidget {
         borderRadius: 14,
       ),
       width: double.infinity,
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
       padding: const EdgeInsetsDirectional.symmetric(horizontal: 18, vertical: 10),
       child: Row(
         children: [
@@ -26,15 +27,13 @@ class TakeTest extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.max,
               children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8),
-                  child: Text(
-                    'Master Your Grammar: Test Your English Proficiency! ',
-                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          color: AppColors.balticSea,
-                        ),
-                  ),
+                Text(
+                  'Master Your Grammar Test Your English Proficiency! ',
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        color: AppColors.balticSea,
+                      ),
                 ),
+                const SizedBox(height: 10),
                 Text(
                   "Get your result evaluated 1:1",
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
@@ -44,36 +43,33 @@ class TakeTest extends StatelessWidget {
               ],
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: OutlinedButton(
-              style: getOutlinedButtonStyle(
-                borderRadius: 10,
-                showShadow: false,
-                width: MediaQuery.of(context).size.width * 0.1,
-                height: 40,
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+                elevation: 0,
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(10),
+                  ),
+                ),
                 backgroundColor: AppColors.white,
-                borderColor: AppColors.white,
-              ),
-              onPressed: () {
-                context.push(
-                  GoPaths.chooseMockTestScreen,
-                );
-              },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Take Test",
-                    style: Theme.of(context).textTheme.bodyLarge,
-                  ),
-                  const SizedBox(width: 8),
-                  const Icon(
-                    Icons.arrow_forward,
-                    color: AppColors.balticSea,
-                  ),
-                ],
-              ),
+                minimumSize: Size(MediaQuery.of(context).size.width * 0.1, 40),
+                padding: const EdgeInsets.symmetric(horizontal: 12)),
+            onPressed: () {
+              context.push(GoPaths.chooseMockTestScreen);
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Take Test",
+                  style: Theme.of(context).textTheme.bodyLarge,
+                ),
+                const SizedBox(width: 8),
+                const Icon(
+                  Icons.arrow_forward,
+                  color: AppColors.balticSea,
+                ),
+              ],
             ),
           )
         ],

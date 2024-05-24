@@ -77,7 +77,8 @@ class _CustomFlashCardsState extends State<CustomFlashCards> with TickerProvider
     _getFlashCardDataController.testSavedData.value = savedItemList;
   }
 
-  Future<void> addAndDeleteDataTOHiveBox(Map<String, dynamic> boxData, {required String tableName}) async {
+  Future<void> addAndDeleteDataTOHiveBox(Map<String, dynamic> boxData,
+      {required String tableName}) async {
     var box = await Hive.openBox(tableName);
 
     var itemList = box.get(tableName, defaultValue: []);
@@ -105,11 +106,13 @@ class _CustomFlashCardsState extends State<CustomFlashCards> with TickerProvider
   }
 
   bool isLikedItemExists(dynamic item) {
-    return _getFlashCardDataController.testLikedData.any((element) => element["title"] == item["title"]);
+    return _getFlashCardDataController.testLikedData
+        .any((element) => element["title"] == item["title"]);
   }
 
   bool isSavedItemExists(dynamic item) {
-    return _getFlashCardDataController.testSavedData.any((element) => element["title"] == item["title"]);
+    return _getFlashCardDataController.testSavedData
+        .any((element) => element["title"] == item["title"]);
   }
 
   Future _speak(String word) async {
@@ -236,25 +239,16 @@ class _CustomFlashCardsState extends State<CustomFlashCards> with TickerProvider
                                 },
                                 child: SvgPicture.asset(AssetPath.speaker, height: 30, width: 30),
                               ),
-                              // GestureDetector(
-                              //   onTap: () async {
-                              //     await addAndDeleteDataTOHiveBox(boxData, tableName: "LikedFlashCards");
-                              //     openDataBase();
-                              //     setState(() {});
-                              //     return;
-                              //   },
-                              //   child: SvgPicture.asset(
-                              //     isLikedOrExists ? AssetPath.heartFilled : AssetPath.heart,
-                              //     height: 30,
-                              //     width: 30,
-                              //   ),
-                              // ),
                               GestureDetector(
                                 onTap: () async {
-                                  await addAndDeleteDataTOHiveBox(boxData, tableName: "LikedFlashCards");
+                                  await addAndDeleteDataTOHiveBox(
+                                    boxData,
+                                    tableName: "LikedFlashCards",
+                                  );
                                   openDataBase();
                                   setState(() {});
-                                  _controller.forward(from: 0.0); // Start the animation from the beginning
+                                  _controller.forward(
+                                      from: 0.0); // Start the animation from the beginning
                                   return;
                                 },
                                 child: AnimatedBuilder(
@@ -273,7 +267,8 @@ class _CustomFlashCardsState extends State<CustomFlashCards> with TickerProvider
                               ),
                               GestureDetector(
                                 onTap: () async {
-                                  await addAndDeleteDataTOHiveBox(boxData, tableName: "SavedFlashCards");
+                                  await addAndDeleteDataTOHiveBox(boxData,
+                                      tableName: "SavedFlashCards");
                                   openDataBase();
                                   setState(() {});
                                   return;

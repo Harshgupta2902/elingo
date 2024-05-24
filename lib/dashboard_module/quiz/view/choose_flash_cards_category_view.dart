@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 import 'package:vocablury/components/app_bar/custom_app_bar.dart';
 import 'package:vocablury/components/custom_container.dart';
 import 'package:vocablury/flash_cards/controller%20/get_flash_card_controller.dart';
@@ -52,6 +53,8 @@ class _ChooseFlashCardScreenState extends State<ChooseFlashCardScreen> {
             ),
             onTap: (index) {
               final categoryNameList = state?.categoryNameList?[index];
+              debugPrint(categoryNameList?.categoryName);
+              debugPrint(categoryNameList?.title);
 
               MyNavigator.pushNamed(
                 GoPaths.customFlashCards,
@@ -64,6 +67,16 @@ class _ChooseFlashCardScreenState extends State<ChooseFlashCardScreen> {
           );
         },
       ),
+      floatingActionButton: ElevatedButton(
+        onPressed: () {
+          context.push(GoPaths.likedFlashCardsView, extra: {
+            'dbName': 'LikedFlashCards',
+            'title': 'LikedFlashCards',
+          });
+        },
+        child: Text("Saved Cards"),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 }

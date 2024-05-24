@@ -16,6 +16,8 @@ class DictionaryScreenState extends State<DictionaryScreen> {
   late List<Map<String, dynamic>> _wordData;
   late TextEditingController _textEditingController;
 
+  bool isLoading = false;
+
   @override
   void initState() {
     super.initState();
@@ -24,16 +26,25 @@ class DictionaryScreenState extends State<DictionaryScreen> {
   }
 
   Future<void> fetchData() async {
-    final response =
-        await http.get(Uri.parse('https://api.dictionaryapi.dev/api/v2/entries/en_US/${_textEditingController.text}'));
-    if (response.statusCode == 200) {
-      // If the server returns a 200 OK response, parse the JSON
-      final List<dynamic> responseData = json.decode(response.body);
-      setState(() {
-        _wordData = responseData.cast<Map<String, dynamic>>();
-      });
-    } else {
-      // If the server did not return a 200 OK response, throw an exception.
+    try {
+      isLoading = true;
+      final response = await http.get(
+        Uri.parse(
+            'https://api.dictionaryapi.dev/api/v2/entries/en_US/${_textEditingController.text}'),
+      );
+      if (response.statusCode == 200) {
+        // If the server returns a 200 OK response, parse the JSON
+        final List<dynamic> responseData = json.decode(response.body);
+        setState(() {
+          _wordData = responseData.cast<Map<String, dynamic>>();
+        });
+        isLoading = false;
+      } else {
+        isLoading = false;
+        throw Exception('Failed to load data');
+      }
+    } catch (e) {
+      isLoading = false;
       throw Exception('Failed to load data');
     }
   }
@@ -43,7 +54,7 @@ class DictionaryScreenState extends State<DictionaryScreen> {
     return Scaffold(
       backgroundColor: AppColors.zircon,
       appBar: CustomAppBar(
-        title: "Flash Cards",
+        title: "Dictionary",
         isProfileView: false,
         bgColor: AppColors.zircon,
         actionOnTap: () {
@@ -57,9 +68,16 @@ class DictionaryScreenState extends State<DictionaryScreen> {
             child: TextField(
               controller: _textEditingController,
               decoration: InputDecoration(
-                labelText: 'Search word meaning',
+                labelText: 'Enter word',
                 prefixIcon: const Icon(Icons.search),
-                suffixIcon: IconButton(
+                suffixIcon:
+                    // _wordData.isEmpty
+                    //     ? CircularProgressIndicator(
+                    //         color: AppColors.toryBlue,
+                    //         backgroundColor: AppColors.white,
+                    //       )
+                    //     :
+                    IconButton(
                   onPressed: () async {
                     await fetchData();
                   },
@@ -103,25 +121,29 @@ class DictionaryScreenState extends State<DictionaryScreen> {
                                           style: const TextStyle(fontWeight: FontWeight.bold),
                                         ),
                                       ),
-                                      ...List<Widget>.from((meaning['definitions'] as List<dynamic>).map((definition) {
+                                      ...List<Widget>.from((meaning['definitions'] as List<dynamic>)
+                                          .map((definition) {
                                         return Column(
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
                                             Padding(
                                               padding: const EdgeInsets.only(top: 4),
-                                              child: Text('Definition: ${definition['definition']}'),
+                                              child:
+                                                  Text('Definition: ${definition['definition']}'),
                                             ),
                                             if (definition['synonyms'] != null &&
                                                 (definition['synonyms'] as List).isNotEmpty)
                                               Padding(
                                                 padding: const EdgeInsets.only(top: 4),
-                                                child: Text('Synonyms: ${definition['synonyms'].join(", ")}'),
+                                                child: Text(
+                                                    'Synonyms: ${definition['synonyms'].join(", ")}'),
                                               ),
                                             if (definition['antonyms'] != null &&
                                                 (definition['antonyms'] as List).isNotEmpty)
                                               Padding(
                                                 padding: const EdgeInsets.only(top: 4),
-                                                child: Text('Antonyms: ${definition['antonyms'].join(", ")}'),
+                                                child: Text(
+                                                    'Antonyms: ${definition['antonyms'].join(", ")}'),
                                               ),
                                           ],
                                         );
@@ -135,25 +157,17 @@ class DictionaryScreenState extends State<DictionaryScreen> {
                       );
                     },
                   )
-                : _textEditingController.text.isNotEmpty
-                    ? const Center(
-                        child: Text(
-                          'No results found',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      )
-                    : const Center(
-                        child: Text(
-                          'Enter a word to search',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
+                : Center(
+                    child: Text(
+                      _textEditingController.text.isNotEmpty
+                          ? 'No results found'
+                          : 'Enter a word to search',
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
                       ),
+                    ),
+                  ),
           ),
         ],
       ),

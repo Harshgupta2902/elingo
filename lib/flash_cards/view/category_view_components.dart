@@ -54,97 +54,92 @@ class _LikedFlashCardsViewState extends State<LikedFlashCardsView> {
         isProfileView: false,
         bgColor: AppColors.zircon,
       ),
-      body: _getFlashCardDataController.obx(
-        (state) {
-          return PageView.builder(
-            physics: const BouncingScrollPhysics(),
-            controller: _pageController,
-            scrollDirection: Axis.vertical,
-            itemCount: dataList.length,
-            onPageChanged: (int index) {
-              setState(() {
-                currentPage = index;
-              });
-            },
-            itemBuilder: (context, index) {
-              final item = dataList[index];
-
-              return dataList.isEmpty
-                  ? const Text("No data found")
-                  : Container(
-                      margin: const EdgeInsets.all(16.0),
-                      decoration: AppBoxDecoration.getBoxDecoration(
-                        showShadow: false,
-                        borderRadius: 8,
-                        color: AppColors.zircon,
-                      ),
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 20,
-                        horizontal: 20,
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            item['title'] ?? '',
-                            style: Theme.of(context).textTheme.displaySmall?.copyWith(
-                                  color: AppColors.black,
-                                ),
-                          ),
-                          const SizedBox(height: 20),
-                          Text(
-                            item['description'] ?? '',
-                            textAlign: TextAlign.center,
-                            style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                                  color: AppColors.black,
-                                  fontWeight: FontWeight.w400,
-                                ),
-                          ),
-                          const Padding(
-                            padding: EdgeInsets.symmetric(vertical: 20),
-                            child: Divider(thickness: 1),
-                          ),
-                          RichText(
-                            text: TextSpan(
-                              text: 'SYN: ',
-                              style: Theme.of(context).textTheme.titleLarge,
-                              children: List.generate(
-                                item['synonyms'].length ?? 0,
-                                (index) {
-                                  final itemData = item['synonyms'][index];
-                                  return TextSpan(
-                                    text: itemData,
-                                    style: Theme.of(context).textTheme.titleMedium,
-                                  );
-                                },
-                              ),
+      body: dataList.isEmpty == true
+          ? const Center(child: Text("No data found"))
+          : PageView.builder(
+              physics: const BouncingScrollPhysics(),
+              controller: _pageController,
+              scrollDirection: Axis.vertical,
+              itemCount: dataList.length,
+              onPageChanged: (int index) {
+                setState(() {
+                  currentPage = index;
+                });
+              },
+              itemBuilder: (context, index) {
+                debugPrint(dataList.length.toString());
+                final item = dataList[index];
+                return Container(
+                  margin: const EdgeInsets.all(16.0),
+                  decoration: AppBoxDecoration.getBoxDecoration(
+                    showShadow: false,
+                    borderRadius: 8,
+                    color: AppColors.zircon,
+                  ),
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 20,
+                    horizontal: 20,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        item['title'] ?? '',
+                        style: Theme.of(context).textTheme.displaySmall?.copyWith(
+                              color: AppColors.black,
                             ),
-                          ),
-                          RichText(
-                            text: TextSpan(
-                              text: 'ANT: ',
-                              style: Theme.of(context).textTheme.titleLarge,
-                              children: List.generate(
-                                item["antonyms"].length ?? 0,
-                                (index) {
-                                  final itemData = item["antonyms"][index];
-                                  return TextSpan(
-                                    text: itemData,
-                                    style: Theme.of(context).textTheme.titleMedium,
-                                  );
-                                },
-                              ),
-                            ),
-                          ),
-                        ],
                       ),
-                    );
-            },
-          );
-        },
-        onEmpty: const Text("No data found"),
-      ),
+                      const SizedBox(height: 20),
+                      Text(
+                        item['description'] ?? '',
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                              color: AppColors.black,
+                              fontWeight: FontWeight.w400,
+                            ),
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 20),
+                        child: Divider(thickness: 1),
+                      ),
+                      RichText(
+                        text: TextSpan(
+                          text: 'SYN: ',
+                          style: Theme.of(context).textTheme.titleLarge,
+                          children: List.generate(
+                            item['synonyms'].length ?? 0,
+                            (index) {
+                              final itemData = item['synonyms'][index];
+                              return TextSpan(
+                                text: itemData,
+                                style: Theme.of(context).textTheme.titleMedium,
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                      RichText(
+                        text: TextSpan(
+                          text: 'ANT: ',
+                          style: Theme.of(context).textTheme.titleLarge,
+                          children: List.generate(
+                            item["antonyms"].length ?? 0,
+                            (index) {
+                              final itemData = item["antonyms"][index];
+                              return TextSpan(
+                                text: itemData,
+                                style: Theme.of(context).textTheme.titleMedium,
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
     );
   }
 }

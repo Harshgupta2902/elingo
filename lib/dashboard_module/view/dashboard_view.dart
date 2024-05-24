@@ -28,9 +28,8 @@ class DashboardViewState extends State<DashboardView> {
   @override
   void initState() {
     super.initState();
-
+    _scrollController.addListener(_onScroll);
     FCMNotificationService().updateFCMToken();
-
     FirebaseMessaging.instance.getInitialMessage().then((RemoteMessage? value) {
       if (value != null) {
         FCMNotificationService().onNotificationClicked(payload: value.data, path: "home view");
@@ -41,68 +40,28 @@ class DashboardViewState extends State<DashboardView> {
   final controller = CarouselController();
   int activeIndex = 0;
 
-  final svgPaths = [
-    AssetPath.accommodation,
-    AssetPath.dashIcon,
-    AssetPath.reading,
-    AssetPath.dashIcon,
-    AssetPath.music,
-    AssetPath.flash,
-  ];
-
-  final svgData = [
-    "Vocabulary Building",
-    "Grammar",
-    "Reading Comprehension",
-    "Dictionary",
-    "Listening Practice",
-    "Flash Cards",
-  ];
-
-  final routesData = [
-    "videoLinksView",
-    "readingScreen",
-    "readingScreen",
-    "onboardingQuestions",
-    // "likedFlashCardsView",
-
-    "irregularVerbsScreen",
-    "chooseFlashCardScreen",
-  ];
-
-  final bgColors = [
-    AppColors.lavenderMist,
-    AppColors.tequila,
-    AppColors.aeroBlue,
-    AppColors.moonRaker,
-  ];
-
-  final detailsContainerBgColors = [
-    AppColors.ultraMarineBlue,
-    AppColors.darkMintGreen,
-    AppColors.darkMintGreen,
-    AppColors.ultraMarineBlue,
-  ];
-
-  final borderColorsList = [
-    AppColors.pastelBlue,
-    AppColors.sand,
-    AppColors.lightBluishGreen,
-    AppColors.babyPurple,
-  ];
-
-  final titleList = [
-    " Class Schedule",
-    " Mock Tests",
-    "Today’s Tasks",
-    "Practice Tests",
-  ];
-
   final realUserPost = [
     "Team Lead",
     "Co-founder",
     "Manager",
   ];
+
+  var _isScrolledToTop = false;
+  final _scrollController = DraggableScrollableController();
+
+  void _onScroll() {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      if (_scrollController.size >= 0.85) {
+        setState(() {
+          _isScrolledToTop = true;
+        });
+      } else {
+        setState(() {
+          _isScrolledToTop = false;
+        });
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -168,17 +127,17 @@ class DashboardViewState extends State<DashboardView> {
                       onPressed: () {
                         context.push(GoPaths.videoLinksView);
                       },
-                      style: getOutlinedButtonStyle(
-                        backgroundColor: Colors.white.withOpacity(
-                          0.3,
+                      style: OutlinedButton.styleFrom(
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(10),
+                          ),
                         ),
                         foregroundColor: AppColors.white,
-                        borderColor: Colors.white,
-                        width: 50,
-                        height: 40,
-                        borderRadius: 10,
-                        buttonColor: Colors.white,
-                        showShadow: false,
+                        backgroundColor: Colors.white.withOpacity(0.3),
+                        side: const BorderSide(color: Colors.white, width: 2.0),
+                        minimumSize: const Size(50, 40),
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
                       ),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
@@ -186,20 +145,16 @@ class DashboardViewState extends State<DashboardView> {
                         children: [
                           Text(
                             "Watch Now",
-                            style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                                  color: AppColors.white,
-                                  fontSize: 12,
-                                ),
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(color: AppColors.white),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 8,
-                            ),
-                            child: SvgPicture.asset(
-                              AssetPath.videoIcon,
-                              height: 25,
-                              width: 25,
-                            ),
+                          const SizedBox(width: 8),
+                          SvgPicture.asset(
+                            AssetPath.videoIcon,
+                            height: 25,
+                            width: 25,
                           ),
                         ],
                       ),
@@ -219,9 +174,18 @@ class DashboardViewState extends State<DashboardView> {
             snapSizes: const [0.65],
             minChildSize: 0.65,
             maxChildSize: 0.98,
+            controller: _scrollController,
             builder: (context, scrollController) {
-              return Container(
-                decoration: AppBoxDecoration.getBoxDecoration(color: AppColors.zircon),
+              return AnimatedContainer(
+                duration: const Duration(seconds: 1),
+                decoration: BoxDecoration(
+                  color: AppColors.zircon,
+                  borderRadius: _isScrolledToTop
+                      ? null
+                      : const BorderRadius.vertical(
+                          top: Radius.circular(20),
+                        ),
+                ),
                 child: SingleChildScrollView(
                   controller: scrollController,
                   scrollDirection: Axis.vertical,
@@ -229,39 +193,49 @@ class DashboardViewState extends State<DashboardView> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Container(
-                              height: 5,
-                              width: 80,
-                              decoration: AppBoxDecoration.getBoxDecoration(color: AppColors.cadetGrey),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 6),
-                        child: Text(
-                          "Categories",
-                          style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                                color: AppColors.scienceBlue,
-                                fontWeight: FontWeight.w600,
-                                fontSize: 16,
+                        padding: const EdgeInsets.symmetric(vertical: 8),
+                        child: Center(
+                          child: AnimatedContainer(
+                            duration: const Duration(seconds: 1),
+                            height: _isScrolledToTop == false ? 6 : 0,
+                            width: _isScrolledToTop == false ? 52 : 0,
+                            decoration: const BoxDecoration(
+                              color: AppColors.cadetGrey,
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(16),
                               ),
+                            ),
+                          ),
                         ),
                       ),
                       buildGridContainers(
                         context: context,
-                        svgPaths: svgPaths,
-                        svgData: svgData,
-                        routesData: routesData,
+                        svgPaths: [
+                          AssetPath.accommodation,
+                          AssetPath.dashIcon,
+                          AssetPath.reading,
+                          AssetPath.dashIcon,
+                          AssetPath.music,
+                          AssetPath.flash
+                        ],
+                        svgData: [
+                          "Vocabulary Building",
+                          "Grammar",
+                          "Reading Comprehension",
+                          "Dictionary",
+                          "Listening Practice",
+                          "Flash Cards",
+                        ],
+                        routesData: [
+                          "videoLinksView",
+                          "readingScreen",
+                          "readingScreen",
+                          "dictionary",
+                          "irregularVerbsScreen",
+                          "chooseFlashCardScreen",
+                        ],
                       ),
-                      const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 20),
-                        child: TakeTest(),
-                      ),
+                      const TakeTest(),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16),
                         child: Row(
@@ -279,10 +253,8 @@ class DashboardViewState extends State<DashboardView> {
                                   children: [
                                     Text(
                                       "Get 20% OFF on IELTS",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium
-                                          ?.copyWith(color: AppColors.white, fontWeight: FontWeight.w700),
+                                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                          color: AppColors.white, fontWeight: FontWeight.w700),
                                     ),
                                     Text(
                                       "Get Special Discount on IELTS packages for you",
@@ -295,7 +267,7 @@ class DashboardViewState extends State<DashboardView> {
                                 ),
                               ),
                             ),
-                            const SizedBox(width: 18),
+                            const SizedBox(width: 20),
                             Flexible(
                               child: Container(
                                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
@@ -308,10 +280,8 @@ class DashboardViewState extends State<DashboardView> {
                                   children: [
                                     Text(
                                       "Get 20% OFF on IELTS",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium
-                                          ?.copyWith(color: AppColors.white, fontWeight: FontWeight.w700),
+                                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                          color: AppColors.white, fontWeight: FontWeight.w700),
                                     ),
                                     Text(
                                       "Get Special Discount on IELTS packages for you",
@@ -327,29 +297,13 @@ class DashboardViewState extends State<DashboardView> {
                           ],
                         ),
                       ),
-                      const SizedBox(height: 50),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Column(
-                              children: [
-                                Text(
-                                  "Real Reviews",
-                                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                                        color: AppColors.black,
-                                      ),
-                                ),
-                                Text(
-                                  "From Real Students.",
-                                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                                        color: AppColors.scienceBlue,
-                                      ),
-                                ),
-                              ],
-                            ),
-                          ],
+                      const SizedBox(height: kToolbarHeight - 20),
+                      Center(
+                        child: Text(
+                          "Students Reviews",
+                          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                                color: AppColors.black,
+                              ),
                         ),
                       ),
                       CarouselSlider.builder(
@@ -403,7 +357,7 @@ class DashboardViewState extends State<DashboardView> {
                           scrollPhysics: const BouncingScrollPhysics(),
                         ),
                       ),
-                      const SizedBox(height: 50)
+                      const SizedBox(height: kToolbarHeight),
                     ],
                   ),
                 ),

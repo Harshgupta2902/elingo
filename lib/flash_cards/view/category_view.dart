@@ -40,90 +40,80 @@ class FlashCardCategoryView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Text(
-            'Category Name',
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.brightGrey,
-                ),
-          ),
-        ),
-        GridView.builder(
-          shrinkWrap: true,
-          physics: const BouncingScrollPhysics(),
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            crossAxisSpacing: 12,
-            mainAxisExtent: MediaQuery.of(context).size.height * 0.25,
-          ),
-          itemCount: keyValue.length,
-          itemBuilder: (context, index) {
-            final item = keyValue[index];
-            final route = routesData?[index];
+    return GridView.builder(
+      shrinkWrap: true,
+      physics: const BouncingScrollPhysics(),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        crossAxisSpacing: 25,
+        mainAxisExtent: 100,
+        mainAxisSpacing: 25,
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      itemCount: keyValue.length,
+      itemBuilder: (context, index) {
+        final item = keyValue[index];
+        final route = routesData?[index];
 
-            final backColors = bgColors[index];
-            final borderColors = borderColorsList[index];
+        final backColors = bgColors[index];
+        final borderColors = borderColorsList[index];
 
-            return GestureDetector(
-              onTap: () {
-                context.push(
-                  "/${route.path}",
-                  extra: {
-                    "dbName": route.value,
-                    "title": route.key,
-                  },
-                );
+        return GestureDetector(
+          onTap: () {
+            context.pop();
+            context.push(
+              "/${route.path}",
+              extra: {
+                "dbName": route.value,
+                "title": route.key,
               },
-              child: Container(
-                margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
-                width: 160,
-                decoration: AppBoxDecoration.getBorderBoxDecoration(
-                  color: backColors ,
-                  borderRadius: 18,
-                  showShadow: false,
-                  borderColor: borderColors ,
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 12,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const SizedBox(height: 10),
-                      Text(
-                        item.key ,
-                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                              fontWeight: FontWeight.w600,
-                              color: AppColors.brightGrey,
-                            ),
-                      ),
-                      const SizedBox(height: 10),
-                      Text(
-                        item.value ,
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: AppColors.brightGrey,
-                            ),
-                      ),
-                      Lottie.asset(
-                        item.path.toString(),
-                        fit: BoxFit.fitHeight,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
             );
           },
-        ),
-      ],
+          child: Container(
+            decoration: AppBoxDecoration.getBorderBoxDecoration(
+              color: backColors,
+              borderRadius: 18,
+              borderColor: borderColors,
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      item.key,
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.brightGrey,
+                          ),
+                    ),
+                    SizedBox(
+                      height: 50,
+                      width: 50,
+                      child: Lottie.asset(
+                        item.path.toString(),
+                        fit: BoxFit.fill,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  item.value,
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: AppColors.brightGrey,
+                      ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }

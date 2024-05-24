@@ -11,6 +11,7 @@ class GetFlashCardDataController extends GetxController with StateMixin<FlashCar
 
   void getFlashCardData({required String categoryName}) async {
     debugPrint("--------------- start fetching FlashCards -----------------");
+    debugPrint("--------------- start fetching FlashCards $categoryName-----------------");
 
     change(null, status: RxStatus.loading());
 

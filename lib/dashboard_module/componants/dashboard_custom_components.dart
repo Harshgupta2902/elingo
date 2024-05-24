@@ -46,23 +46,20 @@ Widget loadAssetImage(String imagePath) {
   if (imagePath.endsWith('.png')) {
     return Image.asset(
       imagePath,
-      height: 40,
-      width: 40,
+      fit: BoxFit.fill,
     );
   }
 
   if (imagePath.endsWith('.svg')) {
     return SvgPicture.asset(
       imagePath,
-      height: 40,
-      width: 40,
+      fit: BoxFit.fill,
     );
   }
 
   return Image.asset(
     imagePath,
-    height: 40,
-    width: 40,
+    fit: BoxFit.fill,
   );
 }
 
@@ -78,9 +75,10 @@ Widget buildGridContainers({
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisSpacing: 25,
-        mainAxisSpacing: 20,
+        crossAxisSpacing: 12,
+        mainAxisSpacing: 18,
         crossAxisCount: 3,
+        mainAxisExtent: 100,
       ),
       itemCount: svgPaths.length,
       itemBuilder: (BuildContext context, int index) {
@@ -93,29 +91,28 @@ Widget buildGridContainers({
             context.push("/$routeName");
           },
           child: Container(
-            height: 120,
-            width: 120,
-            margin: const EdgeInsets.symmetric(horizontal: 4),
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            decoration: AppBoxDecoration.getBorderBoxDecoration(
+            decoration: AppBoxDecoration.getBoxDecoration(
               showShadow: true,
               blurRadius: 15,
-              borderColor: Colors.transparent,
               color: Colors.white,
               borderRadius: 11,
             ),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                loadAssetImage(svgPath),
-                const SizedBox(height: 10),
+                const SizedBox(height: 8),
+                SizedBox(
+                  height: 40,
+                  width: 40,
+                  child: loadAssetImage(svgPath),
+                ),
+                const SizedBox(height: 12),
                 Text(
                   itemName,
                   textAlign: TextAlign.center,
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  // overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: Colors.black87,
-                        fontSize: 12,
                         fontWeight: FontWeight.w400,
                       ),
                 ),
@@ -128,62 +125,6 @@ Widget buildGridContainers({
   );
 }
 
-
-Widget detailsContainer({
-  required BuildContext context,
-  required List value,
-  required List<Color> bgColor,
-}) {
-  return GridView.builder(
-    shrinkWrap: true,
-    physics: const BouncingScrollPhysics(),
-    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-      crossAxisCount: 2,
-      crossAxisSpacing: 4,
-      mainAxisExtent: MediaQuery.of(context).size.height * 0.22,
-    ),
-    itemCount: value.length ?? 0,
-    itemBuilder: (context, index) {
-      final data = value[index];
-      final color = bgColor[index];
-
-      return Container(
-        margin: const EdgeInsets.symmetric(horizontal: 22, vertical: 12),
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 30),
-        width: 160,
-        decoration: AppBoxDecoration.getBoxDecoration(
-          color: color ?? AppColors.ultraMarineBlue,
-          borderRadius: 15,
-          showShadow: false,
-        ),
-        child: Padding(
-          padding: const EdgeInsets.only(right: 20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              const SizedBox(height: 10),
-              Text(
-                data.key ?? '',
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      fontWeight: FontWeight.w400,
-                      color: AppColors.white,
-                    ),
-              ),
-              const SizedBox(height: 10),
-              Text(
-                data.value ?? "",
-                style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                      color: AppColors.white,
-                    ),
-              ),
-            ],
-          ),
-        ),
-      );
-    },
-  );
-}
 
 Widget buildScrollContainers({
   required BuildContext context,

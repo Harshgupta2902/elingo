@@ -22,37 +22,9 @@ final GlobalKey<NavigatorState> rootNavigatorKey = GlobalKey<NavigatorState>(deb
 final GlobalKey<NavigatorState> shellNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'shell');
 
 final GoRouter goRouterConfig = GoRouter(
-  // initialLocation: GoPaths.serOnBoardingScreen,
   initialLocation: GoPaths.dashBoard,
-
   navigatorKey: rootNavigatorKey,
   routes: [
-    // ShellRoute(
-    //   navigatorKey: shellNavigatorKey,
-    //   builder: (context, state, child) {
-    //     return SerchWordMean();
-    //   },
-    //   routes: const [
-    //     // GoRoute(
-    //     //   parentNavigatorKey: shellNavigatorKey,
-    //     //   path: GoPaths.home,
-    //     //   builder: (context, state) {
-    //     //     return const HomeScreenView();
-    //     //   },
-    //     // ),
-    //     // GoRoute(
-    //     //   parentNavigatorKey: shellNavigatorKey,
-    //     //   path: GoPaths.page1,
-    //     //   builder: (context, state) {
-    //     //     return Page1();
-    //     //   },
-    //     // ),
-    //
-    //   ],
-    // ),
-
-    // -------------------------------------- X --------------------------------------
-
     GoRoute(
       parentNavigatorKey: rootNavigatorKey,
       path: GoPaths.dictionary,

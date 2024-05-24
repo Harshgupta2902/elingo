@@ -15,6 +15,14 @@ void main() async {
   var directory = await getApplicationDocumentsDirectory();
   Hive.init(directory.path);
 
+
+
+
+
+
+
+
+  
   await Firebase.initializeApp();
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,

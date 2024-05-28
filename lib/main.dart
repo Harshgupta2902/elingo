@@ -1,34 +1,16 @@
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:vocablury/global.dart';
+import 'package:vocablury/utilities/packages/smooth_rectangular_border.dart';
 import 'package:vocablury/utilities/theme/app_colors.dart';
 
 import 'utilities/navigation/route_generator.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-
-  // await Firebase.initializeApp();
-  var directory = await getApplicationDocumentsDirectory();
-  Hive.init(directory.path);
-
-  await Firebase.initializeApp();
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
-
-  // CheckBiometrics();
-
-  FlutterError.onError = (FlutterErrorDetails details) {
-    if (kDebugMode) {
-      print('FlutterError caught: ${details.exception}');
-    }
-  };
-
   runApp(const MyApp());
 }
 
@@ -42,12 +24,28 @@ class MyApp extends StatelessWidget {
       title: 'Vocablury',
       routerConfig: goRouterConfig,
       theme: ThemeData(
+        scaffoldBackgroundColor: AppColors.backgroundColor,
         useMaterial3: false,
-        primaryColor: AppColors.scienceBlue,
+        primaryColor: GlobalColors.primaryColor,
         fontFamily: 'Quicksand',
-        outlinedButtonTheme: OutlinedButtonThemeData(
-          style: OutlinedButton.styleFrom(
-            foregroundColor: AppColors.scienceBlue,
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ButtonStyle(
+            backgroundColor: const MaterialStatePropertyAll(GlobalColors.primaryColor),
+            elevation: const MaterialStatePropertyAll(0),
+            minimumSize: MaterialStatePropertyAll(
+              Size(MediaQuery.of(context).size.width, 52),
+            ),
+            textStyle: MaterialStatePropertyAll(
+              Theme.of(context).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w400),
+            ),
+            shape: MaterialStatePropertyAll(
+              RoundedRectangleBorder(
+                borderRadius: SmoothBorderRadius(cornerRadius: 34),
+              ),
+            ),
+            shadowColor: MaterialStatePropertyAll(
+              GlobalColors.primaryColor.withOpacity(0.25),
+            ),
           ),
         ),
         bottomSheetTheme: const BottomSheetThemeData(
@@ -60,11 +58,9 @@ class MyApp extends StatelessWidget {
         ),
         inputDecorationTheme: InputDecorationTheme(
           border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(
-              20.0,
-            ),
+            borderRadius: BorderRadius.circular(20.0),
             borderSide: const BorderSide(
-              color: AppColors.scienceBlue,
+              color: GlobalColors.primaryColor,
             ),
           ),
         ),

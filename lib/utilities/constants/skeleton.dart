@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vocablury/utilities/packages/smooth_rectangular_border.dart';
 
 const Color black04 = Color(0x0A1D1D1D);
 final Color whiteBlur = const Color(0xFFD9E7FF).withOpacity(0.3);
@@ -26,9 +27,10 @@ class SkeletonWidget extends StatelessWidget {
       padding: EdgeInsets.all(padding),
       decoration: BoxDecoration(
         color: showLight ? whiteBlur : black04,
-        borderRadius: BorderRadius.all(
-          Radius.circular(
-            borderRadius,
+        borderRadius: SmoothBorderRadius.all(
+          SmoothRadius(
+            cornerRadius: borderRadius,
+            cornerSmoothing: 10,
           ),
         ),
       ),

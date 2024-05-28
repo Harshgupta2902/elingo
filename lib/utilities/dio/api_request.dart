@@ -18,9 +18,7 @@ Future<Response> getRequest({required String apiEndPoint}) async {
     }
 
     return response;
-  } catch (error) {
-    debugPrint("get request error $error ");
-
+  } catch (e) {
     rethrow;
   }
 }
@@ -28,19 +26,15 @@ Future<Response> getRequest({required String apiEndPoint}) async {
 Future<Response> postRequest({
   required String apiEndPoint,
   required Map<String, dynamic> postData,
+  FormData? formData,
 }) async {
   Dio client = NewClient().init();
   debugPrint("~~~~~~~~~~~~~~~~~~~~ $apiEndPoint postRequest Start ~~~~~~~~~~~~~~~~~~~~ ");
 
-  debugPrint("~~~~~~~~~~~~~~~~~~~~ $apiEndPoint postRequest postData $postData ~~~~~~~~~~~~~~~~~~~~ ");
+  debugPrint(
+      "~~~~~~~~~~~~~~~~~~~~ $apiEndPoint postRequest postData $postData ~~~~~~~~~~~~~~~~~~~~ ");
 
-  final response = await client.post(
-    apiEndPoint,
-    data: postData,
-    options: Options(
-      contentType: Headers.jsonContentType,
-    ),
-  );
+  final response = await client.post(apiEndPoint, data: formData, queryParameters: postData);
 
   debugPrint("~~~~~~~~~~~~~~~~~~~~ $apiEndPoint postRequest End ~~~~~~~~~~~~~~~~~~~~ ");
 

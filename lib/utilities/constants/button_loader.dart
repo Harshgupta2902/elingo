@@ -8,13 +8,14 @@ class ButtonLoader extends StatelessWidget {
     this.loaderString = 'Loading...',
     this.buttonString = 'Invest More',
     this.textStyle,
+    this.loaderColor,
   }) : super(key: key);
 
   final String buttonString;
   final RxBool isLoading;
   final String loaderString;
   final TextStyle? textStyle;
-
+  final Color? loaderColor;
   @override
   Widget build(BuildContext context) {
     return Obx(
@@ -24,29 +25,27 @@ class ButtonLoader extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                     child: SizedBox(
                       height: 20,
                       width: 20,
-                      child: CircularProgressIndicator(),
+                      child: CircularProgressIndicator(
+                        color: loaderColor ?? Colors.white,
+                      ),
                     ),
                   ),
                   Text(
                     loaderString,
                     style: textStyle ??
-                        Theme.of(context).textTheme.labelLarge?.copyWith(
-                              color: Colors.white,
-                            ),
+                        Theme.of(context).textTheme.labelLarge?.copyWith(color: Colors.white),
                   )
                 ],
               )
             : Text(
                 buttonString,
                 style: textStyle ??
-                    Theme.of(context).textTheme.labelLarge?.copyWith(
-                          color: Colors.white,
-                        ),
+                    Theme.of(context).textTheme.labelLarge?.copyWith(color: Colors.white),
               );
       },
     );

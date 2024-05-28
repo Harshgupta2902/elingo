@@ -32,7 +32,7 @@ class AppBoxDecoration {
   }
 
   static BoxDecoration getBorderBoxDecoration({
-    double borderRadius = 24,
+    double borderRadius = 16,
     Color color = Colors.white,
     double borderWidth = 2,
     Color borderColor = GlobalColors.primaryColor,

@@ -6,8 +6,8 @@ import 'package:vocablury/utilities/navigation/go_paths.dart';
 import 'package:vocablury/utilities/navigation/navigator.dart';
 import 'package:vocablury/utilities/theme/app_colors.dart';
 
-class OnboardingScreen extends StatelessWidget {
-  const OnboardingScreen({super.key});
+class OnboardingSuccessScreen extends StatelessWidget {
+  const OnboardingSuccessScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -28,11 +28,13 @@ class OnboardingScreen extends StatelessWidget {
                     fit: BoxFit.fill,
                   ),
                 ),
-                padding: const EdgeInsets.only(left: 26, right: 26, top: 10, bottom: 16),
+                padding: const EdgeInsets.only(left: 30, right: 30, top: 10, bottom: 16),
                 child: Text(
-                  "Hi there! I'm El!",
-                  style:
-                      Theme.of(context).textTheme.headline6?.copyWith(fontWeight: FontWeight.w600),
+                  "Awesome",
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleMedium
+                      ?.copyWith(fontWeight: FontWeight.w600),
                 ),
               ),
             ),
@@ -43,15 +45,7 @@ class OnboardingScreen extends StatelessWidget {
             ),
             const SizedBox(height: 40),
             Text(
-              GlobalText.appName,
-              style: Theme.of(context)
-                  .textTheme
-                  .headlineMedium
-                  ?.copyWith(color: GlobalColors.primaryColor, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 40),
-            Text(
-              "Learn Languages whenever and wherever you want. It's free and forever",
+              "Create a profile now so you can save progress and connect with friends, Or you can skip it",
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                     color: AppColors.battleshipGrey,
@@ -75,9 +69,9 @@ class OnboardingScreen extends StatelessWidget {
           children: [
             ElevatedButton(
               onPressed: () {
-                MyNavigator.pushNamed(GoPaths.onBoardingQuestions);
+                MyNavigator.pushNamed(GoPaths.createProfileForm);
               },
-              child: const Text("GET STARTED"),
+              child: const Text("CREATE PROFILE"),
             ),
             const SizedBox(height: 20),
             ElevatedButton(
@@ -86,7 +80,7 @@ class OnboardingScreen extends StatelessWidget {
                 foregroundColor: GlobalColors.primaryColor,
               ),
               onPressed: () {},
-              child: const Text("I ALREADY HAVE AN ACCOUNT"),
+              child: const Text("SKIP"),
             ),
           ],
         ),

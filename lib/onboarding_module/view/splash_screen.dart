@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:vocablury/global.dart';
 import 'package:vocablury/utilities/navigation/go_paths.dart';
 import 'package:vocablury/utilities/navigation/navigator.dart';
@@ -56,7 +57,8 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
             height: MediaQuery.of(context).size.height * 0.7,
             child: SlideTransition(
               position: _animation,
-              child: Image.asset(GlobalImages.splash),
+              child: SvgPicture.asset(GlobalImages.smile),
+              // child: SvgPicture.asset(GlobalImages.smile),
             ),
           ),
           const SizedBox(height: kToolbarHeight),

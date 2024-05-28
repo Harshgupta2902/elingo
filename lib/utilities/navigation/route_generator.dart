@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:go_router/go_router.dart';
+import 'package:vocablury/onboarding_module/view/create_profile_form.dart';
+import 'package:vocablury/onboarding_module/view/onboarding_questions_screen.dart';
 import 'package:vocablury/onboarding_module/view/onboarding_screen.dart';
+import 'package:vocablury/onboarding_module/view/onboarding_success_screen.dart';
+import 'package:vocablury/onboarding_module/view/profile_success_screen.dart';
 import 'package:vocablury/onboarding_module/view/splash_screen.dart';
 import 'package:vocablury/utilities/navigation/go_paths.dart';
 
@@ -11,7 +15,7 @@ final GlobalKey<NavigatorState> shellNavigatorKey = GlobalKey<NavigatorState>(de
 final prefs = GetStorage();
 
 final GoRouter goRouterConfig = GoRouter(
-  initialLocation: GoPaths.splash,
+  initialLocation: GoPaths.createProfileForm,
   navigatorKey: rootNavigatorKey,
   routes: [
     GoRoute(
@@ -30,6 +34,39 @@ final GoRouter goRouterConfig = GoRouter(
         return const OnboardingScreen();
       },
     ),
+    GoRoute(
+      parentNavigatorKey: rootNavigatorKey,
+      path: GoPaths.onBoardingQuestions,
+      name: GoPaths.onBoardingQuestions,
+      builder: (context, state) {
+        return const OnboardingQuestionsScreen();
+      },
+    ),
+    GoRoute(
+      parentNavigatorKey: rootNavigatorKey,
+      path: GoPaths.onboardingSuccessScreen,
+      name: GoPaths.onboardingSuccessScreen,
+      builder: (context, state) {
+        return const OnboardingSuccessScreen();
+      },
+    ),
+    GoRoute(
+      parentNavigatorKey: rootNavigatorKey,
+      path: GoPaths.createProfileForm,
+      name: GoPaths.createProfileForm,
+      builder: (context, state) {
+        return const CreateProfileForm();
+      },
+    ),
+    GoRoute(
+      parentNavigatorKey: rootNavigatorKey,
+      path: GoPaths.profileSuccessScreen,
+      name: GoPaths.profileSuccessScreen,
+      builder: (context, state) {
+        return const ProfileSuccessScreen();
+      },
+    ),
+
     // // -------------------------------------- NAV BAR Routes --------------------------------------
 
     // ShellRoute(

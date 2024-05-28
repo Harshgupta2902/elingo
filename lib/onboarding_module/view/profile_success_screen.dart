@@ -6,8 +6,8 @@ import 'package:vocablury/utilities/navigation/go_paths.dart';
 import 'package:vocablury/utilities/navigation/navigator.dart';
 import 'package:vocablury/utilities/theme/app_colors.dart';
 
-class OnboardingScreen extends StatelessWidget {
-  const OnboardingScreen({super.key});
+class ProfileSuccessScreen extends StatelessWidget {
+  const ProfileSuccessScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -28,11 +28,13 @@ class OnboardingScreen extends StatelessWidget {
                     fit: BoxFit.fill,
                   ),
                 ),
-                padding: const EdgeInsets.only(left: 26, right: 26, top: 10, bottom: 16),
+                padding: const EdgeInsets.only(left: 30, right: 30, top: 10, bottom: 16),
                 child: Text(
-                  "Hi there! I'm El!",
-                  style:
-                      Theme.of(context).textTheme.headline6?.copyWith(fontWeight: FontWeight.w600),
+                  "Hurray!!",
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleMedium
+                      ?.copyWith(fontWeight: FontWeight.w600),
                 ),
               ),
             ),
@@ -43,7 +45,7 @@ class OnboardingScreen extends StatelessWidget {
             ),
             const SizedBox(height: 40),
             Text(
-              GlobalText.appName,
+              "Welcome 👋",
               style: Theme.of(context)
                   .textTheme
                   .headlineMedium
@@ -51,7 +53,7 @@ class OnboardingScreen extends StatelessWidget {
             ),
             const SizedBox(height: 40),
             Text(
-              "Learn Languages whenever and wherever you want. It's free and forever",
+              "Your profile has been created successfully",
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                     color: AppColors.battleshipGrey,
@@ -70,25 +72,11 @@ class OnboardingScreen extends StatelessWidget {
           ),
         ),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ElevatedButton(
-              onPressed: () {
-                MyNavigator.pushNamed(GoPaths.onBoardingQuestions);
-              },
-              child: const Text("GET STARTED"),
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: GlobalColors.secondaryButtonColor,
-                foregroundColor: GlobalColors.primaryColor,
-              ),
-              onPressed: () {},
-              child: const Text("I ALREADY HAVE AN ACCOUNT"),
-            ),
-          ],
+        child: ElevatedButton(
+          onPressed: () {
+            MyNavigator.pushNamed(GoPaths.createProfileForm);
+          },
+          child: const Text("CONTINUE TO HOME"),
         ),
       ),
     );

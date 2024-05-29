@@ -7,6 +7,11 @@ import 'package:vocablury/onboarding_module/view/onboarding_screen.dart';
 import 'package:vocablury/onboarding_module/view/onboarding_success_screen.dart';
 import 'package:vocablury/onboarding_module/view/profile_success_screen.dart';
 import 'package:vocablury/onboarding_module/view/splash_screen.dart';
+import 'package:vocablury/registration_module/view/create_password_screen.dart';
+import 'package:vocablury/registration_module/view/forgot_password_screen.dart';
+import 'package:vocablury/registration_module/view/login_screen.dart';
+import 'package:vocablury/registration_module/view/otp_screen.dart';
+import 'package:vocablury/registration_module/view/password_success_screen.dart';
 import 'package:vocablury/utilities/navigation/go_paths.dart';
 
 final GlobalKey<NavigatorState> rootNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'root');
@@ -15,7 +20,7 @@ final GlobalKey<NavigatorState> shellNavigatorKey = GlobalKey<NavigatorState>(de
 final prefs = GetStorage();
 
 final GoRouter goRouterConfig = GoRouter(
-  initialLocation: GoPaths.createProfileForm,
+  initialLocation: GoPaths.login,
   navigatorKey: rootNavigatorKey,
   routes: [
     GoRoute(
@@ -64,6 +69,47 @@ final GoRouter goRouterConfig = GoRouter(
       name: GoPaths.profileSuccessScreen,
       builder: (context, state) {
         return const ProfileSuccessScreen();
+      },
+    ),
+
+    GoRoute(
+      parentNavigatorKey: rootNavigatorKey,
+      path: GoPaths.login,
+      name: GoPaths.login,
+      builder: (context, state) {
+        return const LoginScreen();
+      },
+    ),
+    GoRoute(
+      parentNavigatorKey: rootNavigatorKey,
+      path: GoPaths.forgotPassword,
+      name: GoPaths.forgotPassword,
+      builder: (context, state) {
+        return const ForgotPasswordScreen();
+      },
+    ),
+    GoRoute(
+      parentNavigatorKey: rootNavigatorKey,
+      path: GoPaths.otpScreen,
+      name: GoPaths.otpScreen,
+      builder: (context, state) {
+        return const OtpScreen();
+      },
+    ),
+    GoRoute(
+      parentNavigatorKey: rootNavigatorKey,
+      path: GoPaths.createPassword,
+      name: GoPaths.createPassword,
+      builder: (context, state) {
+        return const CreatePasswordScreen();
+      },
+    ),
+    GoRoute(
+      parentNavigatorKey: rootNavigatorKey,
+      path: GoPaths.passwordSuccess,
+      name: GoPaths.passwordSuccess,
+      builder: (context, state) {
+        return const PasswordSuccessScreen();
       },
     ),
 

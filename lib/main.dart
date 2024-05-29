@@ -28,31 +28,28 @@ class MyApp extends StatelessWidget {
         useMaterial3: false,
         primaryColor: GlobalColors.primaryColor,
         fontFamily: 'Quicksand',
+        checkboxTheme: CheckboxThemeData(
+          shape: RoundedRectangleBorder(borderRadius: SmoothBorderRadius(cornerRadius: 6)),
+          splashRadius: 0,
+        ),
         elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ButtonStyle(
-            backgroundColor: const MaterialStatePropertyAll(GlobalColors.primaryColor),
-            elevation: const MaterialStatePropertyAll(0),
-            minimumSize: MaterialStatePropertyAll(
-              Size(MediaQuery.of(context).size.width, 52),
-            ),
-            textStyle: MaterialStatePropertyAll(
-              Theme.of(context).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w400),
-            ),
-            shape: MaterialStatePropertyAll(
-              RoundedRectangleBorder(
-                borderRadius: SmoothBorderRadius(cornerRadius: 34),
-              ),
-            ),
-            shadowColor: MaterialStatePropertyAll(
-              GlobalColors.primaryColor.withOpacity(0.25),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: GlobalColors.primaryColor,
+            foregroundColor: Colors.white,
+            minimumSize: Size(MediaQuery.of(context).size.width, 52),
+            textStyle: Theme.of(context)
+                .textTheme
+                .titleMedium
+                ?.copyWith(color: Colors.white),
+            shape: RoundedRectangleBorder(
+              borderRadius: SmoothBorderRadius(cornerRadius: 34),
             ),
           ),
         ),
         bottomSheetTheme: const BottomSheetThemeData(
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(20),
-              topRight: Radius.circular(20),
+            borderRadius: BorderRadius.vertical(
+              top: Radius.circular(20),
             ),
           ),
         ),

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:vocablury/components/custom_text_field.dart';
 import 'package:vocablury/global.dart';
+import 'package:vocablury/components/vocab_app_bar.dart';
 import 'package:vocablury/utilities/navigation/go_paths.dart';
 import 'package:vocablury/utilities/navigation/navigator.dart';
 import 'package:vocablury/utilities/validators.dart';
@@ -52,21 +54,7 @@ class _CreateProfileFormState extends State<CreateProfileForm> {
     progressValue = (currentPageIndex + 1) / questions.length;
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          onPressed: () => MyNavigator.pop(),
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-        ),
-        title: LinearProgressIndicator(
-          color: GlobalColors.primaryColor,
-          value: progressValue,
-          borderRadius: const BorderRadius.all(Radius.circular(24)),
-          minHeight: 8,
-          backgroundColor: GlobalColors.borderColor,
-        ),
-      ),
+      appBar: const VocabularyAppBar(),
       body: Form(
         key: _formKey,
         child: PageView.builder(
@@ -97,47 +85,11 @@ class _CreateProfileFormState extends State<CreateProfileForm> {
                         ?.copyWith(fontWeight: FontWeight.w600),
                   ),
                   const SizedBox(height: 20),
-                  TextFormField(
+                  CustomTextField(
                     initialValue: _formData[questions[index]['label']] ?? '',
-                    cursorColor: GlobalColors.primaryColor,
                     obscureText: isObscure ? _obscureTextMap[questions[index]['label']]! : false,
                     keyboardType: getKeyboardType(questions[index]['type']!),
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleMedium
-                        ?.copyWith(fontWeight: FontWeight.w500, fontSize: 18),
-                    decoration: InputDecoration(
-                      label: Text(
-                        questions[index]['label']!,
-                      ),
-                      labelStyle: Theme.of(context)
-                          .textTheme
-                          .titleMedium
-                          ?.copyWith(fontWeight: FontWeight.w500, fontSize: 18),
-                      floatingLabelBehavior: FloatingLabelBehavior.always,
-                      contentPadding: const EdgeInsets.symmetric(vertical: 12),
-                      focusedBorder: const UnderlineInputBorder(
-                        borderSide: BorderSide(
-                          color: GlobalColors.primaryColor,
-                        ),
-                      ),
-                      suffixIcon: isObscure
-                          ? IconButton(
-                              icon: Icon(
-                                _obscureTextMap[questions[index]['label']]!
-                                    ? Icons.visibility
-                                    : Icons.visibility_off,
-                                color: GlobalColors.primaryColor,
-                              ),
-                              onPressed: () {
-                                setState(() {
-                                  _obscureTextMap[questions[index]['label']!] =
-                                      !_obscureTextMap[questions[index]['label']]!;
-                                });
-                              },
-                            )
-                          : null,
-                    ),
+                    labelText: questions[index]['label']!,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return "Enter ${questions[index]['label'].toString()}";
@@ -149,7 +101,23 @@ class _CreateProfileFormState extends State<CreateProfileForm> {
                         _formData[questions[index]['label']!] = value;
                       });
                     },
-                  )
+                    suffixIcon: isObscure
+                        ? IconButton(
+                            icon: Icon(
+                              _obscureTextMap[questions[index]['label']]!
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
+                              color: GlobalColors.primaryColor,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                _obscureTextMap[questions[index]['label']!] =
+                                    !_obscureTextMap[questions[index]['label']]!;
+                              });
+                            },
+                          )
+                        : null,
+                  ),
                 ],
               ),
             );

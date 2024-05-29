@@ -7,4 +7,12 @@ class GoPaths {
   static const String createProfileForm = '/createProfileForm';
   static const String profileSuccessScreen = '/profileSuccessScreen';
 
+
+
+  static const String login = '/login';
+  static const String forgotPassword = '/forgotPassword';
+  static const String otpScreen = '/otpScreen';
+  static const String createPassword = '/createPassword';
+  static const String passwordSuccess = '/passwordSuccess';
+
 }

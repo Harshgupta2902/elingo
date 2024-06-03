@@ -68,7 +68,7 @@ class _OnboardingQuestionsScreenState extends State<OnboardingQuestionsScreen> {
                           textAlign: TextAlign.center,
                           style: Theme.of(context)
                               .textTheme
-                              .headline6
+                              .titleLarge
                               ?.copyWith(fontWeight: FontWeight.w600),
                         ),
                       ),
@@ -127,7 +127,7 @@ class _OnboardingQuestionsScreenState extends State<OnboardingQuestionsScreen> {
                                 questions[index],
                                 style: Theme.of(context)
                                     .textTheme
-                                    .subtitle1
+                                    .titleMedium
                                     ?.copyWith(fontWeight: FontWeight.w600),
                               ),
                             ),

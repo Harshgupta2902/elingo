@@ -32,7 +32,7 @@ class OnboardingScreen extends StatelessWidget {
                 child: Text(
                   "Hi there! I'm El!",
                   style:
-                      Theme.of(context).textTheme.headline6?.copyWith(fontWeight: FontWeight.w600),
+                      Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w600),
                 ),
               ),
             ),

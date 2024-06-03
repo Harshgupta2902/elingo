@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:go_router/go_router.dart';
+import 'package:vocablury/home_module/view/landing_view.dart';
 import 'package:vocablury/onboarding_module/view/create_profile_form.dart';
 import 'package:vocablury/onboarding_module/view/onboarding_questions_screen.dart';
 import 'package:vocablury/onboarding_module/view/onboarding_screen.dart';
@@ -13,6 +14,7 @@ import 'package:vocablury/registration_module/view/login_screen.dart';
 import 'package:vocablury/registration_module/view/otp_screen.dart';
 import 'package:vocablury/registration_module/view/password_success_screen.dart';
 import 'package:vocablury/utilities/navigation/go_paths.dart';
+import 'package:vocablury/utilities/packages/dashboard_levels.dart';
 
 final GlobalKey<NavigatorState> rootNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'root');
 final GlobalKey<NavigatorState> shellNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'shell');
@@ -20,7 +22,7 @@ final GlobalKey<NavigatorState> shellNavigatorKey = GlobalKey<NavigatorState>(de
 final prefs = GetStorage();
 
 final GoRouter goRouterConfig = GoRouter(
-  initialLocation: GoPaths.login,
+  initialLocation: GoPaths.dashboardLevels,
   navigatorKey: rootNavigatorKey,
   routes: [
     GoRoute(
@@ -115,32 +117,32 @@ final GoRouter goRouterConfig = GoRouter(
 
     // // -------------------------------------- NAV BAR Routes --------------------------------------
 
-    // ShellRoute(
-    //   navigatorKey: shellNavigatorKey,
-    //   builder: (context, state, child) {
-    //     return LandingView(
-    //       child: child,
-    //     );
-    //   },
-    //   routes: [
-    //     GoRoute(
-    //       parentNavigatorKey: shellNavigatorKey,
-    //       path: GoPaths.setting,
-    //       name: GoPaths.setting,
-    //       builder: (context, state) {
-    //         return const SettingScreen();
-    //       },
-    //     ),
-    //     GoRoute(
-    //       parentNavigatorKey: shellNavigatorKey,
-    //       path: GoPaths.ieltsDashboard,
-    //       name: GoPaths.ieltsDashboard,
-    //       builder: (context, state) {
-    //         return const IeltsDashboardView();
-    //       },
-    //     ),
-    //   ],
-    // ),
+    ShellRoute(
+      navigatorKey: shellNavigatorKey,
+      builder: (context, state, child) {
+        return LandingView(
+          child: child,
+        );
+      },
+      routes: [
+        GoRoute(
+          parentNavigatorKey: shellNavigatorKey,
+          path: GoPaths.dashboardLevels,
+          name: GoPaths.dashboardLevels,
+          builder: (context, state) {
+            return const DashBoardLevels();
+          },
+        ),
+        // GoRoute(
+        //   parentNavigatorKey: shellNavigatorKey,
+        //   path: GoPaths.dashboardLevels1,
+        //   name: GoPaths.dashboardLevels1,
+        //   builder: (context, state) {
+        //     return const DashBoardLevels();
+        //   },
+        // ),
+      ],
+    ),
 
     // // -------------------------------------- SETTING ROUTES Routes --------------------------------------
   ],

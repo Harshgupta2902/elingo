@@ -9,6 +9,7 @@ class GlobalColors {
 
 class GlobalImages {
   static const String smile = "assets/onboarding/smile.svg";
+  static const String smilePng = "assets/onboarding/smile.png";
 }
 
 class GlobalText {

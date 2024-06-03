@@ -11,6 +11,7 @@ void main() async {
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
 
@@ -37,10 +38,7 @@ class MyApp extends StatelessWidget {
             backgroundColor: GlobalColors.primaryColor,
             foregroundColor: Colors.white,
             minimumSize: Size(MediaQuery.of(context).size.width, 52),
-            textStyle: Theme.of(context)
-                .textTheme
-                .titleMedium
-                ?.copyWith(color: Colors.white),
+            textStyle: Theme.of(context).textTheme.titleMedium?.copyWith(color: Colors.white),
             shape: RoundedRectangleBorder(
               borderRadius: SmoothBorderRadius(cornerRadius: 34),
             ),

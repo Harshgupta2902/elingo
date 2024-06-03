@@ -15,4 +15,10 @@ class GoPaths {
   static const String createPassword = '/createPassword';
   static const String passwordSuccess = '/passwordSuccess';
 
+
+
+  static const String dashboardLevels = '/dashboardLevels';
+  static const String dashboardLevels1 = '/dashboardLevels1';
+
+
 }

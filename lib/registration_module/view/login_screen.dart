@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:vocablury/components/custom_text_field.dart';
 import 'package:vocablury/components/vocab_app_bar.dart';
 import 'package:vocablury/global.dart';
@@ -132,9 +133,11 @@ class _LoginScreenState extends State<LoginScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         child: ElevatedButton(
           onPressed: () {
-            if (_formKey.currentState!.validate()) {
-              // MyNavigator.popUntilAndPushNamed(GoPaths.profileSuccessScreen);
-            }
+            context.goNamed(GoPaths.dashboardLevels);
+
+            // if (_formKey.currentState!.validate()) {
+            // MyNavigator.popUntilAndPushNamed(GoPaths.profileSuccessScreen);
+            // },
           },
           child: const Text("SIGN IN"),
         ),

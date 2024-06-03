@@ -2,14 +2,12 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:pinput/pinput.dart';
-import 'package:vocablury/components/custom_text_field.dart';
 import 'package:vocablury/components/vocab_app_bar.dart';
 import 'package:vocablury/global.dart';
 import 'package:vocablury/utilities/navigation/go_paths.dart';
 import 'package:vocablury/utilities/navigation/navigator.dart';
 import 'package:vocablury/utilities/packages/smooth_rectangular_border.dart';
 import 'package:vocablury/utilities/theme/app_colors.dart';
-import 'package:vocablury/utilities/validators.dart';
 
 class OtpScreen extends StatefulWidget {
   const OtpScreen({super.key});

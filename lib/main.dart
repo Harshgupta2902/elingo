@@ -25,10 +25,11 @@ class MyApp extends StatelessWidget {
       title: 'Vocablury',
       routerConfig: goRouterConfig,
       theme: ThemeData(
+        splashColor: Colors.transparent,
         scaffoldBackgroundColor: AppColors.backgroundColor,
         useMaterial3: false,
         primaryColor: GlobalColors.primaryColor,
-        fontFamily: 'Quicksand',
+        fontFamily: 'Nunito',
         checkboxTheme: CheckboxThemeData(
           shape: RoundedRectangleBorder(borderRadius: SmoothBorderRadius(cornerRadius: 6)),
           splashRadius: 0,

@@ -4,7 +4,7 @@ import 'package:vocablury/global.dart';
 import 'package:vocablury/components/vocab_app_bar.dart';
 import 'package:vocablury/utilities/navigation/go_paths.dart';
 import 'package:vocablury/utilities/navigation/navigator.dart';
-import 'package:vocablury/utilities/validators.dart';
+import 'package:vocablury/utilities/functions.dart';
 
 class CreateProfileForm extends StatefulWidget {
   const CreateProfileForm({super.key});

@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:go_router/go_router.dart';
+import 'package:vocablury/home_module/view/buy_diamonds/buy_diamonds.dart';
+import 'package:vocablury/home_module/view/buy_diamonds/payment_success.dart';
+import 'package:vocablury/home_module/view/buy_diamonds/review_summary.dart';
+import 'package:vocablury/home_module/view/buy_diamonds/select_payment_method.dart';
 import 'package:vocablury/home_module/view/landing_view.dart';
 import 'package:vocablury/onboarding_module/view/create_profile_form.dart';
 import 'package:vocablury/onboarding_module/view/onboarding_questions_screen.dart';
@@ -14,7 +18,7 @@ import 'package:vocablury/registration_module/view/login_screen.dart';
 import 'package:vocablury/registration_module/view/otp_screen.dart';
 import 'package:vocablury/registration_module/view/password_success_screen.dart';
 import 'package:vocablury/utilities/navigation/go_paths.dart';
-import 'package:vocablury/utilities/packages/dashboard_levels.dart';
+import 'package:vocablury/home_module/view/dashboard_levels.dart';
 
 final GlobalKey<NavigatorState> rootNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'root');
 final GlobalKey<NavigatorState> shellNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'shell');
@@ -144,6 +148,43 @@ final GoRouter goRouterConfig = GoRouter(
       ],
     ),
 
-    // // -------------------------------------- SETTING ROUTES Routes --------------------------------------
+    // // -------------------------------------- BUY DIAMONDS Routes --------------------------------------
+    GoRoute(
+      parentNavigatorKey: rootNavigatorKey,
+      path: GoPaths.buyDiamonds,
+      name: GoPaths.buyDiamonds,
+      builder: (context, state) {
+        return const BuyDiamonds();
+      },
+    ),
+    GoRoute(
+      parentNavigatorKey: rootNavigatorKey,
+      path: GoPaths.selectPaymentMethod,
+      name: GoPaths.selectPaymentMethod,
+      builder: (context, state) {
+        return const SelectPaymentMethod();
+      },
+    ),
+    GoRoute(
+      parentNavigatorKey: rootNavigatorKey,
+      path: GoPaths.reviewSummary,
+      name: GoPaths.reviewSummary,
+      builder: (context, state) {
+        final extras = state.extra as Map<String, dynamic>;
+        final selectedPaymentMethod = extras["selectedPaymentMethod"];
+        return ReviewSummary(
+          selectedPaymentMethod: selectedPaymentMethod,
+        );
+      },
+    ),
+
+    GoRoute(
+      parentNavigatorKey: rootNavigatorKey,
+      path: GoPaths.paymentSuccess,
+      name: GoPaths.paymentSuccess,
+      builder: (context, state) {
+        return const PaymentSuccessScreen();
+      },
+    ),
   ],
 );

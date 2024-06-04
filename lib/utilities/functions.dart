@@ -1,5 +1,6 @@
-
 import 'package:flutter/material.dart';
+import 'package:vocablury/global.dart';
+import 'package:vocablury/home_module/view/dashboard_levels.dart';
 
 TextInputType getKeyboardType(String type) {
   switch (type) {
@@ -37,4 +38,33 @@ String? validateInput(String type, String? value) {
       break;
   }
   return null;
+}
+
+Widget getIconForLevelState(LevelState state) {
+  switch (state) {
+    case LevelState.inProgress:
+      return const Icon(
+        Icons.play_arrow,
+        color: GlobalColors.primaryColor,
+        size: 56,
+      );
+    case LevelState.completed:
+      return const Icon(
+        Icons.check_circle,
+        color: GlobalColors.primaryColor,
+        size: 56,
+      );
+    case LevelState.upComing:
+      return const Icon(
+        Icons.hourglass_empty,
+        color: GlobalColors.primaryColor,
+        size: 56,
+      );
+    default:
+      return const Icon(
+        Icons.help,
+        color: GlobalColors.primaryColor,
+        size: 56,
+      ); // Default icon in case of unknown state
+  }
 }

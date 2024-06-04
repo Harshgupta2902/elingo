@@ -4,15 +4,14 @@ import 'package:vocablury/global.dart';
 import 'package:vocablury/utilities/navigation/go_paths.dart';
 import 'package:vocablury/utilities/navigation/navigator.dart';
 
-
-class BottomBar extends StatefulWidget {
-  const BottomBar({super.key});
+class BottomNavigation extends StatefulWidget {
+  const BottomNavigation({super.key});
 
   @override
-  State<BottomBar> createState() => _BottomBarState();
+  State<BottomNavigation> createState() => _BottomNavigationState();
 }
 
-class _BottomBarState extends State<BottomBar> {
+class _BottomNavigationState extends State<BottomNavigation> {
   int index = 0;
 
   @override

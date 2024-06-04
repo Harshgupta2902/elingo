@@ -23,7 +23,6 @@ class MyNavigator {
 
   static void popUntilAndPushNamed(String routeName, {Object? extra}) {
     try {
-
       while (goRouterConfig.canPop()) {
         goRouterConfig.pop();
       }

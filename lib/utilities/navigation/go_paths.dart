@@ -1,5 +1,7 @@
 class GoPaths {
-  // onboarding
+
+
+// onboarding routes
   static const String splash = '/';
   static const String onBoarding = '/onBoarding';
   static const String onBoardingQuestions = '/onBoardingQuestions';
@@ -9,6 +11,7 @@ class GoPaths {
 
 
 
+// registration routes
   static const String login = '/login';
   static const String forgotPassword = '/forgotPassword';
   static const String otpScreen = '/otpScreen';
@@ -17,8 +20,17 @@ class GoPaths {
 
 
 
+// bottom bar routes
   static const String dashboardLevels = '/dashboardLevels';
-  static const String dashboardLevels1 = '/dashboardLevels1';
+
+
+
+// buy diamonds routes
+  static const String buyDiamonds = '/buyDiamonds';
+  static const String selectPaymentMethod = '/selectPaymentMethod';
+  static const String reviewSummary = '/reviewSummary';
+  static const String paymentSuccess = '/paymentSuccess';
+
 
 
 }

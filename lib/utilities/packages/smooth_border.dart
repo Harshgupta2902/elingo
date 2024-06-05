@@ -7,7 +7,7 @@ enum CornerLocation { tl, tr, bl, br }
 /// A rectangular border with variable smoothness transitions between
 /// the straight sides and the rounded corners.
 class SmoothRectangleBorder extends OutlinedBorder {
-  SmoothRectangleBorder({
+  const SmoothRectangleBorder({
     this.smoothness = 0.0,
     this.borderRadius = BorderRadius.zero,
     BorderSide side = BorderSide.none,
@@ -29,12 +29,11 @@ class SmoothRectangleBorder extends OutlinedBorder {
   final double smoothness;
 
   @override
-  EdgeInsetsGeometry get dimensions => EdgeInsets.all(0);
+  EdgeInsetsGeometry get dimensions => const EdgeInsets.all(0);
 
   @override
   Path getInnerPath(Rect rect, {TextDirection? textDirection}) {
-    return getPath(
-        borderRadius.resolve(textDirection).toRRect(rect).deflate(side.width));
+    return getPath(borderRadius.resolve(textDirection).toRRect(rect).deflate(side.width));
   }
 
   Path getPath(RRect rrect) {
@@ -131,9 +130,7 @@ class SmoothRectangleBorder extends OutlinedBorder {
           bottom - bl.d,
         )
         ..arcTo(
-          Rect.fromCircle(
-              center: Offset(left + bl.radius, bottom - bl.radius),
-              radius: bl.radius),
+          Rect.fromCircle(center: Offset(left + bl.radius, bottom - bl.radius), radius: bl.radius),
           (90 + bl.angleBezier).toRadian(),
           (90 - bl.angleBezier * 2).toRadian(),
           false,
@@ -159,9 +156,7 @@ class SmoothRectangleBorder extends OutlinedBorder {
           top + (tl.p - tl.a - tl.b - tl.c),
         )
         ..arcTo(
-          Rect.fromCircle(
-              center: Offset(left + tl.radius, top + tl.radius),
-              radius: tl.radius),
+          Rect.fromCircle(center: Offset(left + tl.radius, top + tl.radius), radius: tl.radius),
           (180 + tl.angleBezier).toRadian(),
           (90 - tl.angleBezier * 2).toRadian(),
           false,
@@ -192,10 +187,8 @@ class SmoothRectangleBorder extends OutlinedBorder {
       case BorderStyle.none:
         break;
       case BorderStyle.solid:
-        final Path path = getPath(borderRadius
-            .resolve(textDirection)
-            .toRRect(rect)
-            .deflate(side.width / 2));
+        final Path path =
+            getPath(borderRadius.resolve(textDirection).toRRect(rect).deflate(side.width / 2));
         final Paint paint = side.toPaint()..isAntiAlias = true;
         canvas.drawPath(path, paint);
         break;
@@ -215,8 +208,7 @@ class SmoothRectangleBorder extends OutlinedBorder {
     if (a is SmoothRectangleBorder) {
       return SmoothRectangleBorder(
         side: BorderSide.lerp(a.side, side, t),
-        borderRadius:
-        BorderRadiusGeometry.lerp(a.borderRadius, borderRadius, t)!,
+        borderRadius: BorderRadiusGeometry.lerp(a.borderRadius, borderRadius, t)!,
         smoothness: lerpDouble(a.smoothness, smoothness, t)!,
       );
     }
@@ -228,8 +220,7 @@ class SmoothRectangleBorder extends OutlinedBorder {
     if (b is SmoothRectangleBorder) {
       return SmoothRectangleBorder(
         side: BorderSide.lerp(side, b.side, t),
-        borderRadius:
-        BorderRadiusGeometry.lerp(borderRadius, b.borderRadius, t)!,
+        borderRadius: BorderRadiusGeometry.lerp(borderRadius, b.borderRadius, t)!,
         smoothness: lerpDouble(smoothness, b.smoothness, t)!,
       );
     }
@@ -238,9 +229,7 @@ class SmoothRectangleBorder extends OutlinedBorder {
 
   @override
   SmoothRectangleBorder copyWith(
-      {BorderSide? side,
-        BorderRadiusGeometry? borderRadius,
-        double? smoothness}) {
+      {BorderSide? side, BorderRadiusGeometry? borderRadius, double? smoothness}) {
     return SmoothRectangleBorder(
       borderRadius: borderRadius ?? this.borderRadius,
       side: side ?? this.side,

@@ -1,6 +1,4 @@
 class GoPaths {
-
-
 // onboarding routes
   static const String splash = '/';
   static const String onBoarding = '/onBoarding';
@@ -9,8 +7,6 @@ class GoPaths {
   static const String createProfileForm = '/createProfileForm';
   static const String profileSuccessScreen = '/profileSuccessScreen';
 
-
-
 // registration routes
   static const String login = '/login';
   static const String forgotPassword = '/forgotPassword';
@@ -18,12 +14,8 @@ class GoPaths {
   static const String createPassword = '/createPassword';
   static const String passwordSuccess = '/passwordSuccess';
 
-
-
 // bottom bar routes
   static const String dashboardLevels = '/dashboardLevels';
-
-
 
 // buy diamonds routes
   static const String buyDiamonds = '/buyDiamonds';
@@ -31,6 +23,9 @@ class GoPaths {
   static const String reviewSummary = '/reviewSummary';
   static const String paymentSuccess = '/paymentSuccess';
 
-
-
+// start lesson routes
+  static const String startLesson = '/startLesson';
+  static const String questionsView = '/questionsView';
+  // static const String reviewSummary = '/reviewSummary';
+  // static const String paymentSuccess = '/paymentSuccess';
 }

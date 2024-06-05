@@ -17,7 +17,7 @@ class _ReviewSummaryState extends State<ReviewSummary> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: VocabularyAppBar(
+      appBar: const VocabularyAppBar(
         title: "Review Summary",
       ),
       body: Padding(
@@ -129,7 +129,7 @@ class _ReviewSummaryState extends State<ReviewSummary> {
             ),
             Container(
               width: MediaQuery.of(context).size.width,
-              margin: EdgeInsets.symmetric(vertical: 16),
+              margin: const EdgeInsets.symmetric(vertical: 16),
               padding: const EdgeInsets.all(16),
               decoration: ShapeDecoration(
                 shape: SmoothRectangleBorder(

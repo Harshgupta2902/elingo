@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:vocablury/global.dart';
 import 'package:vocablury/home_module/components/single_calender.dart';
 import 'package:vocablury/utilities/navigation/go_paths.dart';
@@ -295,7 +294,7 @@ class StreakDropDown extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 10),
-        SingleCalender()
+        const SingleCalender()
       ],
     );
   }

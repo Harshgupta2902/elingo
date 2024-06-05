@@ -5,6 +5,8 @@ import 'package:vocablury/global.dart';
 import 'dart:math' as math;
 
 import 'package:vocablury/utilities/functions.dart';
+import 'package:vocablury/utilities/navigation/go_paths.dart';
+import 'package:vocablury/utilities/navigation/navigator.dart';
 
 enum LevelState {
   inProgress,
@@ -166,24 +168,30 @@ class _DashBoardLevelsState extends State<DashBoardLevels> {
                   }
 
                   Widget icon = getIconForLevelState(state);
-                  return Transform.translate(
-                    offset: Offset(
-                      100 * math.sin((index * gapHeight + baseY) / 150),
-                      0,
-                    ),
-                    child: GestureDetector(
-                      child: Container(
-                        height: 56,
-                        width: 56,
-                        margin: const EdgeInsets.symmetric(vertical: 25),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(chapter?[subIndex].id.toString() ?? ""),
-                            const SizedBox(width: 10),
-                            icon,
-                          ],
+                  return GestureDetector(
+                    onTap: () {
+                      debugPrint("${chapter?[subIndex].id}");
+                      MyNavigator.pushNamed(GoPaths.startLesson);
+                    },
+                    child: Transform.translate(
+                      offset: Offset(
+                        100 * math.sin((index * gapHeight + baseY) / 150),
+                        0,
+                      ),
+                      child: GestureDetector(
+                        child: Container(
+                          height: 56,
+                          width: 56,
+                          margin: const EdgeInsets.symmetric(vertical: 25),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(chapter?[subIndex].id.toString() ?? ""),
+                              const SizedBox(width: 10),
+                              icon,
+                            ],
+                          ),
                         ),
                       ),
                     ),

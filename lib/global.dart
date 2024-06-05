@@ -7,6 +7,8 @@ class GlobalColors {
   static const Color borderColor = Color(0xFFEEEEEE);
   static const Color appBarColorBlue = Color(0xFF7659FF);
   static const Color diamondTextColor = Color(0xFF3695F0);
+  static const Color correctAnswer = Color(0xFF4DD18D);
+  static const Color wrongAnswer = Color(0xFFF35555);
 }
 
 class GlobalImages {

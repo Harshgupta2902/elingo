@@ -4,7 +4,6 @@ import 'package:vocablury/global.dart';
 import 'package:vocablury/utilities/navigation/go_paths.dart';
 import 'package:vocablury/utilities/navigation/navigator.dart';
 import 'package:vocablury/utilities/packages/smooth_rectangular_border.dart';
-import 'package:vocablury/utilities/theme/app_colors.dart';
 
 class SelectPaymentMethod extends StatefulWidget {
   const SelectPaymentMethod({super.key});

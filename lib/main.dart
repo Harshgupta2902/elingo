@@ -7,11 +7,11 @@ import 'package:vocablury/utilities/theme/app_colors.dart';
 import 'utilities/navigation/route_generator.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
-  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
 

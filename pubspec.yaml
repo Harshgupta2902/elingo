@@ -46,11 +46,14 @@ dependencies:
   flutter_svg: ^0.22.0
   speech_to_text: ^6.6.0
   permission_handler: ^11.3.1
+  flutter_tts: ^4.0.2
+  vibration: ^1.9.0
+  audioplayers: ^4.1.0
 
 #  audioplayers: ^0.18.3
 
-dependency_overrides:
-  audioplayers: ^4.1.0
+#dependency_overrides:
+#  audioplayers: ^4.1.0
 
 
 dev_dependencies:
@@ -80,6 +83,8 @@ flutter:
     - assets/onboarding/
     - assets/font/
     - assets/lottie/
+    - assets/audio/wrong.mp3
+    - assets/audio/correct.mp3
     - assets/dialog/
 
 

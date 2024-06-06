@@ -5,6 +5,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 import 'package:vocablury/global.dart';
+import 'package:vocablury/home_module/view/start_lesson/flutter_tts.dart';
 import 'package:vocablury/utilities/constants/assets_path.dart';
 import 'package:vocablury/utilities/functions.dart';
 import 'package:vocablury/utilities/packages/smooth_rectangular_border.dart';
@@ -33,6 +34,7 @@ class _SpeakingQuestionsState extends State<SpeakingQuestions> {
   final SpeechToText _speechToText = SpeechToText();
   bool _speechEnabled = false;
   final List<String> _recognizedWords = [];
+  TextToSpeechService ttsService = TextToSpeechService();
 
   @override
   void initState() {
@@ -112,7 +114,11 @@ class _SpeakingQuestionsState extends State<SpeakingQuestions> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Icon(Icons.volume_up, color: GlobalColors.primaryColor, size: 24),
+                      GestureDetector(
+                        onTap: () => ttsService.speak(widget.correctSentence),
+                        child:
+                            const Icon(Icons.volume_up, color: GlobalColors.primaryColor, size: 24),
+                      ),
                       const SizedBox(width: 6),
                       Flexible(
                         child: Text(

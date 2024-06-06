@@ -1,13 +1,6 @@
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:lottie/lottie.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:speech_to_text/speech_recognition_result.dart';
-import 'package:speech_to_text/speech_to_text.dart';
 import 'package:vocablury/global.dart';
-import 'package:vocablury/utilities/constants/assets_path.dart';
-import 'package:vocablury/utilities/functions.dart';
+import 'package:vocablury/home_module/view/start_lesson/flutter_speak.dart';
 import 'package:vocablury/utilities/packages/smooth_rectangular_border.dart';
 import 'package:vocablury/utilities/theme/app_colors.dart';
 
@@ -34,7 +27,6 @@ class ListeningQuestions extends StatefulWidget {
 }
 
 class _ListeningQuestionsState extends State<ListeningQuestions> {
-  AudioPlayer player = AudioPlayer();
   List<String> showWords = [];
   List<String> removedIndices = [];
 
@@ -42,10 +34,6 @@ class _ListeningQuestionsState extends State<ListeningQuestions> {
   void initState() {
     super.initState();
     showWords = List.from(widget.options);
-  }
-
-  Future<void> _playAudio() async {
-    await player.play(UrlSource(widget.questionUrl));
   }
 
   @override
@@ -78,7 +66,7 @@ class _ListeningQuestionsState extends State<ListeningQuestions> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 GestureDetector(
-                  onTap: () => _playAudio(),
+                  onTap: () => playAudio(audio: widget.questionUrl),
                   child: Container(
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,

@@ -18,3 +18,8 @@ class GlobalImages {
 class GlobalText {
   static const String appName = 'Elingo';
 }
+
+class GlobalAudio {
+  static const String correctAnswerAudio = 'assets/audio/correct.mp3';
+  static const String wrongAnswerAudio = 'assets/audio/wrong.mp3';
+}

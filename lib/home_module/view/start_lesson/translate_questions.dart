@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:vocablury/global.dart';
+import 'package:vocablury/home_module/view/start_lesson/lesson_functions.dart';
 import 'package:vocablury/utilities/packages/smooth_rectangular_border.dart';
 
 typedef OnChangeCallBack = void Function();
@@ -48,26 +49,7 @@ class _TranslateQuestionsState extends State<TranslateQuestions> {
             padding: EdgeInsets.symmetric(vertical: 12),
             child: Divider(color: GlobalColors.borderColor, thickness: 1),
           ),
-          Row(
-            children: [
-              Container(
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: GlobalColors.primaryColor,
-                ),
-                padding: const EdgeInsets.all(10),
-                child: const Icon(Icons.volume_up, color: Colors.white, size: 26),
-              ),
-              const SizedBox(width: 16),
-              Flexible(
-                child: Text(
-                  widget.question,
-                  style:
-                      Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w600),
-                ),
-              ),
-            ],
-          ),
+          getSpeakerWidget(question: widget.question, context: context),
           const SizedBox(height: 20),
           SizedBox(
             height: 200,

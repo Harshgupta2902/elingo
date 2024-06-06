@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:vocablury/global.dart';
-import 'package:vocablury/home_module/view/dashboard_levels.dart';
+import 'package:vocablury/utilities/constants/enums.dart';
 
 TextInputType getKeyboardType(String type) {
   switch (type) {
@@ -13,6 +13,12 @@ TextInputType getKeyboardType(String type) {
     default:
       return TextInputType.text;
   }
+}
+
+String capitalizeFirstWord(String sentence) {
+  if (sentence.isEmpty) return sentence;
+
+  return sentence[0].toUpperCase() + sentence.substring(1);
 }
 
 String? validateInput(String type, String? value) {
@@ -66,5 +72,20 @@ Widget getIconForLevelState(LevelState state) {
         color: GlobalColors.primaryColor,
         size: 56,
       ); // Default icon in case of unknown state
+  }
+}
+
+String getQuestionHeading(String questionType) {
+  switch (questionType) {
+    case "translate":
+      return "Translate this Sentence";
+    case "speaking":
+      return "Speak this Sentence";
+    case "meaning":
+      return "What does this sentence mean?";
+    case "listening":
+      return "What does this audio say?";
+    default:
+      return "Translate this Sentence";
   }
 }

@@ -140,7 +140,7 @@ void wrongAnswerBottomSheet({
               onPressed: wrongAnswerButtonPressed,
               child: const Text(
                 "OK",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.white),
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
               ),
             ),
           ],

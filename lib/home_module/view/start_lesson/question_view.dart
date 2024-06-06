@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:vocablury/components/bottom_sheet.dart';
 import 'package:vocablury/components/vocab_app_bar.dart';
 import 'package:vocablury/global.dart';
+import 'package:vocablury/home_module/view/start_lesson/listening_questions.dart';
+import 'package:vocablury/home_module/view/start_lesson/meaning_questions.dart';
+import 'package:vocablury/home_module/view/start_lesson/speak_questions.dart';
 import 'package:vocablury/home_module/view/start_lesson/translate_questions.dart';
+import 'package:vocablury/utilities/functions.dart';
 import 'package:vocablury/utilities/navigation/go_paths.dart';
 import 'package:vocablury/utilities/navigation/navigator.dart';
 import 'package:vocablury/utilities/packages/smooth_rectangular_border.dart';
@@ -20,7 +24,7 @@ class _QuestionsViewState extends State<QuestionsView> {
   Map<String, dynamic> answerMap = {};
   final PageController pageController = PageController();
 
-  void checkSentence({
+  void checkTranslateSentence({
     required List selectedWords,
     required String correctSentence,
     required VoidCallback correctAnswerButtonPressed,
@@ -43,22 +47,56 @@ class _QuestionsViewState extends State<QuestionsView> {
     }
   }
 
+  void checkSpeakingSentence({
+    required String mappedSentence,
+    required String correctSentence,
+    required VoidCallback correctAnswerButtonPressed,
+    required VoidCallback wrongAnswerButtonPressed,
+  }) {
+    debugPrint("$mappedSentence    $correctSentence");
+
+    if (correctSentence.toLowerCase() == mappedSentence.toLowerCase()) {
+      correctAnswerBottomSheet(
+        correctAnswerButtonPressed: correctAnswerButtonPressed,
+        context: context,
+      );
+    } else {
+      wrongAnswerBottomSheet(
+        wrongAnswerButtonPressed: wrongAnswerButtonPressed,
+        correctAnswer: correctSentence,
+        context: context,
+      );
+    }
+  }
+
+  void checkMeaningSentence({
+    required String correctSentence,
+    required String mappedSentence,
+    required VoidCallback correctAnswerButtonPressed,
+    required VoidCallback wrongAnswerButtonPressed,
+  }) {
+    debugPrint("$mappedSentence    $correctSentence");
+
+    if (correctSentence.toLowerCase() == mappedSentence.toLowerCase()) {
+      correctAnswerBottomSheet(
+        correctAnswerButtonPressed: correctAnswerButtonPressed,
+        context: context,
+      );
+    } else {
+      wrongAnswerBottomSheet(
+        wrongAnswerButtonPressed: wrongAnswerButtonPressed,
+        correctAnswer: correctSentence,
+        context: context,
+      );
+    }
+  }
+
   static const questions = [
     {
-      "sentence": "The big red apple fell from the tree",
-      "jumbled_words": ["fell", "red", "tree", "big", "the", "apple", "from", "The"]
-    },
-    {
-      "sentence": "She danced gracefully on the stage",
-      "jumbled_words": ["gracefully", "danced", "She", "on", "the", "stage"]
-    },
-    {
-      "sentence": "The old library contained many rare books",
-      "jumbled_words": ["contained", "library", "books", "many", "rare", "old", "The"]
-    },
-    {
-      "sentence": "He quietly opened the door and entered the room",
-      "jumbled_words": ["entered", "room", "door", "opened", "the", "quietly", "and", "He"]
+      "question": "He quietly opened the door and entered the room",
+      "correctSentence": "He quietly opened the door and entered the room",
+      "type": "listening",
+      "options": ["entered", "room", "door", "opened", "the", "quietly", "and", "He"]
     }
   ];
 
@@ -121,16 +159,43 @@ class _QuestionsViewState extends State<QuestionsView> {
               },
               itemBuilder: (context, index) {
                 Map<String, dynamic> question = questions[index];
-                String sentence = question['sentence'];
-                List<String> jumbledWords = List<String>.from(question['jumbled_words']);
+                String ques = question['question'];
+                String questionType = question['type'];
+                String correctSentence = question['correctSentence'];
+                List<String> options = List<String>.from(question['options']);
                 return Column(
                   children: [
-                    TranslateQuestions(
-                      correctSentence: sentence,
-                      jumbledWords: jumbledWords,
-                      answerMap: answerMap,
-                      onChange: () => setState(() {}),
-                    ),
+                    if (questionType == "translate")
+                      TranslateQuestions(
+                        questionHeading: getQuestionHeading(questionType),
+                        question: ques,
+                        jumbledWords: options,
+                        answerMap: answerMap,
+                        onChange: () => setState(() {}),
+                      ),
+                    if (questionType == "speaking")
+                      SpeakingQuestions(
+                        questionHeading: getQuestionHeading(questionType),
+                        correctSentence: ques,
+                        answerMap: answerMap,
+                        onChange: () => setState(() {}),
+                      ),
+                    if (questionType == "meaning")
+                      MeaningQuestions(
+                        options: options,
+                        questionHeading: getQuestionHeading(questionType),
+                        correctSentence: ques,
+                        answerMap: answerMap,
+                        onChange: () => setState(() {}),
+                      ),
+                    if (questionType == "listening")
+                      ListeningQuestions(
+                        options: options,
+                        questionHeading: getQuestionHeading(questionType),
+                        correctSentence: ques,
+                        answerMap: answerMap,
+                        onChange: () => setState(() {}),
+                      ),
                     const Spacer(),
                     Container(
                       decoration: const BoxDecoration(
@@ -144,37 +209,78 @@ class _QuestionsViewState extends State<QuestionsView> {
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           // splashFactory: NoSplash.splashFactory,
-                          backgroundColor:
-                              answerMap.containsKey(sentence) && answerMap[sentence].isNotEmpty
-                                  ? GlobalColors.primaryColor
-                                  : GlobalColors.borderColor,
+                          backgroundColor: answerMap.containsKey(ques) && answerMap[ques].isNotEmpty
+                              ? GlobalColors.primaryColor
+                              : GlobalColors.borderColor,
 
-                          foregroundColor:
-                              answerMap.containsKey(sentence) && answerMap[sentence].isNotEmpty
-                                  ? Colors.white
-                                  : AppColors.battleshipGrey,
+                          foregroundColor: answerMap.containsKey(ques) && answerMap[ques].isNotEmpty
+                              ? Colors.white
+                              : AppColors.battleshipGrey,
                           elevation: 0,
                         ),
                         onPressed: () {
-                          if (answerMap.containsKey(sentence) && answerMap[sentence].isNotEmpty) {
-                            checkSentence(
-                              correctSentence: sentence,
-                              selectedWords: answerMap[sentence],
-                              correctAnswerButtonPressed: () {
-                                MyNavigator.pop();
-                                pageController.nextPage(
-                                  duration: const Duration(milliseconds: 400),
-                                  curve: Curves.bounceInOut,
-                                );
-                              },
-                              wrongAnswerButtonPressed: () {
-                                MyNavigator.pop();
-                                pageController.nextPage(
-                                  duration: const Duration(milliseconds: 400),
-                                  curve: Curves.bounceInOut,
-                                );
-                              },
-                            );
+                          if (answerMap.containsKey(ques) && answerMap[ques].isNotEmpty) {
+                            if (questionType == "translate") {
+                              checkTranslateSentence(
+                                correctSentence: correctSentence,
+                                selectedWords: answerMap[ques],
+                                correctAnswerButtonPressed: () {
+                                  MyNavigator.pop();
+                                  pageController.nextPage(
+                                    duration: const Duration(milliseconds: 400),
+                                    curve: Curves.bounceInOut,
+                                  );
+                                },
+                                wrongAnswerButtonPressed: () {
+                                  MyNavigator.pop();
+                                  pageController.nextPage(
+                                    duration: const Duration(milliseconds: 400),
+                                    curve: Curves.bounceInOut,
+                                  );
+                                },
+                              );
+                            }
+
+                            if (questionType == "speaking") {
+                              checkSpeakingSentence(
+                                correctSentence: correctSentence,
+                                mappedSentence: answerMap[ques],
+                                correctAnswerButtonPressed: () {
+                                  MyNavigator.pop();
+                                  pageController.nextPage(
+                                    duration: const Duration(milliseconds: 400),
+                                    curve: Curves.bounceInOut,
+                                  );
+                                },
+                                wrongAnswerButtonPressed: () {
+                                  MyNavigator.pop();
+                                  pageController.nextPage(
+                                    duration: const Duration(milliseconds: 400),
+                                    curve: Curves.bounceInOut,
+                                  );
+                                },
+                              );
+                            }
+                            if (questionType == "meaning") {
+                              checkMeaningSentence(
+                                correctSentence: correctSentence,
+                                mappedSentence: answerMap[ques],
+                                correctAnswerButtonPressed: () {
+                                  MyNavigator.pop();
+                                  pageController.nextPage(
+                                    duration: const Duration(milliseconds: 400),
+                                    curve: Curves.bounceInOut,
+                                  );
+                                },
+                                wrongAnswerButtonPressed: () {
+                                  MyNavigator.pop();
+                                  pageController.nextPage(
+                                    duration: const Duration(milliseconds: 400),
+                                    curve: Curves.bounceInOut,
+                                  );
+                                },
+                              );
+                            }
                           }
                         },
                         child: const Text("Check Answers"),

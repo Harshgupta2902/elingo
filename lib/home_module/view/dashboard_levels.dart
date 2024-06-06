@@ -2,17 +2,12 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:vocablury/global.dart';
+import 'package:vocablury/utilities/constants/enums.dart';
 import 'dart:math' as math;
 
 import 'package:vocablury/utilities/functions.dart';
 import 'package:vocablury/utilities/navigation/go_paths.dart';
 import 'package:vocablury/utilities/navigation/navigator.dart';
-
-enum LevelState {
-  inProgress,
-  completed,
-  upComing,
-}
 
 class Lesson {
   final int id;

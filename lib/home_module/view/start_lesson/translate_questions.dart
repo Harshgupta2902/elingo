@@ -8,15 +8,17 @@ class TranslateQuestions extends StatefulWidget {
   const TranslateQuestions({
     super.key,
     required this.jumbledWords,
-    required this.correctSentence,
+    required this.question,
     required this.answerMap,
     required this.onChange,
+    required this.questionHeading,
   });
 
   final List<String> jumbledWords;
-  final String correctSentence;
+  final String question;
   final Map<String, dynamic> answerMap;
   final OnChangeCallBack onChange;
+  final String questionHeading;
   @override
   State<TranslateQuestions> createState() => _TranslateQuestionsState();
 }
@@ -39,7 +41,7 @@ class _TranslateQuestionsState extends State<TranslateQuestions> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "Translate this Sentence",
+            widget.questionHeading,
             style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w600),
           ),
           const Padding(
@@ -59,7 +61,7 @@ class _TranslateQuestionsState extends State<TranslateQuestions> {
               const SizedBox(width: 16),
               Flexible(
                 child: Text(
-                  widget.correctSentence,
+                  widget.question,
                   style:
                       Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w600),
                 ),
@@ -73,14 +75,13 @@ class _TranslateQuestionsState extends State<TranslateQuestions> {
               runAlignment: WrapAlignment.center,
               runSpacing: 12,
               spacing: 16,
-              children:
-                  List.generate(widget.answerMap[widget.correctSentence]?.length ?? 0, (index) {
-                final word = widget.answerMap[widget.correctSentence]?[index];
+              children: List.generate(widget.answerMap[widget.question]?.length ?? 0, (index) {
+                final word = widget.answerMap[widget.question]?[index];
 
                 return GestureDetector(
                   onTap: () {
                     setState(() {
-                      widget.answerMap[widget.correctSentence]?.removeAt(index);
+                      widget.answerMap[widget.question]?.removeAt(index);
                       removedIndices.remove(word);
                       widget.onChange();
                     });
@@ -119,8 +120,8 @@ class _TranslateQuestionsState extends State<TranslateQuestions> {
 
                   setState(() {
                     removedIndices.add(word);
-                    widget.answerMap[widget.correctSentence] ??= [];
-                    widget.answerMap[widget.correctSentence]?.add(word);
+                    widget.answerMap[widget.question] ??= [];
+                    widget.answerMap[widget.question]?.add(word);
 
                     debugPrint("+++++ ${widget.answerMap}");
                     widget.onChange();

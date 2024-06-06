@@ -93,10 +93,34 @@ class _QuestionsViewState extends State<QuestionsView> {
 
   static const questions = [
     {
-      "question": "He quietly opened the door and entered the room",
-      "correctSentence": "He quietly opened the door and entered the room",
+      "question":
+          "https://d2357je2x03wmv.cloudfront.net/f2pncn%2Ffile%2Fe78fff13fe5c58524aaff73ce537ef7f_c10e4530c72801d8f7a6c0996b536ab2.mp3?response-content-disposition=inline%3Bfilename%3D%22e78fff13fe5c58524aaff73ce537ef7f_c10e4530c72801d8f7a6c0996b536ab2.mp3%22%3B&response-content-type=audio%2Fmpeg&Expires=1717678732&Signature=MOzEAF2AKgfKdyK1zaH-V1NWEtnw5IeOtBERb9ZC6aGqI8sCyxLxA-EZFtjI7VVjmPCyBRcxmgF4J15azx8SqteXDiJHfldzudtb9Hx7hnCWVy7AWlEvW4nflW2hnlZK4WqlVglZ7qiC8nfxK~5AttHIsZ3s-5wYf4zk29K9uq~MW7UwggUIIm9GkilfQLZaVhB6jHHwFxmlsL2wU60HHlqF1KKnbDn8l9AreCmTKHrALEdBTFG-DDnTGFuijEKbwBzOn-3XNgK4NoUZvfo1bBlJfCxYRU8NlLJdpYa5bILHromW3QjMB~jRYjFridG4-4NVRHf-2vuaDL~VPUNWmg__&Key-Pair-Id=APKAJT5WQLLEOADKLHBQ",
+      "correctSentence": "Hello and welcome to gradding",
       "type": "listening",
-      "options": ["entered", "room", "door", "opened", "the", "quietly", "and", "He"]
+      "options": ["to", "Hello", "gradding", "and", "welcome"]
+    },
+    {
+      "question": "The boy is eating a burger",
+      "correctSentence": "eating a burger",
+      "type": "meaning",
+      "options": [
+        "The boy is eating",
+        "boy is eating",
+        "eating a burger",
+        "burger is eating by a boy by burger"
+      ]
+    },
+    {
+      "question": "The Call is from your mother",
+      "correctSentence": "The Call is from your mother",
+      "type": "speaking",
+      "options": ["gracefully", "danced", "She", "on", "the", "stage"]
+    },
+    {
+      "question": "The big red apple fell from the tree",
+      "correctSentence": "The big red apple fell from the tree",
+      "type": "translate",
+      "options": ["fell", "red", "tree", "big", "the", "apple", "from", "The"]
     }
   ];
 
@@ -192,7 +216,7 @@ class _QuestionsViewState extends State<QuestionsView> {
                       ListeningQuestions(
                         options: options,
                         questionHeading: getQuestionHeading(questionType),
-                        correctSentence: ques,
+                        questionUrl: ques,
                         answerMap: answerMap,
                         onChange: () => setState(() {}),
                       ),
@@ -265,6 +289,27 @@ class _QuestionsViewState extends State<QuestionsView> {
                               checkMeaningSentence(
                                 correctSentence: correctSentence,
                                 mappedSentence: answerMap[ques],
+                                correctAnswerButtonPressed: () {
+                                  MyNavigator.pop();
+                                  pageController.nextPage(
+                                    duration: const Duration(milliseconds: 400),
+                                    curve: Curves.bounceInOut,
+                                  );
+                                },
+                                wrongAnswerButtonPressed: () {
+                                  MyNavigator.pop();
+                                  pageController.nextPage(
+                                    duration: const Duration(milliseconds: 400),
+                                    curve: Curves.bounceInOut,
+                                  );
+                                },
+                              );
+                            }
+
+                            if (questionType == "listening") {
+                              checkTranslateSentence(
+                                correctSentence: correctSentence,
+                                selectedWords: answerMap[ques],
                                 correctAnswerButtonPressed: () {
                                   MyNavigator.pop();
                                   pageController.nextPage(

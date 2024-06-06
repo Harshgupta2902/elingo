@@ -9,20 +9,21 @@ import 'package:vocablury/global.dart';
 import 'package:vocablury/utilities/constants/assets_path.dart';
 import 'package:vocablury/utilities/functions.dart';
 import 'package:vocablury/utilities/packages/smooth_rectangular_border.dart';
+import 'package:vocablury/utilities/theme/app_colors.dart';
 
 typedef OnChangeCallBack = void Function();
 
 class ListeningQuestions extends StatefulWidget {
   const ListeningQuestions({
     super.key,
-    required this.correctSentence,
+    required this.questionUrl,
     required this.answerMap,
     required this.onChange,
     required this.questionHeading,
     required this.options,
   });
 
-  final String correctSentence;
+  final String questionUrl;
   final Map<String, dynamic> answerMap;
   final OnChangeCallBack onChange;
   final String questionHeading;
@@ -34,11 +35,17 @@ class ListeningQuestions extends StatefulWidget {
 
 class _ListeningQuestionsState extends State<ListeningQuestions> {
   AudioPlayer player = AudioPlayer();
+  List<String> showWords = [];
+  List<String> removedIndices = [];
 
-  Future<void> playAudioFromUrl() async {
-    String url =
-        "https://d2357je2x03wmv.cloudfront.net/f2pncn%2Ffile%2Fe78fff13fe5c58524aaff73ce537ef7f_c10e4530c72801d8f7a6c0996b536ab2.mp3?response-content-disposition=inline%3Bfilename%3D%22e78fff13fe5c58524aaff73ce537ef7f_c10e4530c72801d8f7a6c0996b536ab2.mp3%22%3B&response-content-type=audio%2Fmpeg&Expires=1717678732&Signature=MOzEAF2AKgfKdyK1zaH-V1NWEtnw5IeOtBERb9ZC6aGqI8sCyxLxA-EZFtjI7VVjmPCyBRcxmgF4J15azx8SqteXDiJHfldzudtb9Hx7hnCWVy7AWlEvW4nflW2hnlZK4WqlVglZ7qiC8nfxK~5AttHIsZ3s-5wYf4zk29K9uq~MW7UwggUIIm9GkilfQLZaVhB6jHHwFxmlsL2wU60HHlqF1KKnbDn8l9AreCmTKHrALEdBTFG-DDnTGFuijEKbwBzOn-3XNgK4NoUZvfo1bBlJfCxYRU8NlLJdpYa5bILHromW3QjMB~jRYjFridG4-4NVRHf-2vuaDL~VPUNWmg__&Key-Pair-Id=APKAJT5WQLLEOADKLHBQ";
-    await player.play(UrlSource(url));
+  @override
+  void initState() {
+    super.initState();
+    showWords = List.from(widget.options);
+  }
+
+  Future<void> _playAudio() async {
+    await player.play(UrlSource(widget.questionUrl));
   }
 
   @override
@@ -66,7 +73,125 @@ class _ListeningQuestionsState extends State<ListeningQuestions> {
                 side: const BorderSide(color: GlobalColors.borderColor, width: 2),
               ),
             ),
-          )
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                GestureDetector(
+                  onTap: () => _playAudio(),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: GlobalColors.primaryColor,
+                      boxShadow: [
+                        BoxShadow(
+                          color: GlobalColors.primaryColor.withOpacity(0.2),
+                          blurRadius: 20,
+                          spreadRadius: 6,
+                        ),
+                      ],
+                    ),
+                    padding: const EdgeInsets.all(18),
+                    child: Container(
+                      decoration: const BoxDecoration(shape: BoxShape.circle, color: Colors.white),
+                      child: const Icon(
+                        Icons.play_arrow_rounded,
+                        color: GlobalColors.primaryColor,
+                        size: 32,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Text(
+                  "Tap to play audio",
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyLarge
+                      ?.copyWith(color: AppColors.battleshipGrey),
+                )
+              ],
+            ),
+          ),
+          const SizedBox(height: 20),
+          SizedBox(
+            height: 200,
+            child: Wrap(
+              runAlignment: WrapAlignment.center,
+              runSpacing: 12,
+              spacing: 16,
+              children: List.generate(widget.answerMap[widget.questionUrl]?.length ?? 0, (index) {
+                final word = widget.answerMap[widget.questionUrl]?[index];
+
+                return GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      widget.answerMap[widget.questionUrl]?.removeAt(index);
+                      removedIndices.remove(word);
+                      widget.onChange();
+                    });
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    decoration: ShapeDecoration(
+                      shape: SmoothRectangleBorder(
+                        borderRadius: SmoothBorderRadius(cornerRadius: 24),
+                        side: const BorderSide(color: GlobalColors.borderColor, width: 2),
+                      ),
+                    ),
+                    child: Text(
+                      word,
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                  ),
+                );
+              }),
+            ),
+          ),
+          const SizedBox(height: 20),
+          Wrap(
+            runAlignment: WrapAlignment.center,
+            runSpacing: 12,
+            spacing: 16,
+            children: List.generate(showWords.length, (index) {
+              final word = showWords[index];
+
+              final isContains = removedIndices.contains(word);
+              return GestureDetector(
+                onTap: () {
+                  if (isContains == true) {
+                    return;
+                  }
+
+                  setState(() {
+                    removedIndices.add(word);
+                    widget.answerMap[widget.questionUrl] ??= [];
+                    widget.answerMap[widget.questionUrl]?.add(word);
+
+                    debugPrint("+++++ ${widget.answerMap}");
+                    widget.onChange();
+                  });
+                },
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  decoration: ShapeDecoration(
+                    color: isContains ? GlobalColors.borderColor : null,
+                    shape: SmoothRectangleBorder(
+                      borderRadius: SmoothBorderRadius(cornerRadius: 24),
+                      side: const BorderSide(color: GlobalColors.borderColor, width: 2),
+                    ),
+                  ),
+                  child: Text(
+                    showWords[index],
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleSmall
+                        ?.copyWith(color: isContains ? Colors.transparent : Colors.black),
+                  ),
+                ),
+              );
+            }),
+          ),
         ],
       ),
     );

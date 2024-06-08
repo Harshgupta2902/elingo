@@ -15,7 +15,7 @@ class TranslateQuestions extends StatefulWidget {
     required this.questionHeading,
   });
 
-  final List<String> jumbledWords;
+  final List<dynamic> jumbledWords;
   final String question;
   final Map<String, dynamic> answerMap;
   final OnChangeCallBack onChange;

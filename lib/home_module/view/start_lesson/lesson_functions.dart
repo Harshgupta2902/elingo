@@ -5,6 +5,7 @@ import 'package:vocablury/global.dart';
 import 'package:vocablury/home_module/view/start_lesson/flutter_speak.dart';
 import 'package:vocablury/home_module/view/start_lesson/flutter_tts.dart';
 import 'package:vocablury/home_module/view/start_lesson/listening_questions.dart';
+import 'package:vocablury/home_module/view/start_lesson/matching_questions.dart';
 import 'package:vocablury/home_module/view/start_lesson/meaning_questions.dart';
 import 'package:vocablury/home_module/view/start_lesson/speak_questions.dart';
 import 'package:vocablury/home_module/view/start_lesson/translate_questions.dart';
@@ -15,7 +16,7 @@ Widget getQuestionWidget({
   required String questionType,
   required String questionHeading,
   required String ques,
-  required List<String> options,
+  required List<dynamic> options,
   required String questionUrl,
   required String correctSentence,
   required Map<String, dynamic> answerMap,
@@ -52,6 +53,14 @@ Widget getQuestionWidget({
         questionUrl: questionUrl,
         answerMap: answerMap,
         onChange: onChange,
+      );
+    case "matching":
+      return MatchingQuestions(
+        options: options,
+        questionHeading: questionHeading,
+        answerMap: answerMap,
+        onChange: onChange,
+        question: ques,
       );
     default:
       return Container();
@@ -128,6 +137,16 @@ void handleAnswer({
       break;
     case "listening":
       checkTranslateSentence(
+        correctSentence: correctSentence,
+        selectedWords: answerMap,
+        correctAnswerButtonPressed: correctAnswerButtonPressed,
+        wrongAnswerButtonPressed: wrongAnswerButtonPressed,
+        context: context,
+      );
+      break;
+
+    case "matching":
+      checkMatchingQuestion(
         correctSentence: correctSentence,
         selectedWords: answerMap,
         correctAnswerButtonPressed: correctAnswerButtonPressed,
@@ -214,5 +233,48 @@ void checkMeaningSentence({
       correctAnswer: correctSentence,
       context: context,
     );
+  }
+}
+
+void checkMatchingQuestion({
+  required String selectedWords,
+  required String correctSentence,
+  required VoidCallback correctAnswerButtonPressed,
+  required VoidCallback wrongAnswerButtonPressed,
+  required BuildContext context,
+}) {
+  debugPrint("$selectedWords    $correctSentence");
+
+  String selectedSentence = selectedWords;
+  if (selectedSentence == correctSentence) {
+    playAudio(audio: GlobalAudio.correctAnswerAudio);
+    correctAnswerBottomSheet(
+      correctAnswerButtonPressed: correctAnswerButtonPressed,
+      context: context,
+    );
+  } else {
+    playAudio(audio: GlobalAudio.wrongAnswerAudio);
+    wrongAnswerBottomSheet(
+      wrongAnswerButtonPressed: wrongAnswerButtonPressed,
+      correctAnswer: correctSentence,
+      context: context,
+    );
+  }
+}
+
+String getQuestionHeading(String questionType) {
+  switch (questionType) {
+    case "translate":
+      return "Translate this Sentence";
+    case "speaking":
+      return "Speak this Sentence";
+    case "meaning":
+      return "What does this sentence mean?";
+    case "listening":
+      return "What does this audio say?";
+    case "matching":
+      return "Tap the matching word pair";
+    default:
+      return "Translate this Sentence";
   }
 }

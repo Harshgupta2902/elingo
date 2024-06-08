@@ -74,18 +74,3 @@ Widget getIconForLevelState(LevelState state) {
       ); // Default icon in case of unknown state
   }
 }
-
-String getQuestionHeading(String questionType) {
-  switch (questionType) {
-    case "translate":
-      return "Translate this Sentence";
-    case "speaking":
-      return "Speak this Sentence";
-    case "meaning":
-      return "What does this sentence mean?";
-    case "listening":
-      return "What does this audio say?";
-    default:
-      return "Translate this Sentence";
-  }
-}

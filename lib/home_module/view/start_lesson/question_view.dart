@@ -3,7 +3,6 @@ import 'package:vocablury/components/bottom_sheet.dart';
 import 'package:vocablury/components/vocab_app_bar.dart';
 import 'package:vocablury/global.dart';
 import 'package:vocablury/home_module/view/start_lesson/lesson_functions.dart';
-import 'package:vocablury/utilities/functions.dart';
 import 'package:vocablury/utilities/navigation/go_paths.dart';
 import 'package:vocablury/utilities/navigation/navigator.dart';
 import 'package:vocablury/utilities/packages/smooth_rectangular_border.dart';
@@ -22,6 +21,15 @@ class _QuestionsViewState extends State<QuestionsView> {
   final PageController pageController = PageController();
 
   static const questions = [
+    {
+      "question": "Matching Questions",
+      "correctSentence": "completed",
+      "type": "matching",
+      "options": [
+        ["Apple", "Dog", "Car"],
+        ["A fruit", "An animal", "A vehicle"]
+      ],
+    },
     {
       "question": "The boy is eating a burger",
       "correctSentence": "eating a burger",
@@ -124,7 +132,7 @@ class _QuestionsViewState extends State<QuestionsView> {
                   String ques = question['question'];
                   String questionType = question['type'];
                   String correctSentence = question['correctSentence'];
-                  List<String> options = List<String>.from(question['options']);
+                  List<dynamic> options = List<dynamic>.from(question['options']);
                   return Column(
                     children: [
                       getQuestionWidget(

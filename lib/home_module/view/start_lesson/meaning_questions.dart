@@ -20,13 +20,12 @@ class MeaningQuestions extends StatefulWidget {
   final Map<String, dynamic> answerMap;
   final OnChangeCallBack onChange;
   final String questionHeading;
-  final List<String> options;
+  final List<dynamic> options;
   @override
   State<MeaningQuestions> createState() => _MeaningQuestionsState();
 }
 
 class _MeaningQuestionsState extends State<MeaningQuestions> {
-
   int selectedOption = -1;
   @override
   Widget build(BuildContext context) {

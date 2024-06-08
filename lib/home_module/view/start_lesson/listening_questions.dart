@@ -20,7 +20,7 @@ class ListeningQuestions extends StatefulWidget {
   final Map<String, dynamic> answerMap;
   final OnChangeCallBack onChange;
   final String questionHeading;
-  final List<String> options;
+  final List<dynamic> options;
 
   @override
   State<ListeningQuestions> createState() => _ListeningQuestionsState();

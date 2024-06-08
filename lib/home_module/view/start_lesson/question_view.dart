@@ -170,6 +170,10 @@ class _QuestionsViewState extends State<QuestionsView> {
                             elevation: 0,
                           ),
                           onPressed: () {
+                            if (questions.length == currentPage) {
+                              MyNavigator.goNamed(GoPaths.dashboardLevels);
+                              return;
+                            }
                             if (answerMap.containsKey(ques) && answerMap[ques].isNotEmpty) {
                               vibratePhone();
                               handleAnswer(

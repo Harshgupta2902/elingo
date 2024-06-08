@@ -73,6 +73,10 @@ class _SpeakingQuestionsState extends State<SpeakingQuestions> {
     }
   }
 
+  void stopListening() {
+    _speechToText.stop();
+  }
+
   void _onSpeechResult(SpeechRecognitionResult result) {
     debugPrint(result.recognizedWords.toString());
     setState(() {
@@ -144,6 +148,11 @@ class _SpeakingQuestionsState extends State<SpeakingQuestions> {
             onTap: () {
               if (_speechToText.isNotListening) {
                 _startListening();
+                return;
+              }
+              if (_speechToText.isListening) {
+                stopListening();
+                return;
               }
             },
             child: Container(

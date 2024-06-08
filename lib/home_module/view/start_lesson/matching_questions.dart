@@ -200,6 +200,11 @@ class _MatchingQuestionsState extends State<MatchingQuestions> {
             'Correct pairs: $correctCount\nIncorrect pairs: $incorrectCount',
             style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600),
           ),
+          GestureDetector(
+              onTap: () {
+                selectedPairs.clear();
+              },
+              child: Text("clear"))
         ],
       ),
     );

@@ -1,11 +1,9 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:vocablury/global.dart';
 import 'package:vocablury/utilities/constants/enums.dart';
-import 'dart:math' as math;
-
 import 'package:vocablury/utilities/functions.dart';
+import 'dart:math' as math;
 import 'package:vocablury/utilities/navigation/go_paths.dart';
 import 'package:vocablury/utilities/navigation/navigator.dart';
 
@@ -133,6 +131,8 @@ class _DashBoardLevelsState extends State<DashBoardLevels> {
 
   @override
   Widget build(BuildContext context) {
+    const Color color = GlobalColors.primaryColor;
+
     return Scaffold(
       body: Center(
         child: SingleChildScrollView(
@@ -152,45 +152,77 @@ class _DashBoardLevelsState extends State<DashBoardLevels> {
                 itemCount: chapter?.length ?? 0,
                 itemBuilder: (context, subIndex) {
                   double baseY = subIndex * gapHeight;
-                  LevelState state;
 
-                  if (chapter?[subIndex].status == 'completed') {
-                    state = LevelState.completed;
-                  } else if (chapter?[subIndex].status == 'inProgress') {
-                    state = LevelState.inProgress;
-                  } else {
-                    state = LevelState.upComing;
-                  }
+                  // LevelState state;
+                  //
+                  // if (chapter?[subIndex].status == 'completed') {
+                  //   state = LevelState.completed;
+                  // } else if (chapter?[subIndex].status == 'inProgress') {
+                  //   state = LevelState.inProgress;
+                  // } else {
+                  //   state = LevelState.upComing;
+                  // }
+                  //
+                  // Widget icon = getIconForLevelState(state);
 
-                  Widget icon = getIconForLevelState(state);
-                  return GestureDetector(
-                    onTap: () {
-                      debugPrint("${chapter?[subIndex].id}");
-                      MyNavigator.pushNamed(GoPaths.startLesson);
-                    },
-                    child: Transform.translate(
+                  // return Transform.translate(
+                  //   offset: Offset(
+                  //     100 * math.sin((index * gapHeight + baseY) / 150),
+                  //     0,
+                  //   ),
+                  //   child: GestureDetector(
+                  //     child: Container(
+                  //       height: 56,
+                  //       width: 56,
+                  //       margin: const EdgeInsets.symmetric(vertical: 25),
+                  //       child: Row(
+                  //         crossAxisAlignment: CrossAxisAlignment.center,
+                  //         mainAxisAlignment: MainAxisAlignment.center,
+                  //         children: [
+                  //           Text(chapter?[subIndex].id.toString() ?? ""),
+                  //           const SizedBox(width: 10),
+                  //           icon,
+                  //         ],
+                  //       ),
+                  //     ),
+                  //   ),
+                  // );
+                  return Transform.translate(
                       offset: Offset(
                         100 * math.sin((index * gapHeight + baseY) / 150),
                         0,
                       ),
                       child: GestureDetector(
-                        child: Container(
-                          height: 56,
-                          width: 56,
-                          margin: const EdgeInsets.symmetric(vertical: 25),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(chapter?[subIndex].id.toString() ?? ""),
-                              const SizedBox(width: 10),
-                              icon,
-                            ],
+                        onTap: () {
+                          debugPrint("${chapter?[subIndex].id}");
+                          MyNavigator.pushNamed(GoPaths.startLesson);
+                        },
+                        child: ClipRect(
+                          clipBehavior: Clip.hardEdge,
+                          child: AnimatedContainer(
+                            margin: const EdgeInsets.symmetric(horizontal: 160, vertical: 25),
+                            duration: const Duration(milliseconds: 400),
+                            decoration: BoxDecoration(
+                              color: color.withOpacity(0.7),
+                              borderRadius: const BorderRadius.all(Radius.circular(50)),
+                            ),
+                            padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
+                            child: Center(
+                              child: Text(
+                                chapter?[subIndex].id.toString() ?? "",
+                              ),
+                            ),
                           ),
                         ),
-                      ),
-                    ),
-                  );
+                      )
+                      // Flat3dButton.text(
+                      //   onPressed: () {
+                      //     debugPrint("${chapter?[subIndex].id}");
+                      //     MyNavigator.pushNamed(GoPaths.startLesson);
+                      //   },
+                      //   text: chapter?[subIndex].id.toString() ?? "",
+                      // ),
+                      );
                 },
               );
             },

@@ -120,8 +120,11 @@ class _SpeakingQuestionsState extends State<SpeakingQuestions> {
                     children: [
                       GestureDetector(
                         onTap: () => ttsService.speak(widget.correctSentence),
-                        child:
-                            const Icon(Icons.volume_up, color: GlobalColors.primaryColor, size: 24),
+                        child: const Icon(
+                          Icons.volume_up,
+                          color: GlobalColors.primaryColor,
+                          size: 24,
+                        ),
                       ),
                       const SizedBox(width: 6),
                       Flexible(

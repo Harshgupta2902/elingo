@@ -1,39 +1,11 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:vocablury/global.dart';
-import 'package:vocablury/utilities/constants/enums.dart';
-import 'package:vocablury/utilities/functions.dart';
+import 'package:vocablury/utilities/constants/assets_path.dart';
 import 'dart:math' as math;
 import 'package:vocablury/utilities/navigation/go_paths.dart';
 import 'package:vocablury/utilities/navigation/navigator.dart';
-
-class Lesson {
-  final int id;
-  final String status;
-
-  Lesson({required this.id, required this.status});
-
-  factory Lesson.fromJson(Map<String, dynamic> json) {
-    return Lesson(
-      id: json['id'] as int,
-      status: json['status'] as String,
-    );
-  }
-}
-
-class Section {
-  final String section;
-  final List<Lesson> lessons;
-
-  Section({required this.section, required this.lessons});
-
-  factory Section.fromJson(Map<String, dynamic> json) {
-    return Section(
-      section: json['section'] as String,
-      lessons: (json['lessons'] as List<dynamic>).map((lesson) => Lesson.fromJson(lesson)).toList(),
-    );
-  }
-}
+import 'package:vocablury/utilities/packages/animated_button.dart';
 
 class DashBoardLevels extends StatefulWidget {
   const DashBoardLevels({super.key});
@@ -42,13 +14,16 @@ class DashBoardLevels extends StatefulWidget {
   State<DashBoardLevels> createState() => _DashBoardLevelsState();
 }
 
-class _DashBoardLevelsState extends State<DashBoardLevels> {
+class _DashBoardLevelsState extends State<DashBoardLevels> with SingleTickerProviderStateMixin {
   final ScrollController _scrollController = ScrollController();
+  late AnimationController _controller;
+  late Animation<double> _animation;
+
   double _scrollOffset = 0.0;
-  final int _desiredLevel = 20;
+  final int _desiredLevel = 2;
   final int totalLevels = 24;
 
-  double gapHeight = 98.0;
+  double gapHeight = 150.0;
   List<Section>? sections;
 
   @override
@@ -59,8 +34,25 @@ class _DashBoardLevelsState extends State<DashBoardLevels> {
         const Duration(milliseconds: 200),
         () => scrollToDesiredLevel(),
       );
+      _controller = AnimationController(
+        vsync: this,
+        duration: const Duration(milliseconds: 500), // Adjust duration as needed
+      );
+
+      // Define animation curve
+      _animation = Tween<double>(begin: 0, end: 12)
+          .animate(CurvedAnimation(parent: _controller, curve: Curves.linear));
+
+      // Start the animation
+      _controller.repeat(reverse: true);
       sections = parseSections(jsonString);
     });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose(); // Clean up controller
+    super.dispose();
   }
 
   List<Section> parseSections(String jsonString) {
@@ -117,6 +109,25 @@ class _DashBoardLevelsState extends State<DashBoardLevels> {
 ]
 ''';
 
+  // void scrollToDesiredLevel() {
+  //   // Calculate the offset for the desired level
+  //   final sectionIndex = sections?.indexWhere(
+  //           (section) => section.lessons.any((lesson) => lesson.id == _desiredLevel)) ??
+  //       0;
+  //   final lessonIndex =
+  //       sections?[sectionIndex].lessons.indexWhere((lesson) => lesson.id == _desiredLevel) ?? 0;
+  //
+  //   final itemOffset = sectionIndex * gapHeight * 6 + lessonIndex * gapHeight;
+  //   final halfScreenHeight = MediaQuery.of(context).size.height / 2;
+  //   _scrollOffset = itemOffset - halfScreenHeight + gapHeight / 2;
+  //
+  //   _scrollController.animateTo(
+  //     _scrollOffset,
+  //     duration: const Duration(milliseconds: 500),
+  //     curve: Curves.easeInOut,
+  //   );
+  // }
+
   void scrollToDesiredLevel() {
     setState(() {
       _scrollOffset = (totalLevels - _desiredLevel) * gapHeight;
@@ -131,8 +142,6 @@ class _DashBoardLevelsState extends State<DashBoardLevels> {
 
   @override
   Widget build(BuildContext context) {
-    const Color color = GlobalColors.primaryColor;
-
     return Scaffold(
       body: Center(
         child: SingleChildScrollView(
@@ -151,85 +160,68 @@ class _DashBoardLevelsState extends State<DashBoardLevels> {
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount: chapter?.length ?? 0,
                 itemBuilder: (context, subIndex) {
-                  double baseY = subIndex * gapHeight;
-
-                  // LevelState state;
-                  //
-                  // if (chapter?[subIndex].status == 'completed') {
-                  //   state = LevelState.completed;
-                  // } else if (chapter?[subIndex].status == 'inProgress') {
-                  //   state = LevelState.inProgress;
-                  // } else {
-                  //   state = LevelState.upComing;
-                  // }
-                  //
-                  // Widget icon = getIconForLevelState(state);
-
-                  // return Transform.translate(
-                  //   offset: Offset(
-                  //     100 * math.sin((index * gapHeight + baseY) / 150),
-                  //     0,
-                  //   ),
-                  //   child: GestureDetector(
-                  //     child: Container(
-                  //       height: 56,
-                  //       width: 56,
-                  //       margin: const EdgeInsets.symmetric(vertical: 25),
-                  //       child: Row(
-                  //         crossAxisAlignment: CrossAxisAlignment.center,
-                  //         mainAxisAlignment: MainAxisAlignment.center,
-                  //         children: [
-                  //           Text(chapter?[subIndex].id.toString() ?? ""),
-                  //           const SizedBox(width: 10),
-                  //           icon,
-                  //         ],
-                  //       ),
-                  //     ),
-                  //   ),
-                  // );
+                  bool isDesiredLevel = chapter?[subIndex].id == _desiredLevel;
+                  double baseY = int.parse(chapter?[subIndex].id.toString() ?? "") * gapHeight;
                   return Transform.translate(
-                      offset: Offset(
-                        100 * math.sin((index * gapHeight + baseY) / 150),
-                        0,
-                      ),
-                      child: GestureDetector(
-                        onTap: () {
-                          debugPrint("${chapter?[subIndex].id}");
-                          MyNavigator.pushNamed(GoPaths.startLesson);
-                        },
-                        child: ClipRect(
-                          clipBehavior: Clip.hardEdge,
-                          child: AnimatedContainer(
-                            margin: const EdgeInsets.symmetric(horizontal: 160, vertical: 25),
-                            duration: const Duration(milliseconds: 400),
-                            decoration: BoxDecoration(
-                              color: color.withOpacity(0.7),
-                              borderRadius: const BorderRadius.all(Radius.circular(50)),
-                            ),
-                            padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
-                            child: Center(
-                              child: Text(
-                                chapter?[subIndex].id.toString() ?? "",
-                              ),
+                    offset: Offset(
+                      100 * math.sin((index * gapHeight + baseY) / 150),
+                      0,
+                    ),
+                    child: Center(
+                      child: Stack(
+                        children: [
+                          AnimatedButton(
+                            shape: BoxShape.circle,
+                            onPressed: () {
+                              debugPrint("${chapter?[subIndex].id}");
+                              MyNavigator.pushNamed(GoPaths.startLesson);
+                            },
+                            child: Text(
+                              chapter?[subIndex].id.toString() ?? "",
                             ),
                           ),
-                        ),
-                      )
-                      // Flat3dButton.text(
-                      //   onPressed: () {
-                      //     debugPrint("${chapter?[subIndex].id}");
-                      //     MyNavigator.pushNamed(GoPaths.startLesson);
-                      //   },
-                      //   text: chapter?[subIndex].id.toString() ?? "",
-                      // ),
-                      );
+                          if (isDesiredLevel)
+                            Positioned(
+                              left: 0,
+                              right: 0,
+                              top: 10,
+                              child: AnimatedBuilder(
+                                animation: _controller,
+                                builder: (context, child) {
+                                  return Container(
+                                    width: 150,
+                                    height: 40,
+                                    decoration: const BoxDecoration(
+                                      image: DecorationImage(
+                                        image: AssetImage(AssetPath.dialogDown),
+                                        fit: BoxFit.fill,
+                                      ),
+                                    ),
+                                    margin: EdgeInsets.only(top: _animation.value),
+                                    child: Center(
+                                      child: Text(
+                                        'Start Now',
+                                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                                              color: GlobalColors.primaryColor,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
+                  );
                 },
               );
             },
             separatorBuilder: (context, index) {
               return Container(
                 height: 100,
-                color: GlobalColors.primaryColor,
+                color: GlobalColors.secondaryButtonColor,
                 width: MediaQuery.of(context).size.width,
                 child: Center(
                   child: Text("${sections?[index].section}"),
@@ -239,6 +231,34 @@ class _DashBoardLevelsState extends State<DashBoardLevels> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class Lesson {
+  final int id;
+  final String status;
+
+  Lesson({required this.id, required this.status});
+
+  factory Lesson.fromJson(Map<String, dynamic> json) {
+    return Lesson(
+      id: json['id'] as int,
+      status: json['status'] as String,
+    );
+  }
+}
+
+class Section {
+  final String section;
+  final List<Lesson> lessons;
+
+  Section({required this.section, required this.lessons});
+
+  factory Section.fromJson(Map<String, dynamic> json) {
+    return Section(
+      section: json['section'] as String,
+      lessons: (json['lessons'] as List<dynamic>).map((lesson) => Lesson.fromJson(lesson)).toList(),
     );
   }
 }

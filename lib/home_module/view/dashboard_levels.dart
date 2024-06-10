@@ -19,8 +19,7 @@ class _DashBoardLevelsState extends State<DashBoardLevels> with SingleTickerProv
   late AnimationController _controller;
   late Animation<double> _animation;
 
-  double _scrollOffset = 0.0;
-  final int _desiredLevel = 2;
+  final int _desiredLevel = 20;
   final int totalLevels = 24;
 
   double gapHeight = 150.0;
@@ -39,11 +38,9 @@ class _DashBoardLevelsState extends State<DashBoardLevels> with SingleTickerProv
         duration: const Duration(milliseconds: 500), // Adjust duration as needed
       );
 
-      // Define animation curve
       _animation = Tween<double>(begin: 0, end: 12)
           .animate(CurvedAnimation(parent: _controller, curve: Curves.linear));
 
-      // Start the animation
       _controller.repeat(reverse: true);
       sections = parseSections(jsonString);
     });
@@ -85,7 +82,7 @@ class _DashBoardLevelsState extends State<DashBoardLevels> with SingleTickerProv
     ]
   },
   {
-    "section": "Section 1",
+    "section": "Section 3",
     "lessons": [
       {"id": 13, "status": "completed"},
       {"id": 14, "status": "completed"},
@@ -96,7 +93,7 @@ class _DashBoardLevelsState extends State<DashBoardLevels> with SingleTickerProv
     ]
   },
   {
-    "section": "Section 2",
+    "section": "Section 4",
     "lessons": [
       {"id": 19, "status": "upComing"},
       {"id": 20, "status": "upComing"},
@@ -108,36 +105,28 @@ class _DashBoardLevelsState extends State<DashBoardLevels> with SingleTickerProv
   }
 ]
 ''';
-
-  // void scrollToDesiredLevel() {
-  //   // Calculate the offset for the desired level
-  //   final sectionIndex = sections?.indexWhere(
-  //           (section) => section.lessons.any((lesson) => lesson.id == _desiredLevel)) ??
-  //       0;
-  //   final lessonIndex =
-  //       sections?[sectionIndex].lessons.indexWhere((lesson) => lesson.id == _desiredLevel) ?? 0;
-  //
-  //   final itemOffset = sectionIndex * gapHeight * 6 + lessonIndex * gapHeight;
-  //   final halfScreenHeight = MediaQuery.of(context).size.height / 2;
-  //   _scrollOffset = itemOffset - halfScreenHeight + gapHeight / 2;
-  //
-  //   _scrollController.animateTo(
-  //     _scrollOffset,
-  //     duration: const Duration(milliseconds: 500),
-  //     curve: Curves.easeInOut,
-  //   );
-  // }
-
   void scrollToDesiredLevel() {
-    setState(() {
-      _scrollOffset = (totalLevels - _desiredLevel) * gapHeight;
-    });
+    final level = totalLevels - _desiredLevel;
+    double totalOffset = 0;
 
-    _scrollController.animateTo(
-      _scrollOffset,
-      duration: const Duration(milliseconds: 500),
-      curve: Curves.easeInOut,
-    );
+    for (int i = 0; i < (sections?.length ?? 0); i++) {
+      var chapter = sections?[i].lessons;
+
+      if (chapter != null) {
+        for (int j = 0; j < chapter.length; j++) {
+          if (chapter[j].id == level) {
+            _scrollController.animateTo(
+              totalOffset,
+              duration: const Duration(seconds: 1),
+              curve: Curves.easeInOut,
+            );
+            return;
+          }
+          totalOffset += gapHeight;
+        }
+      }
+      totalOffset += gapHeight;
+    }
   }
 
   @override

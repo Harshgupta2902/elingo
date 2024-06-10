@@ -1,11 +1,12 @@
 import 'dart:convert';
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:vocablury/global.dart';
+import 'package:vocablury/home_module/view/start_lesson/lesson_functions.dart';
 import 'package:vocablury/utilities/constants/assets_path.dart';
-import 'dart:math' as math;
 import 'package:vocablury/utilities/navigation/go_paths.dart';
 import 'package:vocablury/utilities/navigation/navigator.dart';
-import 'package:vocablury/utilities/packages/animated_button.dart';
+import 'package:vocablury/utilities/packages/level_button.dart';
 
 class DashBoardLevels extends StatefulWidget {
   const DashBoardLevels({super.key});
@@ -20,15 +21,16 @@ class _DashBoardLevelsState extends State<DashBoardLevels> with SingleTickerProv
   late Animation<double> _animation;
 
   final int _desiredLevel = 20;
-  final int totalLevels = 24;
+  final int totalLevels = 36;
 
-  double gapHeight = 150.0;
+  double gapHeight = 90.0;
   List<Section>? sections;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      sections = parseSections(jsonString);
       Future.delayed(
         const Duration(milliseconds: 200),
         () => scrollToDesiredLevel(),
@@ -42,7 +44,7 @@ class _DashBoardLevelsState extends State<DashBoardLevels> with SingleTickerProv
           .animate(CurvedAnimation(parent: _controller, curve: Curves.linear));
 
       _controller.repeat(reverse: true);
-      sections = parseSections(jsonString);
+      setState(() {});
     });
   }
 
@@ -61,6 +63,7 @@ class _DashBoardLevelsState extends State<DashBoardLevels> with SingleTickerProv
 [
   {
     "section": "Section 1",
+    "section_name":"Reading",
     "lessons": [
       {"id": 1, "status": "completed"},
       {"id": 2, "status": "completed"},
@@ -72,6 +75,7 @@ class _DashBoardLevelsState extends State<DashBoardLevels> with SingleTickerProv
   },
   {
     "section": "Section 2",
+    "section_name":"Writing",
     "lessons": [
       {"id": 7, "status": "upComing"},
       {"id": 8, "status": "upComing"},
@@ -83,17 +87,19 @@ class _DashBoardLevelsState extends State<DashBoardLevels> with SingleTickerProv
   },
   {
     "section": "Section 3",
+    "section_name":"Listening",
     "lessons": [
-      {"id": 13, "status": "completed"},
-      {"id": 14, "status": "completed"},
-      {"id": 15, "status": "completed"},
-      {"id": 16, "status": "completed"},
-      {"id": 17, "status": "completed"},
-      {"id": 18, "status": "inProgress"}
+      {"id": 13, "status": "upComing"},
+      {"id": 14, "status": "upComing"},
+      {"id": 15, "status": "upComing"},
+      {"id": 16, "status": "upComing"},
+      {"id": 17, "status": "upComing"},
+      {"id": 18, "status": "upComing"}
     ]
   },
   {
     "section": "Section 4",
+    "section_name":"Speaking",
     "lessons": [
       {"id": 19, "status": "upComing"},
       {"id": 20, "status": "upComing"},
@@ -102,19 +108,44 @@ class _DashBoardLevelsState extends State<DashBoardLevels> with SingleTickerProv
       {"id": 23, "status": "upComing"},
       {"id": 24, "status": "upComing"}
     ]
+  },
+  {
+    "section": "Section 5",
+    "section_name":"Combined",
+    "lessons": [
+       {"id": 25, "status": "upComing"},
+      {"id": 26, "status": "upComing"},
+      {"id": 27, "status": "upComing"},
+      {"id": 28, "status": "upComing"},
+      {"id": 29, "status": "upComing"},
+      {"id": 30, "status": "upComing"}
+    ]
+  },
+  {
+    "section": "Section 6",
+    "section_name":"Test",
+    "lessons": [
+      {"id": 31, "status": "upComing"},
+      {"id": 32, "status": "upComing"},
+      {"id": 33, "status": "upComing"},
+      {"id": 34, "status": "upComing"},
+      {"id": 35, "status": "upComing"},
+      {"id": 36, "status": "upComing"}
+    ]
   }
 ]
 ''';
+
   void scrollToDesiredLevel() {
     final level = totalLevels - _desiredLevel;
     double totalOffset = 0;
-
     for (int i = 0; i < (sections?.length ?? 0); i++) {
       var chapter = sections?[i].lessons;
-
       if (chapter != null) {
         for (int j = 0; j < chapter.length; j++) {
           if (chapter[j].id == level) {
+            debugPrint(totalOffset.toString());
+
             _scrollController.animateTo(
               totalOffset,
               duration: const Duration(seconds: 1),
@@ -136,85 +167,108 @@ class _DashBoardLevelsState extends State<DashBoardLevels> with SingleTickerProv
         child: SingleChildScrollView(
           controller: _scrollController,
           physics: const BouncingScrollPhysics(),
-          child: ListView.separated(
+          child: ListView.builder(
             shrinkWrap: true,
             reverse: true,
             physics: const NeverScrollableScrollPhysics(),
             itemCount: sections?.length ?? 0,
             itemBuilder: (context, index) {
               final chapter = sections?[index].lessons;
-              return ListView.builder(
-                shrinkWrap: true,
-                reverse: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: chapter?.length ?? 0,
-                itemBuilder: (context, subIndex) {
-                  bool isDesiredLevel = chapter?[subIndex].id == _desiredLevel;
-                  double baseY = int.parse(chapter?[subIndex].id.toString() ?? "") * gapHeight;
-                  return Transform.translate(
-                    offset: Offset(
-                      100 * math.sin((index * gapHeight + baseY) / 150),
-                      0,
+              final sectionColor = getColorForSections(index);
+              return Column(
+                children: [
+                  Container(
+                    height: 100,
+                    color: sectionColor.withOpacity(0.4),
+                    width: MediaQuery.of(context).size.width,
+                    padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 22),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "${sections?[index].section}",
+                              style: Theme.of(context).textTheme.titleLarge,
+                            ),
+                            const SizedBox(height: 6),
+                            Text(
+                              "${sections?[index].sectionName}",
+                              style: Theme.of(context).textTheme.bodyLarge,
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
-                    child: Center(
-                      child: Stack(
-                        children: [
-                          AnimatedButton(
-                            shape: BoxShape.circle,
-                            onPressed: () {
-                              debugPrint("${chapter?[subIndex].id}");
-                              MyNavigator.pushNamed(GoPaths.startLesson);
-                            },
-                            child: Text(
-                              chapter?[subIndex].id.toString() ?? "",
+                  ),
+                  ListView.builder(
+                    shrinkWrap: true,
+                    reverse: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: chapter?.length ?? 0,
+                    itemBuilder: (context, subIndex) {
+                      bool isDesiredLevel = chapter?[subIndex].id == _desiredLevel;
+                      double baseY = int.parse(chapter?[subIndex].id.toString() ?? "") * gapHeight;
+                      return Transform.translate(
+                        offset: Offset(100 * math.sin((index * gapHeight + baseY) / 150), 0),
+                        child: SizedBox(
+                          height: gapHeight,
+                          child: Center(
+                            child: Stack(
+                              clipBehavior: Clip.none,
+                              children: [
+                                LevelAnimatedButton(
+                                  onPressed: () => MyNavigator.pushNamed(GoPaths.startLesson),
+                                  height: 50,
+                                  buttonHeight: 10,
+                                  width: 65,
+                                  backgroundColor: sectionColor,
+                                  buttonType: LevelButtonTypes.oval,
+                                  child: Text(
+                                    chapter?[subIndex].id.toString() ?? "",
+                                  ),
+                                ),
+                                if (isDesiredLevel)
+                                  Positioned(
+                                    left: -20,
+                                    right: -20,
+                                    top: -30,
+                                    child: AnimatedBuilder(
+                                      animation: _controller,
+                                      builder: (context, child) {
+                                        return Container(
+                                          width: 200,
+                                          decoration: const BoxDecoration(
+                                            image: DecorationImage(
+                                              image: AssetImage(AssetPath.dialogDown),
+                                              fit: BoxFit.fill,
+                                            ),
+                                          ),
+                                          padding: EdgeInsets.only(
+                                              left: 16, right: 16, bottom: 12, top: 6),
+                                          margin: EdgeInsets.only(top: _animation.value),
+                                          child: Text(
+                                            'Start Now',
+                                            style:
+                                                Theme.of(context).textTheme.titleMedium?.copyWith(
+                                                      color: GlobalColors.primaryColor,
+                                                      fontWeight: FontWeight.w600,
+                                                    ),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                              ],
                             ),
                           ),
-                          if (isDesiredLevel)
-                            Positioned(
-                              left: 0,
-                              right: 0,
-                              top: 10,
-                              child: AnimatedBuilder(
-                                animation: _controller,
-                                builder: (context, child) {
-                                  return Container(
-                                    width: 150,
-                                    height: 40,
-                                    decoration: const BoxDecoration(
-                                      image: DecorationImage(
-                                        image: AssetImage(AssetPath.dialogDown),
-                                        fit: BoxFit.fill,
-                                      ),
-                                    ),
-                                    margin: EdgeInsets.only(top: _animation.value),
-                                    child: Center(
-                                      child: Text(
-                                        'Start Now',
-                                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                                              color: GlobalColors.primaryColor,
-                                              fontWeight: FontWeight.w600,
-                                            ),
-                                      ),
-                                    ),
-                                  );
-                                },
-                              ),
-                            ),
-                        ],
-                      ),
-                    ),
-                  );
-                },
-              );
-            },
-            separatorBuilder: (context, index) {
-              return Container(
-                height: 100,
-                color: GlobalColors.secondaryButtonColor,
-                width: MediaQuery.of(context).size.width,
-                child: Center(
-                  child: Text("${sections?[index].section}"),
-                ),
+                        ),
+                      );
+                    },
+                  ),
+                ],
               );
             },
           ),
@@ -240,13 +294,15 @@ class Lesson {
 
 class Section {
   final String section;
+  final String sectionName;
   final List<Lesson> lessons;
 
-  Section({required this.section, required this.lessons});
+  Section({required this.sectionName, required this.section, required this.lessons});
 
   factory Section.fromJson(Map<String, dynamic> json) {
     return Section(
       section: json['section'] as String,
+      sectionName: json['section_name'] as String,
       lessons: (json['lessons'] as List<dynamic>).map((lesson) => Lesson.fromJson(lesson)).toList(),
     );
   }

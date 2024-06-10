@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:vocablury/global.dart';
-import 'package:vocablury/home_module/view/start_lesson/flutter_tts.dart';
-import 'package:vocablury/home_module/view/start_lesson/lesson_functions.dart';
 import 'package:vocablury/utilities/packages/smooth_rectangular_border.dart';
 
 typedef OnChangeCallBack = void Function();

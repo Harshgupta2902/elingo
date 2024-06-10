@@ -278,3 +278,22 @@ String getQuestionHeading(String questionType) {
       return "Translate this Sentence";
   }
 }
+
+Color getColorForSections(int id) {
+  switch (id % 5) {
+    case 0:
+      return Colors.red;
+    case 1:
+      return Colors.blue;
+    case 2:
+      return Colors.green;
+    case 3:
+      return Colors.orange;
+    case 4:
+      return Colors.purple;
+    default:
+      return Colors.black;
+  }
+}
+
+

@@ -1,37 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:vocablury/global.dart';
-import 'package:vocablury/home_module/view/start_lesson/lesson_functions.dart';
+import 'package:vocablury/home_module/components/flutter_speak.dart';
 import 'package:vocablury/utilities/packages/smooth_rectangular_border.dart';
+import 'package:vocablury/utilities/theme/app_colors.dart';
 
 typedef OnChangeCallBack = void Function();
 
-class TranslateQuestions extends StatefulWidget {
-  const TranslateQuestions({
+class ListeningQuestions extends StatefulWidget {
+  const ListeningQuestions({
     super.key,
-    required this.jumbledWords,
-    required this.question,
+    required this.questionUrl,
     required this.answerMap,
     required this.onChange,
     required this.questionHeading,
+    required this.options,
   });
 
-  final List<dynamic> jumbledWords;
-  final String question;
+  final String questionUrl;
   final Map<String, dynamic> answerMap;
   final OnChangeCallBack onChange;
   final String questionHeading;
+  final List<dynamic> options;
+
   @override
-  State<TranslateQuestions> createState() => _TranslateQuestionsState();
+  State<ListeningQuestions> createState() => _ListeningQuestionsState();
 }
 
-class _TranslateQuestionsState extends State<TranslateQuestions> {
+class _ListeningQuestionsState extends State<ListeningQuestions> {
   List<String> showWords = [];
   List<String> removedIndices = [];
 
   @override
   void initState() {
     super.initState();
-    showWords = List.from(widget.jumbledWords);
+    showWords = List.from(widget.options);
   }
 
   @override
@@ -46,10 +48,59 @@ class _TranslateQuestionsState extends State<TranslateQuestions> {
             style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w600),
           ),
           const Padding(
-            padding: EdgeInsets.symmetric(vertical: 12),
+            padding: EdgeInsets.symmetric(vertical: 16),
             child: Divider(color: GlobalColors.borderColor, thickness: 1),
           ),
-          getSpeakerWidget(question: widget.question, context: context),
+          Container(
+            width: MediaQuery.of(context).size.width,
+            margin: const EdgeInsets.symmetric(vertical: 8),
+            padding: const EdgeInsets.all(16),
+            decoration: ShapeDecoration(
+              shape: SmoothRectangleBorder(
+                borderRadius: SmoothBorderRadius(cornerRadius: 16),
+                side: const BorderSide(color: GlobalColors.borderColor, width: 2),
+              ),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                GestureDetector(
+                  onTap: () => playAudio(audio: widget.questionUrl),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: GlobalColors.primaryColor,
+                      boxShadow: [
+                        BoxShadow(
+                          color: GlobalColors.primaryColor.withOpacity(0.2),
+                          blurRadius: 20,
+                          spreadRadius: 6,
+                        ),
+                      ],
+                    ),
+                    padding: const EdgeInsets.all(18),
+                    child: Container(
+                      decoration: const BoxDecoration(shape: BoxShape.circle, color: Colors.white),
+                      child: const Icon(
+                        Icons.play_arrow_rounded,
+                        color: GlobalColors.primaryColor,
+                        size: 32,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Text(
+                  "Tap to play audio",
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyLarge
+                      ?.copyWith(color: AppColors.battleshipGrey),
+                )
+              ],
+            ),
+          ),
           const SizedBox(height: 20),
           SizedBox(
             height: 200,
@@ -57,13 +108,13 @@ class _TranslateQuestionsState extends State<TranslateQuestions> {
               runAlignment: WrapAlignment.center,
               runSpacing: 12,
               spacing: 16,
-              children: List.generate(widget.answerMap[widget.question]?.length ?? 0, (index) {
-                final word = widget.answerMap[widget.question]?[index];
+              children: List.generate(widget.answerMap[widget.questionUrl]?.length ?? 0, (index) {
+                final word = widget.answerMap[widget.questionUrl]?[index];
 
                 return GestureDetector(
                   onTap: () {
                     setState(() {
-                      widget.answerMap[widget.question]?.removeAt(index);
+                      widget.answerMap[widget.questionUrl]?.removeAt(index);
                       removedIndices.remove(word);
                       widget.onChange();
                     });
@@ -102,8 +153,8 @@ class _TranslateQuestionsState extends State<TranslateQuestions> {
 
                   setState(() {
                     removedIndices.add(word);
-                    widget.answerMap[widget.question] ??= [];
-                    widget.answerMap[widget.question]?.add(word);
+                    widget.answerMap[widget.questionUrl] ??= [];
+                    widget.answerMap[widget.questionUrl]?.add(word);
 
                     debugPrint("+++++ ${widget.answerMap}");
                     widget.onChange();

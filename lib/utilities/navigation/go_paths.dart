@@ -26,6 +26,6 @@ class GoPaths {
 // start lesson routes
   static const String startLesson = '/startLesson';
   static const String questionsView = '/questionsView';
-  // static const String reviewSummary = '/reviewSummary';
-  // static const String paymentSuccess = '/paymentSuccess';
+  static const String lessonComplete = '/lessonComplete';
+
 }

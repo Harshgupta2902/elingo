@@ -6,6 +6,7 @@ import 'package:vocablury/home_module/view/buy_diamonds/payment_success.dart';
 import 'package:vocablury/home_module/view/buy_diamonds/review_summary.dart';
 import 'package:vocablury/home_module/view/buy_diamonds/select_payment_method.dart';
 import 'package:vocablury/home_module/view/landing_view.dart';
+import 'package:vocablury/home_module/view/start_lesson/lesson_complete.dart';
 import 'package:vocablury/home_module/view/start_lesson/question_view.dart';
 import 'package:vocablury/home_module/view/start_lesson/start_lesson.dart';
 import 'package:vocablury/onboarding_module/view/create_profile_form.dart';
@@ -204,6 +205,13 @@ final GoRouter goRouterConfig = GoRouter(
       name: GoPaths.questionsView,
       builder: (context, state) {
         return const QuestionsView();
+      },
+    ), GoRoute(
+      parentNavigatorKey: rootNavigatorKey,
+      path: GoPaths.lessonComplete,
+      name: GoPaths.lessonComplete,
+      builder: (context, state) {
+        return const LessonComplete();
       },
     ),
   ],

@@ -49,7 +49,8 @@ class CommonFlexibleDropdown extends StatelessWidget {
 }
 
 class DashBoardAppBar extends StatefulWidget implements PreferredSizeWidget {
-  const DashBoardAppBar({super.key});
+  const DashBoardAppBar({super.key, this.color});
+  final Color? color;
 
   @override
   State<DashBoardAppBar> createState() => _DashBoardAppBarState();
@@ -63,7 +64,7 @@ class _DashBoardAppBarState extends State<DashBoardAppBar> {
   Widget build(BuildContext context) {
     TextStyle? style = Theme.of(context).textTheme.titleLarge?.copyWith(color: Colors.white);
     return Container(
-      color: GlobalColors.appBarColorBlue,
+      color: widget.color ?? GlobalColors.appBarColorBlue,
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Column(
         children: [

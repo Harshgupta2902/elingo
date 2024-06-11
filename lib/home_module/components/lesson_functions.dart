@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:vibration/vibration.dart';
 import 'package:vocablury/components/bottom_sheet.dart';
 import 'package:vocablury/global.dart';
-import 'package:vocablury/home_module/view/start_lesson/flutter_speak.dart';
-import 'package:vocablury/home_module/view/start_lesson/flutter_tts.dart';
-import 'package:vocablury/home_module/view/start_lesson/listening_questions.dart';
-import 'package:vocablury/home_module/view/start_lesson/matching_questions.dart';
-import 'package:vocablury/home_module/view/start_lesson/meaning_questions.dart';
-import 'package:vocablury/home_module/view/start_lesson/speak_questions.dart';
-import 'package:vocablury/home_module/view/start_lesson/translate_questions.dart';
+import 'package:vocablury/home_module/components/flutter_speak.dart';
+import 'package:vocablury/home_module/components/flutter_tts.dart';
+import 'package:vocablury/home_module/view/questions/listening_questions.dart';
+import 'package:vocablury/home_module/view/questions/matching_questions.dart';
+import 'package:vocablury/home_module/view/questions/meaning_questions.dart';
+import 'package:vocablury/home_module/view/questions/speak_questions.dart';
+import 'package:vocablury/home_module/view/questions/translate_questions.dart';
 
 TextToSpeechService ttsService = TextToSpeechService();
 

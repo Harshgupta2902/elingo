@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:vocablury/global.dart';
-import 'package:vocablury/home_module/view/start_lesson/lesson_functions.dart';
+import 'package:vocablury/home_module/components/lesson_functions.dart';
 import 'package:vocablury/utilities/constants/assets_path.dart';
 import 'package:vocablury/utilities/navigation/go_paths.dart';
 import 'package:vocablury/utilities/navigation/navigator.dart';
@@ -220,7 +220,9 @@ class _DashBoardLevelsState extends State<DashBoardLevels> with SingleTickerProv
                               clipBehavior: Clip.none,
                               children: [
                                 LevelAnimatedButton(
-                                  onPressed: () => MyNavigator.pushNamed(GoPaths.startLesson),
+                                  onPressed: () {
+                                    MyNavigator.pushNamed(GoPaths.lessonComplete);
+                                  },
                                   height: 50,
                                   buttonHeight: 10,
                                   width: 65,

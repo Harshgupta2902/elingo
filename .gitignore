@@ -68,6 +68,12 @@ lib/generated_plugin_registrant.dart
 # See https://dart.dev/guides/libraries/private-files#pubspeclock
 #pubspec.lock
 
+
+#Additional Files
+start.sh
+update_ios.sh
+
+
 # Android related
 **/android/**/gradle-wrapper.jar
 **/android/.gradle

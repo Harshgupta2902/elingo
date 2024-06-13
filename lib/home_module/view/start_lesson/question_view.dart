@@ -171,7 +171,7 @@ class _QuestionsViewState extends State<QuestionsView> {
                           ),
                           onPressed: () {
                             if (questions.length == currentPage) {
-                              MyNavigator.goNamed(GoPaths.dashboardLevels);
+                              MyNavigator.pushNamed(GoPaths.lessonComplete);
                               return;
                             }
                             if (answerMap.containsKey(ques) && answerMap[ques].isNotEmpty) {

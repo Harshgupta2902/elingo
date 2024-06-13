@@ -32,58 +32,59 @@ class _LessonCompleteState extends State<LessonComplete> with TickerProviderStat
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      // XP Animation
+      _xpController = AnimationController(
+        vsync: this,
+        duration: const Duration(seconds: 1),
+      );
 
-    // XP Animation
-    _xpController = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 1),
-    );
+      _xpAnimation = IntTween(begin: 0, end: xpTargetNumber).animate(_xpController)
+        ..addListener(() {
+          setState(() {});
+        });
 
-    _xpAnimation = IntTween(begin: 0, end: xpTargetNumber).animate(_xpController)
-      ..addListener(() {
-        setState(() {});
-      });
+      _xpController.forward();
 
-    _xpController.forward();
+      // Diamond Animation
+      _diamondController = AnimationController(
+        vsync: this,
+        duration: const Duration(seconds: 1),
+      );
 
-    // Diamond Animation
-    _diamondController = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 1),
-    );
+      _diamondAnimation = IntTween(begin: 0, end: receivedDiamonds).animate(_diamondController)
+        ..addListener(() {
+          setState(() {});
+        });
 
-    _diamondAnimation = IntTween(begin: 0, end: receivedDiamonds).animate(_diamondController)
-      ..addListener(() {
-        setState(() {});
-      });
+      _diamondController.forward();
 
-    _diamondController.forward();
+      // Accuracy Animation
+      _accuracyController = AnimationController(
+        vsync: this,
+        duration: const Duration(seconds: 1),
+      );
 
-    // Accuracy Animation
-    _accuracyController = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 1),
-    );
+      _accuracyAnimation = IntTween(begin: 0, end: accuracy).animate(_accuracyController)
+        ..addListener(() {
+          setState(() {});
+        });
 
-    _accuracyAnimation = IntTween(begin: 0, end: accuracy).animate(_accuracyController)
-      ..addListener(() {
-        setState(() {});
-      });
+      _accuracyController.forward();
 
-    _accuracyController.forward();
+      // Time Animation
+      _timeController = AnimationController(
+        vsync: this,
+        duration: const Duration(seconds: 1),
+      );
 
-    // Time Animation
-    _timeController = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 2),
-    );
+      _timeAnimation = IntTween(begin: 0, end: timeStringToSeconds("1:45")).animate(_timeController)
+        ..addListener(() {
+          setState(() {});
+        });
 
-    _timeAnimation = IntTween(begin: 0, end: timeStringToSeconds("1:45")).animate(_timeController)
-      ..addListener(() {
-        setState(() {});
-      });
-
-    _timeController.forward();
+      _timeController.forward();
+    });
   }
 
   @override
@@ -307,9 +308,9 @@ class _LessonCompleteState extends State<LessonComplete> with TickerProviderStat
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
         child: ElevatedButton(
           onPressed: () {
-            MyNavigator.pushNamed(GoPaths.onBoardingQuestions);
+            MyNavigator.pushNamed(GoPaths.dailyMissionUpdates);
           },
-          child: const Text("GET STARTED"),
+          child: const Text("CONTINUE"),
         ),
       ),
     );

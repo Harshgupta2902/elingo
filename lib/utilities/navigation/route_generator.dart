@@ -6,6 +6,9 @@ import 'package:vocablury/home_module/view/buy_diamonds/payment_success.dart';
 import 'package:vocablury/home_module/view/buy_diamonds/review_summary.dart';
 import 'package:vocablury/home_module/view/buy_diamonds/select_payment_method.dart';
 import 'package:vocablury/home_module/view/landing_view.dart';
+import 'package:vocablury/home_module/view/other_updates/daily_streak.dart';
+import 'package:vocablury/home_module/view/other_updates/daily_mission_updates.dart';
+import 'package:vocablury/home_module/view/other_updates/share_streak.dart';
 import 'package:vocablury/home_module/view/start_lesson/lesson_complete.dart';
 import 'package:vocablury/home_module/view/start_lesson/question_view.dart';
 import 'package:vocablury/home_module/view/start_lesson/start_lesson.dart';
@@ -29,7 +32,7 @@ final GlobalKey<NavigatorState> shellNavigatorKey = GlobalKey<NavigatorState>(de
 final prefs = GetStorage();
 
 final GoRouter goRouterConfig = GoRouter(
-  initialLocation: GoPaths.dashboardLevels,
+  initialLocation: GoPaths.dailyStreak,
   navigatorKey: rootNavigatorKey,
   routes: [
     GoRoute(
@@ -206,12 +209,39 @@ final GoRouter goRouterConfig = GoRouter(
       builder: (context, state) {
         return const QuestionsView();
       },
-    ), GoRoute(
+    ),
+    GoRoute(
       parentNavigatorKey: rootNavigatorKey,
       path: GoPaths.lessonComplete,
       name: GoPaths.lessonComplete,
       builder: (context, state) {
         return const LessonComplete();
+      },
+    ),
+
+    // // -------------------------------------- Other Updates Routes --------------------------------------
+    GoRoute(
+      parentNavigatorKey: rootNavigatorKey,
+      path: GoPaths.dailyMissionUpdates,
+      name: GoPaths.dailyMissionUpdates,
+      builder: (context, state) {
+        return const DailyMissionUpdates();
+      },
+    ),
+    GoRoute(
+      parentNavigatorKey: rootNavigatorKey,
+      path: GoPaths.dailyStreak,
+      name: GoPaths.dailyStreak,
+      builder: (context, state) {
+        return const DailyStreak();
+      },
+    ),
+    GoRoute(
+      parentNavigatorKey: rootNavigatorKey,
+      path: GoPaths.shareStreak,
+      name: GoPaths.shareStreak,
+      builder: (context, state) {
+        return const ShareStreak();
       },
     ),
   ],

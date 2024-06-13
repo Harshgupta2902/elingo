@@ -77,7 +77,8 @@ try:
     driver = webdriver.Chrome(options=chrome_options)
 
     # URL of the authentication page
-    url = "https://10.26.2.2:8090/httpclient.html"
+#    url = "https://10.26.2.2:8090/httpclient.html"
+    url = "https://10.26.2.2:1003/fgtauth?050e0eb61a100eb7"
 
     # Open the URL in the browser
     driver.get(url)
@@ -90,7 +91,8 @@ try:
     password_input = driver.find_element(By.CSS_SELECTOR, "input[name='password']")
 
     username = "harsh.gupta"
-    password = "Harsh@7890"
+    password = "123456"
+#    password = "Harsh@7890"
 
     username_input.send_keys(username)
     password_input.send_keys(password)
@@ -100,7 +102,7 @@ try:
     login_button.click()
 
     # Wait for the authentication process to complete
-    time.sleep(1)
+#    time.sleep(1)
 
 except Exception as e:
     print("An error occurred:", e)

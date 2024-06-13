@@ -237,30 +237,33 @@ class _DashBoardLevelsState extends State<DashBoardLevels> with SingleTickerProv
                                     left: -20,
                                     right: -20,
                                     top: -30,
-                                    child: AnimatedBuilder(
-                                      animation: _controller,
-                                      builder: (context, child) {
-                                        return Container(
-                                          width: 200,
-                                          decoration: const BoxDecoration(
-                                            image: DecorationImage(
-                                              image: AssetImage(AssetPath.dialogDown),
-                                              fit: BoxFit.fill,
+                                    child: GestureDetector(
+                                      onTap: () => MyNavigator.pushNamed(GoPaths.lessonComplete),
+                                      child: AnimatedBuilder(
+                                        animation: _controller,
+                                        builder: (context, child) {
+                                          return Container(
+                                            width: 200,
+                                            decoration: const BoxDecoration(
+                                              image: DecorationImage(
+                                                image: AssetImage(AssetPath.dialogDown),
+                                                fit: BoxFit.fill,
+                                              ),
                                             ),
-                                          ),
-                                          padding: EdgeInsets.only(
-                                              left: 16, right: 16, bottom: 12, top: 6),
-                                          margin: EdgeInsets.only(top: _animation.value),
-                                          child: Text(
-                                            'Start Now',
-                                            style:
-                                                Theme.of(context).textTheme.titleMedium?.copyWith(
-                                                      color: GlobalColors.primaryColor,
-                                                      fontWeight: FontWeight.w600,
-                                                    ),
-                                          ),
-                                        );
-                                      },
+                                            padding: EdgeInsets.only(
+                                                left: 16, right: 16, bottom: 12, top: 6),
+                                            margin: EdgeInsets.only(top: _animation.value),
+                                            child: Text(
+                                              'Start Now',
+                                              style:
+                                                  Theme.of(context).textTheme.titleMedium?.copyWith(
+                                                        color: GlobalColors.primaryColor,
+                                                        fontWeight: FontWeight.w600,
+                                                      ),
+                                            ),
+                                          );
+                                        },
+                                      ),
                                     ),
                                   ),
                               ],

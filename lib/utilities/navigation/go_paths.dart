@@ -28,4 +28,8 @@ class GoPaths {
   static const String questionsView = '/questionsView';
   static const String lessonComplete = '/lessonComplete';
 
+//   Other updates
+  static const String dailyMissionUpdates = '/dailyMissionUpdates';
+  static const String dailyStreak = '/dailyStreak';
+  static const String shareStreak = '/shareStreak';
 }

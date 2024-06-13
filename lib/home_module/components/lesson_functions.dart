@@ -92,13 +92,6 @@ Widget getSpeakerWidget({required String question, required BuildContext context
   );
 }
 
-Future<void> vibratePhone() async {
-  bool? hasVibrator = await Vibration.hasVibrator();
-  if (hasVibrator == true) {
-    Vibration.vibrate(amplitude: 128);
-  }
-}
-
 void handleAnswer({
   required String questionType,
   required String correctSentence,
@@ -296,4 +289,9 @@ Color getColorForSections(int id) {
   }
 }
 
-
+Future<void> vibratePhone() async {
+  bool? hasVibrator = await Vibration.hasVibrator();
+  if (hasVibrator == true) {
+    Vibration.vibrate(amplitude: 128);
+  }
+}

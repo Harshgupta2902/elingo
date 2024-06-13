@@ -7,5 +7,11 @@ class AssetPath {
   // lottie
   static const String wavesLottie = "assets/lottie/waves.json";
 
-  // onboarding
+  // social icons
+  static const String facebook = "assets/social/facebook.png";
+  static const String instagram = "assets/social/instagram.png";
+  static const String linkedIn = "assets/social/linkedin.png";
+  static const String twitter = "assets/social/twitter.png";
+  static const String telegram = "assets/social/telegram.png";
+  static const String whatsapp = "assets/social/whatsapp.png";
 }

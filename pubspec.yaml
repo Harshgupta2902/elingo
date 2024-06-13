@@ -49,6 +49,7 @@ dependencies:
   flutter_tts: ^4.0.2
   vibration: ^1.9.0
   audioplayers: ^4.1.0
+  intl: ^0.19.0
 
 #  audioplayers: ^0.18.3
 
@@ -86,6 +87,7 @@ flutter:
     - assets/audio/wrong.mp3
     - assets/audio/correct.mp3
     - assets/dialog/
+    - assets/social/
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

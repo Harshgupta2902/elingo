@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:vocablury/global.dart';
+import 'package:vocablury/home_module/components/dashboard_app_bar.dart';
 import 'package:vocablury/home_module/components/lesson_functions.dart';
 import 'package:vocablury/utilities/constants/assets_path.dart';
 import 'package:vocablury/utilities/navigation/go_paths.dart';
@@ -22,6 +23,8 @@ class _DashBoardLevelsState extends State<DashBoardLevels> with SingleTickerProv
 
   final int _desiredLevel = 20;
   final int totalLevels = 36;
+
+  int? currentIndex;
 
   double gapHeight = 90.0;
   List<Section>? sections;
@@ -46,6 +49,32 @@ class _DashBoardLevelsState extends State<DashBoardLevels> with SingleTickerProv
       _controller.repeat(reverse: true);
       setState(() {});
     });
+    _scrollController.addListener(_onScroll);
+  }
+
+  void _onScroll() {
+    double offset = _scrollController.offset;
+    determineCurrentIndex(offset);
+  }
+
+  void determineCurrentIndex(double offset) {
+    double totalOffset = 0;
+    for (int i = (sections?.length ?? 0) - 1; i >= 0; i--) {
+      var chapter = sections?[i].lessons;
+      if (chapter != null) {
+        for (int j = chapter.length - 1; j >= 0; j--) {
+          if (offset >= totalOffset && offset < totalOffset + gapHeight) {
+            setState(() {
+              currentIndex = i;
+              debugPrint(currentIndex.toString());
+            });
+            return;
+          }
+          totalOffset += gapHeight;
+        }
+      }
+      totalOffset += gapHeight;
+    }
   }
 
   @override
@@ -163,6 +192,7 @@ class _DashBoardLevelsState extends State<DashBoardLevels> with SingleTickerProv
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: DashBoardAppBar(color: getColorForSections(currentIndex ?? 0)),
       body: Center(
         child: SingleChildScrollView(
           controller: _scrollController,
@@ -175,6 +205,7 @@ class _DashBoardLevelsState extends State<DashBoardLevels> with SingleTickerProv
             itemBuilder: (context, index) {
               final chapter = sections?[index].lessons;
               final sectionColor = getColorForSections(index);
+
               return Column(
                 children: [
                   Container(

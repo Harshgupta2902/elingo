@@ -15,7 +15,7 @@ class DailyStreak extends StatefulWidget {
 }
 
 class _DailyStreakState extends State<DailyStreak> with SingleTickerProviderStateMixin {
-  final int streakCount = 5; // Example streak count
+  final int streakCount = 5;
   final int daysInWeek = 7; // Number of days in a week
   List<bool> streakStatus = List.generate(7, (index) => false); // Streak status for each day
   @override
@@ -25,7 +25,7 @@ class _DailyStreakState extends State<DailyStreak> with SingleTickerProviderStat
   }
 
   void _initializeStreakStatus() {
-    for (int i = 0; i < streakCount - 1; i++) {
+    for (int i = 0; i < streakCount; i++) {
       streakStatus[i] = true;
     }
     Future.delayed(const Duration(milliseconds: 600), () {
@@ -139,7 +139,7 @@ class _DailyStreakState extends State<DailyStreak> with SingleTickerProviderStat
             const SizedBox(width: 20),
             Flexible(
               child: ElevatedButton(
-                onPressed: () => MyNavigator.pushNamed(GoPaths.onBoardingQuestions),
+                onPressed: () => MyNavigator.pushNamed(GoPaths.allRanks),
                 child: const Text("CONTINUE"),
               ),
             ),

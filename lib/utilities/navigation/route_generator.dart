@@ -6,8 +6,10 @@ import 'package:vocablury/home_module/view/buy_diamonds/payment_success.dart';
 import 'package:vocablury/home_module/view/buy_diamonds/review_summary.dart';
 import 'package:vocablury/home_module/view/buy_diamonds/select_payment_method.dart';
 import 'package:vocablury/home_module/view/landing_view.dart';
+import 'package:vocablury/home_module/view/leaderboard.dart';
 import 'package:vocablury/home_module/view/other_updates/daily_streak.dart';
 import 'package:vocablury/home_module/view/other_updates/daily_mission_updates.dart';
+import 'package:vocablury/home_module/view/other_updates/ranks.dart';
 import 'package:vocablury/home_module/view/other_updates/share_streak.dart';
 import 'package:vocablury/home_module/view/start_lesson/lesson_complete.dart';
 import 'package:vocablury/home_module/view/start_lesson/question_view.dart';
@@ -32,7 +34,7 @@ final GlobalKey<NavigatorState> shellNavigatorKey = GlobalKey<NavigatorState>(de
 final prefs = GetStorage();
 
 final GoRouter goRouterConfig = GoRouter(
-  initialLocation: GoPaths.dailyStreak,
+  initialLocation: GoPaths.dashboardLevels,
   navigatorKey: rootNavigatorKey,
   routes: [
     GoRoute(
@@ -143,14 +145,14 @@ final GoRouter goRouterConfig = GoRouter(
             return const DashBoardLevels();
           },
         ),
-        // GoRoute(
-        //   parentNavigatorKey: shellNavigatorKey,
-        //   path: GoPaths.dashboardLevels1,
-        //   name: GoPaths.dashboardLevels1,
-        //   builder: (context, state) {
-        //     return const DashBoardLevels();
-        //   },
-        // ),
+        GoRoute(
+          parentNavigatorKey: shellNavigatorKey,
+          path: GoPaths.leaderBoard,
+          name: GoPaths.leaderBoard,
+          builder: (context, state) {
+            return const LeaderBoard();
+          },
+        ),
       ],
     ),
 
@@ -242,6 +244,15 @@ final GoRouter goRouterConfig = GoRouter(
       name: GoPaths.shareStreak,
       builder: (context, state) {
         return const ShareStreak();
+      },
+    ),
+
+    GoRoute(
+      parentNavigatorKey: rootNavigatorKey,
+      path: GoPaths.allRanks,
+      name: GoPaths.allRanks,
+      builder: (context, state) {
+        return const AllRanks();
       },
     ),
   ],

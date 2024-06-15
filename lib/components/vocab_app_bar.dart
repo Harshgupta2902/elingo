@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:vocablury/global.dart';
 import 'package:vocablury/utilities/navigation/navigator.dart';
 
-class VocabularyAppBar extends StatefulWidget implements PreferredSizeWidget {
+class VocabularyAppBar extends StatelessWidget implements PreferredSizeWidget {
   const VocabularyAppBar({
     super.key,
     this.progressValue = 0,
@@ -13,6 +13,7 @@ class VocabularyAppBar extends StatefulWidget implements PreferredSizeWidget {
     this.leadingWidget,
     this.actionWidget,
     this.appBgColor,
+    this.leadingColor,
   });
 
   final double? progressValue;
@@ -23,47 +24,45 @@ class VocabularyAppBar extends StatefulWidget implements PreferredSizeWidget {
   final Widget? leadingWidget;
   final List<Widget>? actionWidget;
   final Color? appBgColor;
+  final Color? leadingColor;
 
-  @override
-  State<VocabularyAppBar> createState() => _VocabularyAppBarState();
-
-  @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
-}
-
-class _VocabularyAppBarState extends State<VocabularyAppBar> {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: widget.appBgColor ?? Colors.transparent,
+      backgroundColor: appBgColor ?? Colors.transparent,
       elevation: 0,
-      leading: widget.leadingWidget ??
+      leading: leadingWidget ??
           IconButton(
             onPressed: () {
               if (Navigator.of(context).canPop()) {
                 MyNavigator.pop();
               }
             },
-            icon: const Icon(Icons.arrow_back, color: Colors.black),
+            icon: Icon(Icons.arrow_back, color: leadingColor ?? Colors.black),
           ),
-      centerTitle: widget.centerTitle ?? false,
-      actions: widget.actionWidget ?? [],
-      title: widget.titleWidget ??
-          (widget.showProgress == true
+      centerTitle: centerTitle ?? false,
+      actions: actionWidget ?? [],
+      title: titleWidget ??
+          (showProgress == true
               ? LinearProgressIndicator(
                   color: GlobalColors.primaryColor,
-                  value: widget.progressValue,
+                  value: progressValue,
                   borderRadius: const BorderRadius.all(Radius.circular(24)),
                   minHeight: 8,
                   backgroundColor: GlobalColors.borderColor,
                 )
-              : widget.title != null
+              : title != null
                   ? Text(
-                      "${widget.title}",
+                      "$title",
                       style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                          color: Colors.black, fontWeight: FontWeight.w700, fontSize: 20),
+                          color: leadingColor ?? Colors.black,
+                          fontWeight: FontWeight.w700,
+                          fontSize: 20),
                     )
                   : null),
     );
   }
+
+  @override
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }

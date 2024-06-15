@@ -18,7 +18,6 @@ class GoPaths {
   static const String dashboardLevels = '/dashboardLevels';
   static const String leaderBoard = '/leaderBoard';
   static const String challenges = '/challenges';
-  static const String premium = '/premium';
 
 // buy diamonds routes
   static const String buyDiamonds = '/buyDiamonds';
@@ -36,4 +35,12 @@ class GoPaths {
   static const String dailyStreak = '/dailyStreak';
   static const String shareStreak = '/shareStreak';
   static const String allRanks = '/allRanks';
+
+//   Premium routes
+  static const String premium = '/premium';
+  static const String selectPlan = '/selectPlan';
+  static const String selectPayment = '/selectPayment';
+
+  // static const String shareStreak = '/shareStreak';
+  // static const String allRanks = '/allRanks';
 }

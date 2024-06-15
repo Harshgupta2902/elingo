@@ -23,10 +23,18 @@ class _BottomNavigationState extends State<BottomNavigation> {
       selectedFontSize: 14,
       unselectedFontSize: 14,
       onTap: (idx) {
-        setState(() {
-          index = idx;
-          debugPrint('$idx');
-        });
+        if (idx == 3) {
+          setState(() {
+            index = 0;
+            debugPrint('$idx');
+          });
+        } else {
+          setState(() {
+            index = idx;
+            debugPrint('$idx');
+          });
+        }
+
         _onItemTapped(idx);
       },
       currentIndex: index,

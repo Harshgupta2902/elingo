@@ -12,7 +12,9 @@ import 'package:vocablury/home_module/view/other_updates/daily_streak.dart';
 import 'package:vocablury/home_module/view/other_updates/daily_mission_updates.dart';
 import 'package:vocablury/home_module/view/other_updates/ranks.dart';
 import 'package:vocablury/home_module/view/other_updates/share_streak.dart';
-import 'package:vocablury/home_module/view/premium.dart';
+import 'package:vocablury/home_module/view/premium/premium.dart';
+import 'package:vocablury/home_module/view/premium/select_payment.dart';
+import 'package:vocablury/home_module/view/premium/select_plan.dart';
 import 'package:vocablury/home_module/view/start_lesson/lesson_complete.dart';
 import 'package:vocablury/home_module/view/start_lesson/question_view.dart';
 import 'package:vocablury/home_module/view/start_lesson/start_lesson.dart';
@@ -163,18 +165,18 @@ final GoRouter goRouterConfig = GoRouter(
             return const Challenges();
           },
         ),
-        GoRoute(
-          parentNavigatorKey: shellNavigatorKey,
-          path: GoPaths.premium,
-          name: GoPaths.premium,
-          builder: (context, state) {
-            return const Premium();
-          },
-        ),
+        // GoRoute(
+        //   parentNavigatorKey: shellNavigatorKey,
+        //   path: GoPaths.premium,
+        //   name: GoPaths.premium,
+        //   builder: (context, state) {
+        //     return const Premium();
+        //   },
+        // ),
       ],
     ),
 
-    // // -------------------------------------- BUY DIAMONDS Routes --------------------------------------
+// // -------------------------------------- BUY DIAMONDS Routes --------------------------------------
     GoRoute(
       parentNavigatorKey: rootNavigatorKey,
       path: GoPaths.buyDiamonds,
@@ -271,6 +273,33 @@ final GoRouter goRouterConfig = GoRouter(
       name: GoPaths.allRanks,
       builder: (context, state) {
         return const AllRanks();
+      },
+    ),
+
+// // -------------------------------------- Premium Routes --------------------------------------
+
+    GoRoute(
+      parentNavigatorKey: rootNavigatorKey,
+      path: GoPaths.premium,
+      name: GoPaths.premium,
+      builder: (context, state) {
+        return const Premium();
+      },
+    ),
+    GoRoute(
+      parentNavigatorKey: rootNavigatorKey,
+      path: GoPaths.selectPlan,
+      name: GoPaths.selectPlan,
+      builder: (context, state) {
+        return const SelectPlan();
+      },
+    ),
+    GoRoute(
+      parentNavigatorKey: rootNavigatorKey,
+      path: GoPaths.selectPayment,
+      name: GoPaths.selectPayment,
+      builder: (context, state) {
+        return const SelectPayment();
       },
     ),
   ],

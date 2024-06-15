@@ -17,6 +17,8 @@ class GoPaths {
 // bottom bar routes
   static const String dashboardLevels = '/dashboardLevels';
   static const String leaderBoard = '/leaderBoard';
+  static const String challenges = '/challenges';
+  static const String premium = '/premium';
 
 // buy diamonds routes
   static const String buyDiamonds = '/buyDiamonds';

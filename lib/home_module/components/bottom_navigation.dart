@@ -65,10 +65,10 @@ void _onItemTapped(int index) {
       MyNavigator.pushNamed(GoPaths.leaderBoard);
       break;
     case 2:
-      MyNavigator.pushNamed(GoPaths.dashboardLevels);
+      MyNavigator.pushNamed(GoPaths.challenges);
       break;
     case 3:
-      MyNavigator.pushNamed(GoPaths.dashboardLevels);
+      MyNavigator.pushNamed(GoPaths.premium);
       break;
     case 4:
       MyNavigator.pushNamed(GoPaths.dashboardLevels);

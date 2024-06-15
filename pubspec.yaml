@@ -51,6 +51,7 @@ dependencies:
   audioplayers: ^4.1.0
   intl: ^0.19.0
 
+
 #  audioplayers: ^0.18.3
 
 #dependency_overrides:
@@ -88,6 +89,7 @@ flutter:
     - assets/audio/correct.mp3
     - assets/dialog/
     - assets/social/
+    - assets/leaderboard/
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

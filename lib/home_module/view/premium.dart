@@ -8,8 +8,8 @@ import 'package:vocablury/home_module/view/leaderboard/monthly.dart';
 import 'package:vocablury/home_module/view/leaderboard/weekly.dart';
 import 'package:vocablury/utilities/theme/app_colors.dart';
 
-class LeaderBoard extends StatelessWidget {
-  const LeaderBoard({super.key});
+class Premium extends StatelessWidget {
+  const Premium({super.key});
 
   @override
   Widget build(BuildContext context) {

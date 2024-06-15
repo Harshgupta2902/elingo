@@ -14,4 +14,9 @@ class AssetPath {
   static const String twitter = "assets/social/twitter.png";
   static const String telegram = "assets/social/telegram.png";
   static const String whatsapp = "assets/social/whatsapp.png";
+
+  // leaderBoard
+  static const String leader1 = "assets/leaderboard/1.png";
+  static const String leader2 = "assets/leaderboard/2.png";
+  static const String leader3 = "assets/leaderboard/3.png";
 }

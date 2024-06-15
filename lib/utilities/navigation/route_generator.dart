@@ -5,12 +5,14 @@ import 'package:vocablury/home_module/view/buy_diamonds/buy_diamonds.dart';
 import 'package:vocablury/home_module/view/buy_diamonds/payment_success.dart';
 import 'package:vocablury/home_module/view/buy_diamonds/review_summary.dart';
 import 'package:vocablury/home_module/view/buy_diamonds/select_payment_method.dart';
+import 'package:vocablury/home_module/view/challenges.dart';
 import 'package:vocablury/home_module/view/landing_view.dart';
 import 'package:vocablury/home_module/view/leaderboard.dart';
 import 'package:vocablury/home_module/view/other_updates/daily_streak.dart';
 import 'package:vocablury/home_module/view/other_updates/daily_mission_updates.dart';
 import 'package:vocablury/home_module/view/other_updates/ranks.dart';
 import 'package:vocablury/home_module/view/other_updates/share_streak.dart';
+import 'package:vocablury/home_module/view/premium.dart';
 import 'package:vocablury/home_module/view/start_lesson/lesson_complete.dart';
 import 'package:vocablury/home_module/view/start_lesson/question_view.dart';
 import 'package:vocablury/home_module/view/start_lesson/start_lesson.dart';
@@ -151,6 +153,22 @@ final GoRouter goRouterConfig = GoRouter(
           name: GoPaths.leaderBoard,
           builder: (context, state) {
             return const LeaderBoard();
+          },
+        ),
+        GoRoute(
+          parentNavigatorKey: shellNavigatorKey,
+          path: GoPaths.challenges,
+          name: GoPaths.challenges,
+          builder: (context, state) {
+            return const Challenges();
+          },
+        ),
+        GoRoute(
+          parentNavigatorKey: shellNavigatorKey,
+          path: GoPaths.premium,
+          name: GoPaths.premium,
+          builder: (context, state) {
+            return const Premium();
           },
         ),
       ],

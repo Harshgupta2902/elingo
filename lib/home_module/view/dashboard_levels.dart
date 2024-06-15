@@ -281,8 +281,12 @@ class _DashBoardLevelsState extends State<DashBoardLevels> with SingleTickerProv
                                                 fit: BoxFit.fill,
                                               ),
                                             ),
-                                            padding: EdgeInsets.only(
-                                                left: 16, right: 16, bottom: 12, top: 6),
+                                            padding: const EdgeInsets.only(
+                                              left: 16,
+                                              right: 16,
+                                              bottom: 12,
+                                              top: 6,
+                                            ),
                                             margin: EdgeInsets.only(top: _animation.value),
                                             child: Text(
                                               'Start Now',

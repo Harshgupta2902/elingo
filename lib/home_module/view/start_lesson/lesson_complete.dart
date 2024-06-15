@@ -112,205 +112,208 @@ class _LessonCompleteState extends State<LessonComplete> with TickerProviderStat
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              "Lesson Completed!",
-              style: Theme.of(context)
-                  .textTheme
-                  .headlineMedium
-                  ?.copyWith(color: GlobalColors.primaryColor, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 40),
-            SvgPicture.asset(
-              GlobalImages.smile,
-              height: MediaQuery.of(context).size.height * 0.25,
-            ),
-            const SizedBox(height: 40),
-            Container(
-              clipBehavior: Clip.hardEdge,
-              decoration: AppBoxDecoration.getBorderBoxDecoration(
-                borderColor: AppColors.clearBlue,
-                showShadow: false,
-                borderRadius: 16,
+    return PopScope(
+      canPop: false,
+      child: Scaffold(
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                "Lesson Completed!",
+                style: Theme.of(context)
+                    .textTheme
+                    .headlineMedium
+                    ?.copyWith(color: GlobalColors.primaryColor, fontWeight: FontWeight.bold),
               ),
-              child: Column(
-                children: [
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.rectangle,
-                      color: AppColors.clearBlue,
+              const SizedBox(height: 40),
+              SvgPicture.asset(
+                GlobalImages.smile,
+                height: MediaQuery.of(context).size.height * 0.25,
+              ),
+              const SizedBox(height: 40),
+              Container(
+                clipBehavior: Clip.hardEdge,
+                decoration: AppBoxDecoration.getBorderBoxDecoration(
+                  borderColor: AppColors.clearBlue,
+                  showShadow: false,
+                  borderRadius: 16,
+                ),
+                child: Column(
+                  children: [
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.rectangle,
+                        color: AppColors.clearBlue,
+                      ),
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      child: Center(
+                        child: Text(
+                          "Diamonds",
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleLarge
+                              ?.copyWith(color: Colors.white, fontWeight: FontWeight.bold),
+                        ),
+                      ),
                     ),
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    child: Center(
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 12),
                       child: Text(
-                        "Diamonds",
+                        "🔷 ${_diamondAnimation.value}",
                         style: Theme.of(context)
                             .textTheme
-                            .titleLarge
-                            ?.copyWith(color: Colors.white, fontWeight: FontWeight.bold),
+                            .headlineMedium
+                            ?.copyWith(color: Colors.black, fontWeight: FontWeight.bold),
                       ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                    child: Text(
-                      "🔷 ${_diamondAnimation.value}",
-                      style: Theme.of(context)
-                          .textTheme
-                          .headlineMedium
-                          ?.copyWith(color: Colors.black, fontWeight: FontWeight.bold),
-                    ),
-                  )
-                ],
+                    )
+                  ],
+                ),
               ),
-            ),
-            const SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  clipBehavior: Clip.hardEdge,
-                  width: MediaQuery.of(context).size.width / 3.5,
-                  decoration: AppBoxDecoration.getBorderBoxDecoration(
-                    borderColor: AppColors.sunShade,
-                    showShadow: false,
-                    borderRadius: 16,
-                  ),
-                  child: Column(
-                    children: [
-                      Container(
-                        width: MediaQuery.of(context).size.width,
-                        decoration: const BoxDecoration(
-                          shape: BoxShape.rectangle,
-                          color: AppColors.sunShade,
-                        ),
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        child: Center(
-                          child: Text(
-                            "Total XP",
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleLarge
-                                ?.copyWith(color: Colors.white, fontWeight: FontWeight.bold),
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    clipBehavior: Clip.hardEdge,
+                    width: MediaQuery.of(context).size.width / 3.5,
+                    decoration: AppBoxDecoration.getBorderBoxDecoration(
+                      borderColor: AppColors.sunShade,
+                      showShadow: false,
+                      borderRadius: 16,
+                    ),
+                    child: Column(
+                      children: [
+                        Container(
+                          width: MediaQuery.of(context).size.width,
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.rectangle,
+                            color: AppColors.sunShade,
+                          ),
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          child: Center(
+                            child: Text(
+                              "Total XP",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleLarge
+                                  ?.copyWith(color: Colors.white, fontWeight: FontWeight.bold),
+                            ),
                           ),
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 12),
-                        child: Text(
-                          // "🔷 12",
-                          "🔷 ${_xpAnimation.value}",
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          child: Text(
+                            // "🔷 12",
+                            "🔷 ${_xpAnimation.value}",
 
-                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                              color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20),
-                        ),
-                      )
-                    ],
+                            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20),
+                          ),
+                        )
+                      ],
+                    ),
                   ),
-                ),
-                Container(
-                  clipBehavior: Clip.hardEdge,
-                  width: MediaQuery.of(context).size.width / 3.5,
-                  decoration: AppBoxDecoration.getBorderBoxDecoration(
-                    borderColor: AppColors.mediumAquaMarine,
-                    showShadow: false,
-                    borderRadius: 16,
-                  ),
-                  child: Column(
-                    children: [
-                      Container(
-                        width: MediaQuery.of(context).size.width,
-                        decoration: const BoxDecoration(
-                          shape: BoxShape.rectangle,
-                          color: AppColors.mediumAquaMarine,
-                        ),
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        child: Center(
-                          child: Text(
-                            "Time",
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleLarge
-                                ?.copyWith(color: Colors.white, fontWeight: FontWeight.bold),
+                  Container(
+                    clipBehavior: Clip.hardEdge,
+                    width: MediaQuery.of(context).size.width / 3.5,
+                    decoration: AppBoxDecoration.getBorderBoxDecoration(
+                      borderColor: AppColors.mediumAquaMarine,
+                      showShadow: false,
+                      borderRadius: 16,
+                    ),
+                    child: Column(
+                      children: [
+                        Container(
+                          width: MediaQuery.of(context).size.width,
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.rectangle,
+                            color: AppColors.mediumAquaMarine,
+                          ),
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          child: Center(
+                            child: Text(
+                              "Time",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleLarge
+                                  ?.copyWith(color: Colors.white, fontWeight: FontWeight.bold),
+                            ),
                           ),
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 12),
-                        child: Text(
-                          "⏲ ${formatDuration(_timeAnimation.value)}",
-                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                              color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-                Container(
-                  clipBehavior: Clip.hardEdge,
-                  width: MediaQuery.of(context).size.width / 3.5,
-                  decoration: AppBoxDecoration.getBorderBoxDecoration(
-                    borderColor: AppColors.brinkPink,
-                    showShadow: false,
-                    borderRadius: 16,
-                  ),
-                  child: Column(
-                    children: [
-                      Container(
-                        width: MediaQuery.of(context).size.width,
-                        decoration: const BoxDecoration(
-                          shape: BoxShape.rectangle,
-                          color: AppColors.brinkPink,
-                        ),
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        child: Center(
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 12),
                           child: Text(
-                            "Accuracy",
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleLarge
-                                ?.copyWith(color: Colors.white, fontWeight: FontWeight.bold),
+                            "⏲ ${formatDuration(_timeAnimation.value)}",
+                            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  Container(
+                    clipBehavior: Clip.hardEdge,
+                    width: MediaQuery.of(context).size.width / 3.5,
+                    decoration: AppBoxDecoration.getBorderBoxDecoration(
+                      borderColor: AppColors.brinkPink,
+                      showShadow: false,
+                      borderRadius: 16,
+                    ),
+                    child: Column(
+                      children: [
+                        Container(
+                          width: MediaQuery.of(context).size.width,
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.rectangle,
+                            color: AppColors.brinkPink,
+                          ),
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          child: Center(
+                            child: Text(
+                              "Accuracy",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleLarge
+                                  ?.copyWith(color: Colors.white, fontWeight: FontWeight.bold),
+                            ),
                           ),
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 12),
-                        child: Text(
-                          "🎯 ${_accuracyAnimation.value}%",
-                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                              color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20),
-                        ),
-                      )
-                    ],
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          child: Text(
+                            "🎯 ${_accuracyAnimation.value}%",
+                            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20),
+                          ),
+                        )
+                      ],
+                    ),
                   ),
-                ),
-              ],
-            )
-          ],
-        ),
-      ),
-      bottomNavigationBar: Container(
-        decoration: const BoxDecoration(
-          border: Border(
-            top: BorderSide(
-              color: GlobalColors.borderColor,
-            ),
+                ],
+              )
+            ],
           ),
         ),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-        child: ElevatedButton(
-          onPressed: () {
-            MyNavigator.pushNamed(GoPaths.dailyMissionUpdates);
-          },
-          child: const Text("CONTINUE"),
+        bottomNavigationBar: Container(
+          decoration: const BoxDecoration(
+            border: Border(
+              top: BorderSide(
+                color: GlobalColors.borderColor,
+              ),
+            ),
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+          child: ElevatedButton(
+            onPressed: () {
+              MyNavigator.pushNamed(GoPaths.dailyMissionUpdates);
+            },
+            child: const Text("CONTINUE"),
+          ),
         ),
       ),
     );

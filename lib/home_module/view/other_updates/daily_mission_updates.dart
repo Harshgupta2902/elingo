@@ -72,112 +72,116 @@ class _DailyMissionUpdatesState extends State<DailyMissionUpdates> with TickerPr
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.max,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const SizedBox(height: kToolbarHeight),
-            Text(
-              "Daily Mission Updates!",
-              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                    color: GlobalColors.primaryColor,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 30,
-                  ),
-            ),
-            Flexible(
-              child: ListView.separated(
-                padding: const EdgeInsets.only(top: 30),
-                itemCount: missionUpdates.length,
-                itemBuilder: (context, index) {
-                  double? total = double.tryParse(missionUpdates[index]['total']?.toString() ?? '');
-                  double? achieved =
-                      double.tryParse(missionUpdates[index]['achieved']?.toString() ?? '');
-
-                  return Container(
-                    width: MediaQuery.of(context).size.width,
-                    padding: const EdgeInsets.all(16),
-                    decoration: ShapeDecoration(
-                      shape: SmoothRectangleBorder(
-                        borderRadius: SmoothBorderRadius(cornerRadius: 16),
-                        side: const BorderSide(color: GlobalColors.borderColor, width: 2),
-                      ),
+    return PopScope(
+      canPop: false,
+      child: Scaffold(
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.max,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const SizedBox(height: kToolbarHeight),
+              Text(
+                "Daily Mission Updates!",
+                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                      color: GlobalColors.primaryColor,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 30,
                     ),
-                    child: Row(
-                      children: [
-                        Text(
-                          missionUpdates[index]['image']!,
-                          style: Theme.of(context)
-                              .textTheme
-                              .headlineLarge
-                              ?.copyWith(color: Colors.black),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                missionUpdates[index]['name']!,
-                                style: Theme.of(context).textTheme.bodyLarge,
-                              ),
-                              const SizedBox(height: 8),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  SizedBox(
-                                    width: MediaQuery.of(context).size.width * 0.5,
-                                    child: LinearProgressIndicator(
-                                      color: GlobalColors.primaryColor,
-                                      backgroundColor: GlobalColors.borderColor,
-                                      value: _animations[index].value,
-                                      minHeight: 8,
-                                      borderRadius: SmoothBorderRadius(cornerRadius: 16),
-                                    ),
-                                  ),
-                                  const SizedBox(height: 4),
-                                  Text(
-                                    "${(achieved!.toInt())} / ${total!.toInt()}",
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleSmall
-                                        ?.copyWith(color: GlobalColors.primaryColor),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-                separatorBuilder: (context, index) {
-                  return const SizedBox(height: 26);
-                },
               ),
-            ),
-          ],
-        ),
-      ),
-      bottomNavigationBar: Container(
-        decoration: const BoxDecoration(
-          border: Border(
-            top: BorderSide(
-              color: GlobalColors.borderColor,
-            ),
+              Flexible(
+                child: ListView.separated(
+                  padding: const EdgeInsets.only(top: 30),
+                  itemCount: missionUpdates.length,
+                  itemBuilder: (context, index) {
+                    double? total =
+                        double.tryParse(missionUpdates[index]['total']?.toString() ?? '');
+                    double? achieved =
+                        double.tryParse(missionUpdates[index]['achieved']?.toString() ?? '');
+
+                    return Container(
+                      width: MediaQuery.of(context).size.width,
+                      padding: const EdgeInsets.all(16),
+                      decoration: ShapeDecoration(
+                        shape: SmoothRectangleBorder(
+                          borderRadius: SmoothBorderRadius(cornerRadius: 16),
+                          side: const BorderSide(color: GlobalColors.borderColor, width: 2),
+                        ),
+                      ),
+                      child: Row(
+                        children: [
+                          Text(
+                            missionUpdates[index]['image']!,
+                            style: Theme.of(context)
+                                .textTheme
+                                .headlineLarge
+                                ?.copyWith(color: Colors.black),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  missionUpdates[index]['name']!,
+                                  style: Theme.of(context).textTheme.bodyLarge,
+                                ),
+                                const SizedBox(height: 8),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width * 0.5,
+                                      child: LinearProgressIndicator(
+                                        color: GlobalColors.primaryColor,
+                                        backgroundColor: GlobalColors.borderColor,
+                                        value: _animations[index].value,
+                                        minHeight: 8,
+                                        borderRadius: SmoothBorderRadius(cornerRadius: 16),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 4),
+                                    Text(
+                                      "${(achieved!.toInt())} / ${total!.toInt()}",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleSmall
+                                          ?.copyWith(color: GlobalColors.primaryColor),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                  separatorBuilder: (context, index) {
+                    return const SizedBox(height: 26);
+                  },
+                ),
+              ),
+            ],
           ),
         ),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-        child: ElevatedButton(
-          onPressed: () {
-            MyNavigator.pushNamed(GoPaths.dailyStreak);
-          },
-          child: const Text("CONTINUE"),
+        bottomNavigationBar: Container(
+          decoration: const BoxDecoration(
+            border: Border(
+              top: BorderSide(
+                color: GlobalColors.borderColor,
+              ),
+            ),
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+          child: ElevatedButton(
+            onPressed: () {
+              MyNavigator.pushNamed(GoPaths.dailyStreak);
+            },
+            child: const Text("CONTINUE"),
+          ),
         ),
       ),
     );

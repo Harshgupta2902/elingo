@@ -106,7 +106,7 @@ class AllRanks extends StatelessWidget {
         ),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
         child: ElevatedButton(
-          onPressed: () => MyNavigator.pushNamed(GoPaths.onBoardingQuestions),
+          onPressed: () => MyNavigator.goNamed(GoPaths.leaderBoard),
           child: const Text("OK Great!"),
         ),
       ),

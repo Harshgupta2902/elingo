@@ -66,7 +66,6 @@ class _DashBoardLevelsState extends State<DashBoardLevels> with SingleTickerProv
           if (offset >= totalOffset && offset < totalOffset + gapHeight) {
             setState(() {
               currentIndex = i;
-              debugPrint(currentIndex.toString());
             });
             return;
           }
@@ -173,8 +172,6 @@ class _DashBoardLevelsState extends State<DashBoardLevels> with SingleTickerProv
       if (chapter != null) {
         for (int j = 0; j < chapter.length; j++) {
           if (chapter[j].id == level) {
-            debugPrint(totalOffset.toString());
-
             _scrollController.animateTo(
               totalOffset,
               duration: const Duration(seconds: 1),

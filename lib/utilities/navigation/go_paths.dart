@@ -18,6 +18,7 @@ class GoPaths {
   static const String dashboardLevels = '/dashboardLevels';
   static const String leaderBoard = '/leaderBoard';
   static const String challenges = '/challenges';
+  static const String profile = '/profile';
 
 // buy diamonds routes
   static const String buyDiamonds = '/buyDiamonds';

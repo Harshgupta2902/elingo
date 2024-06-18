@@ -86,6 +86,7 @@ class _SelectPaymentState extends State<SelectPayment> {
                   ListView.separated(
                     padding: const EdgeInsets.symmetric(vertical: 6),
                     itemCount: paymentMethods.length,
+                    physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
                     itemBuilder: (context, index) {
                       final paymentMethod = paymentMethods[index];

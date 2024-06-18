@@ -16,18 +16,18 @@ class BadgesChallenges extends StatefulWidget {
 class _BadgesChallengesState extends State<BadgesChallenges> {
   final List<String> badgeNames = ["Quiz King", "Math Master", "Science Star", "History Hero"];
   final List<String> months = [
-    "January",
-    "February",
-    "March",
-    "April",
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
     "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December"
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec"
   ];
   final Random random = Random();
 

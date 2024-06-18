@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:vocablury/global.dart';
 import 'package:vocablury/utilities/navigation/go_paths.dart';
 import 'package:vocablury/utilities/navigation/navigator.dart';
@@ -15,6 +16,10 @@ class _BottomNavigationState extends State<BottomNavigation> {
 
   @override
   Widget build(BuildContext context) {
+    final dat = GoRouterState.of(context).matchedLocation;
+    setState(() {
+      index = _getIndexFromPath(dat);
+    });
     return BottomNavigationBar(
       type: BottomNavigationBarType.fixed,
       backgroundColor: Colors.white,
@@ -23,19 +28,11 @@ class _BottomNavigationState extends State<BottomNavigation> {
       selectedFontSize: 14,
       unselectedFontSize: 14,
       onTap: (idx) {
-        if (idx == 3) {
-          setState(() {
-            index = 0;
-            debugPrint('$idx');
-          });
-        } else {
-          setState(() {
-            index = idx;
-            debugPrint('$idx');
-          });
-        }
-
-        _onItemTapped(idx);
+        setState(() {
+          index = idx;
+          debugPrint('$idx');
+        });
+        _onItemTapped(idx, context);
       },
       currentIndex: index,
       items: const [
@@ -64,24 +61,39 @@ class _BottomNavigationState extends State<BottomNavigation> {
   }
 }
 
-void _onItemTapped(int index) {
+void _onItemTapped(int index, BuildContext context) {
   switch (index) {
     case 0:
-      MyNavigator.pushNamed(GoPaths.dashboardLevels);
+      context.go(GoPaths.dashboardLevels);
       break;
     case 1:
-      MyNavigator.pushNamed(GoPaths.leaderBoard);
+      context.go(GoPaths.leaderBoard);
       break;
     case 2:
-      MyNavigator.pushNamed(GoPaths.challenges);
+      context.go(GoPaths.challenges);
       break;
     case 3:
-      MyNavigator.pushNamed(GoPaths.premium);
+      context.go(GoPaths.premium);
       break;
     case 4:
-      MyNavigator.pushNamed(GoPaths.dashboardLevels);
+      context.go(GoPaths.dashboardLevels);
       break;
     default:
-      MyNavigator.pushNamed(GoPaths.dashboardLevels);
+      context.go(GoPaths.dashboardLevels);
+  }
+}
+
+int _getIndexFromPath(String path) {
+  switch (path) {
+    case GoPaths.dashboardLevels:
+      return 0;
+    case GoPaths.leaderBoard:
+      return 1;
+    case GoPaths.challenges:
+      return 2;
+    case GoPaths.profile:
+      return 4;
+    default:
+      return 0;
   }
 }

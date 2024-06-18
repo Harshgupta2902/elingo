@@ -15,6 +15,7 @@ import 'package:vocablury/home_module/view/other_updates/share_streak.dart';
 import 'package:vocablury/home_module/view/premium/premium.dart';
 import 'package:vocablury/home_module/view/premium/select_payment.dart';
 import 'package:vocablury/home_module/view/premium/select_plan.dart';
+import 'package:vocablury/home_module/view/profile.dart';
 import 'package:vocablury/home_module/view/start_lesson/lesson_complete.dart';
 import 'package:vocablury/home_module/view/start_lesson/question_view.dart';
 import 'package:vocablury/home_module/view/start_lesson/start_lesson.dart';
@@ -165,14 +166,14 @@ final GoRouter goRouterConfig = GoRouter(
             return const Challenges();
           },
         ),
-        // GoRoute(
-        //   parentNavigatorKey: shellNavigatorKey,
-        //   path: GoPaths.premium,
-        //   name: GoPaths.premium,
-        //   builder: (context, state) {
-        //     return const Premium();
-        //   },
-        // ),
+        GoRoute(
+          parentNavigatorKey: shellNavigatorKey,
+          path: GoPaths.profile,
+          name: GoPaths.profile,
+          builder: (context, state) {
+            return const Profile();
+          },
+        ),
       ],
     ),
 

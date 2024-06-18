@@ -76,7 +76,7 @@ void _onItemTapped(int index, BuildContext context) {
       context.go(GoPaths.premium);
       break;
     case 4:
-      context.go(GoPaths.dashboardLevels);
+      context.go(GoPaths.profile);
       break;
     default:
       context.go(GoPaths.dashboardLevels);
